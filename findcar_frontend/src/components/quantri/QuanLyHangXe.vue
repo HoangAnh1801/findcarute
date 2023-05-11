@@ -153,8 +153,8 @@ export default ({
                     this.getAllHangXe();
                     this.closeDialog();
                   })
-                      .catch(e => {
-                        this.notification(e.response.data.message, "error");
+                      .catch(() => {
+                        this.notification("error");
                       });
                 })
                 .catch(e => {

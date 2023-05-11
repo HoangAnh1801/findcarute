@@ -6,6 +6,7 @@ import com.hoanganh.carservice.reponse.Reponse;
 import com.hoanganh.carservice.repository.PhuongXaRepository;
 import com.hoanganh.carservice.repository.QuanHuyenRepository;
 import com.hoanganh.carservice.repository.TinhNangRepository;
+import com.hoanganh.carservice.repository.XeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,9 @@ public class TinhNangService {
     @Autowired
     TinhNangRepository tinhNangRepository;
 
+    @Autowired
+    XeRepository xeRepository;
+
     public List<TinhNangXe> getAllTinhNang() {
         return tinhNangRepository.findAll();
     }
@@ -26,30 +30,35 @@ public class TinhNangService {
         return tinhNangRepository.findById(id);
     }
 
-    public TinhNangXe save(TinhNangXe tinhNang) {
+    public Reponse save(TinhNangXe tinhNang) {
+        TinhNangXe exitsTinhNang = tinhNangRepository.findTinhNangXeByName(tinhNang.getName());
 
-//        if (quanHuyen.getId() != null && exitsQuanHuyen!= null) {
-//            if (quanHuyen.getId() != exitsQuanHuyen.getId()) {
-//                new Reponse(HttpStatus.BAD_REQUEST, "Tên quận huyện đã tồn tại");
-//            }
-//
-//            return quanHuyenRepository.save(quanHuyen);
-//        }
-//
-//        if(exitsQuanHuyen != null) {
-//            new Reponse(HttpStatus.BAD_REQUEST, "Tên quận huyện đã tồn tại");
-//        }
+        if (tinhNang.getId() != null && exitsTinhNang!= null) {
+            if (tinhNang.getId() != exitsTinhNang.getId()) {
+                return new Reponse(HttpStatus.BAD_REQUEST, "Tính năng đã tồn tại");
+            }
+            tinhNangRepository.save(tinhNang);
+            return new Reponse(HttpStatus.OK, "Thêm mới thành công!");
 
-        return tinhNangRepository.save(tinhNang);
+        }
+
+        if(exitsTinhNang != null) {
+            return new Reponse(HttpStatus.BAD_REQUEST, "Tính năng đã tồn tại");
+        }
+        tinhNangRepository.save(tinhNang);
+        return new Reponse(HttpStatus.OK, "Thêm mới thành công!");
     }
 
     public Reponse deleteTinhNang(Long id) {
-//        boolean checkExist = tinhNangRepository.existsAllByQuanHuyenId(id);
+        TinhNangXe tinhNang = new TinhNangXe();
+        tinhNang.setId(id);
 
-//        if(checkExist) {
-//            return new Reponse(HttpStatus.BAD_REQUEST, "Quận huyện đã tồn tại. Vui lòng xoá danh mục con trước!");
-//        }
+        boolean checkExist = xeRepository.existsAllByTinhNangs(tinhNang);
+
+        if(checkExist) {
+            return new Reponse(HttpStatus.BAD_REQUEST, "Tính năng đã được sử dụng. Vui lòng xoá danh mục con trước!");
+        }
         tinhNangRepository.deleteById(id);
-        return new Reponse(HttpStatus.OK, "Đã xoá quận huyện");
+        return new Reponse(HttpStatus.OK, "Đã xoá tính năng!");
     }
 }

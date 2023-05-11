@@ -8,7 +8,7 @@ import Vue3EasyDataTable from 'vue3-easy-data-table'
 import 'vue3-easy-data-table/dist/style.css'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
-import jQuery from 'jquery'
+// import jQuery from 'jquery'
 import 'animate.css'
 import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
@@ -31,7 +31,7 @@ const vuetify = createVuetify({
 const app = createApp(App).use(router);
 app.use(router);
 app.use(vuetify);
-app.use(jQuery);
+// app.use(jQuery);
 app.use(ElementPlus);
 app.component('EasyDataTable', Vue3EasyDataTable)
 app.mount("#app");

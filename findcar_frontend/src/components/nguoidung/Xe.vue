@@ -108,22 +108,22 @@
         </v-text-field>
       </div>
     </div>
-    <div class="row mt-5">
-      <div class="image-preview position-relative d-inline-flex" v-if="imageData.length > 0">
-        <v-icon icon="mdi:mdi-close-circle-outline" class="position-absolute remove-img" @click="remove()"/>
-        <img :src="imageData" class="image-pre" style="max-height: 100px; max-width: 230px">
-      </div>
-      <div v-if="xe.id != '' && imageData.length == 0" class="image-preview position-relative d-inline-flex">
-        <v-icon icon="mdi:mdi-close-circle-outline" class="position-absolute remove-img" @click="remove()"/>
-        <img :src="getUrlImage(xe.anhNen)" class="image-pre" style="max-height: 100px; max-width: 230px">
-      </div>
-      <v-file-input class="input-image border-color-cus mt-2" density="counter"
-                    counter
-                    variant="outlined"
-                    prepend-icon="mdi:mdi-camera"
-                    @change="onFileChange" ref="avt"
-                    required></v-file-input>
-    </div>
+<!--    <div class="row mt-5">-->
+<!--      <div class="image-preview position-relative d-inline-flex" v-if="imageData.length > 0">-->
+<!--        <v-icon icon="mdi:mdi-close-circle-outline" class="position-absolute remove-img" @click="remove()"/>-->
+<!--        <img :src="imageData" class="image-pre" style="max-height: 100px; max-width: 230px">-->
+<!--      </div>-->
+<!--      <div v-if="xe.id != '' && imageData.length == 0" class="image-preview position-relative d-inline-flex">-->
+<!--        <v-icon icon="mdi:mdi-close-circle-outline" class="position-absolute remove-img" @click="remove()"/>-->
+<!--        <img :src="getUrlImage(xe.anhNen)" class="image-pre" style="max-height: 100px; max-width: 230px">-->
+<!--      </div>-->
+<!--      <v-file-input class="input-image border-color-cus mt-2" density="counter"-->
+<!--                    counter-->
+<!--                    variant="outlined"-->
+<!--                    prepend-icon="mdi:mdi-camera"-->
+<!--                    @change="onFileChange" ref="avt"-->
+<!--                    required></v-file-input>-->
+<!--    </div>-->
     <div class="row mt-5">
       <v-textarea label="Mô tả" variant="outlined" v-model="xe.mota"></v-textarea>
     </div>
@@ -262,7 +262,7 @@ export default {
       listPhuongXa: [],
       xe: {
         id: '',
-        user: {
+        nguoiDung: {
           id: ''
         },
         createdDate: '',
@@ -355,7 +355,7 @@ export default {
       })
     },
     save() {
-      this.xe.user.id = 1
+      this.xe.nguoiDung.id = 1
       this.xe.trangThaiDuyet = 1
       var dataTinhNang = [];
       for (let i in this.selectdTinhNang) {

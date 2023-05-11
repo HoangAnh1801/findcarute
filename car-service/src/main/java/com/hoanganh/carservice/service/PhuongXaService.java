@@ -17,7 +17,7 @@ public class PhuongXaService {
     PhuongXaRepository phuongXaRepository;
 
     @Autowired
-    XeRepository baiDangRepository;
+    XeRepository xeRepository;
 
     public List<PhuongXa> getAllPhuongXa() {
         return phuongXaRepository.findAll();
@@ -48,10 +48,9 @@ public class PhuongXaService {
     }
 
     public Reponse deletePhuongXa(Long id) {
-        boolean checkExist = baiDangRepository.existsBaiDangByPhuongXaId(id);
-
+        boolean checkExist = xeRepository.existsXeByPhuongXaId(id);
         if(checkExist) {
-            return new Reponse(HttpStatus.BAD_REQUEST, "Phường xã đã tồn tại. Vui lòng xoá danh mục con trước!");
+            return new Reponse(HttpStatus.BAD_REQUEST, "Phường xã đã được sử dụng. Vui lòng xoá danh mục con trước!");
         }
         phuongXaRepository.deleteById(id);
         return new Reponse(HttpStatus.OK, "Đã xoá phường xã");

@@ -1,6 +1,7 @@
 package com.hoanganh.carservice.controller;
 
 import com.hoanganh.carservice.entity.LoaiXe;
+import com.hoanganh.carservice.reponse.Reponse;
 import com.hoanganh.carservice.service.LoaiXeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,11 +26,12 @@ public class LoaiXeController {
     }
 
     @PostMapping()
-    public LoaiXe saveLoaiXe(@RequestBody LoaiXe loaiXe) {
+    public Reponse saveLoaiXe(@RequestBody LoaiXe loaiXe) {
         return loaiXeService.saveLoaiXe(loaiXe);
     }
 
-//    @DeleteMapping(Long id) {
-//
-//    }
+    @DeleteMapping("/id")
+    public Reponse deleteLoaiXe(@RequestParam("id") Long id) {
+        return loaiXeService.deleteLoaiXe(id);
+    }
 }

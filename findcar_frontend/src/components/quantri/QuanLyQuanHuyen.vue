@@ -194,7 +194,7 @@ export default ({
                     }
                     this.getAllQuanHuyen();
                   })
-                  swal("Quận/huyện đã được sử dụng. Vui lòng xoá danh mục con trước", "", "success")
+                  swal("Xoá thành công", "", "success")
                 }
           })
     },

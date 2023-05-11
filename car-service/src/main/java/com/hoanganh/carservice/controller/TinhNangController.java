@@ -28,7 +28,7 @@ public class TinhNangController {
     }
 
     @PostMapping()
-    public TinhNangXe saveTinhNang(@RequestBody TinhNangXe tinhNang) {
+    public Reponse saveTinhNang(@RequestBody TinhNangXe tinhNang) {
         return tinhNangService.save(tinhNang);
     }
 
