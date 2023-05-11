@@ -23,7 +23,7 @@
         <td>{{ entry.name }}</td>
         <td>
           <button @click="handleEdit(entry.id)"><v-icon icon="mdi:mdi-pencil" /></button>
-          <button>{{entry.id}}</button>
+          <button @click="deleteById(entry.id)" > <v-icon icon="mdi:mdi-trash-can-outline" /></button>
         </td>
       </tr>
       </tbody>
@@ -55,7 +55,7 @@
                 <v-col cols="12">
                   <v-text-field
                       label="Tên phường/xã"
-                      v-model="phuongXa.name"
+                      v-model.trim="phuongXa.name"
                       variant="outlined"
                       >
                   </v-text-field>
@@ -77,6 +77,7 @@
 <script>
 import DanhMucService from "@/services/danhmuc.service"
 import ImageService from "@/services/image.service"
+import swal from 'sweetalert';
 
 export default ({
   components: {
@@ -109,30 +110,51 @@ export default ({
   methods: {
     resetModel() {
       this.phuongXa.id = '',
-      this.phuongXa.name = '',
-      this.phuongXa.urlImage = ''
-      this.imageData = '',
-      this.$refs.file.value = ''
+      this.phuongXa.name = ''
     },
     getAllQuanHuyen() {
       DanhMucService.getAll('quanhuyen').then(response => (
           this.listQuanHuyen = response.data
       ))
     },
-    getAllNhienLieu() {
+    getAllPhuongXa() {
       DanhMucService.getAll('phuongxa').then(response => (
-          this.listNhienLieu = response.data,
-          console.log(this.listNhienLieu)
+          this.listNhienLieu = response.data
       ))
     },
     save() {
-      DanhMucService.add("phuongxa", this.phuongXa).then(() => {
-            // this.resetModel();
-            this.dialog = false;
-            this.getAllNhienLieu();
-      }
+      DanhMucService.add("phuongxa", this.phuongXa).then(response => {
+        if (response.data.status == "BAD_REQUEST") {
+          swal(response.data.message, "", "error")
+          return
+        }
+        swal(response.data.message, "", "success")
+          this.getAllPhuongXa();
+          this.closeDialog();
+      })
+    },
+    deleteById(id) {
+      swal({
+        title: "Bạn có chắc chắn muốn xoá?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+          .then((willDelete) => {
+            if (willDelete) {
+              var params = {};
+              params['id'] = id;
+              DanhMucService.delete('phuongxa', params).then((response) => {
+                if (response.data.status === "BAD_REQUEST") {
+                  swal(response.data.message, "", "error")
+                  return
+                }
+                this.getAllPhuongXa();
+                swal(response.data.message, "", "success")
+              })
 
-      )
+            }
+          })
     },
     getUrlImage(name) {
       return ImageService.getImage(name);
@@ -152,7 +174,7 @@ export default ({
     }
   },
   created() {
-    this.getAllNhienLieu();
+    this.getAllPhuongXa();
     this.getAllQuanHuyen();
   }
 })

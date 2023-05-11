@@ -13,18 +13,18 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class NguoiDung {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String userName;
+    private String tenDangNhap;
 
-    private String fullName;
+    private String hoTen;
 
-    private String phone;
+    private String sdt;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "nguoiDung", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Xe> xes = new ArrayList<>();
 }

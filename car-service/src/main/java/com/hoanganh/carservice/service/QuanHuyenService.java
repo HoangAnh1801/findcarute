@@ -28,18 +28,19 @@ public class QuanHuyenService {
     }
 
     public QuanHuyen saveQuanHuyen(QuanHuyen quanHuyen) {
+        QuanHuyen exitsQuanHuyen = quanHuyenRepository.findByName(quanHuyen.getName());
+        System.out.println("exitsQuanHuyen" + exitsQuanHuyen);
+        if (quanHuyen.getId() != null && exitsQuanHuyen!= null) {
+            if (quanHuyen.getId() != exitsQuanHuyen.getId()) {
+                new Reponse(HttpStatus.BAD_REQUEST, "Tên quận huyện đã tồn tại");
+            }
 
-//        if (quanHuyen.getId() != null && exitsQuanHuyen!= null) {
-//            if (quanHuyen.getId() != exitsQuanHuyen.getId()) {
-//                new Reponse(HttpStatus.BAD_REQUEST, "Tên quận huyện đã tồn tại");
-//            }
-//
-//            return quanHuyenRepository.save(quanHuyen);
-//        }
-//
-//        if(exitsQuanHuyen != null) {
-//            new Reponse(HttpStatus.BAD_REQUEST, "Tên quận huyện đã tồn tại");
-//        }
+            return quanHuyenRepository.save(quanHuyen);
+        }
+
+        if(exitsQuanHuyen != null) {
+            new Reponse(HttpStatus.BAD_REQUEST, "Tên quận huyện đã tồn tại");
+        }
 
         return quanHuyenRepository.save(quanHuyen);
     }

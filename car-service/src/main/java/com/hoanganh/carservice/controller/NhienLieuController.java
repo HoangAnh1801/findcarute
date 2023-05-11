@@ -1,6 +1,7 @@
 package com.hoanganh.carservice.controller;
 
 import com.hoanganh.carservice.entity.NhienLieu;
+import com.hoanganh.carservice.reponse.Reponse;
 import com.hoanganh.carservice.service.NhienLieuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,12 @@ public class NhienLieuController {
     }
 
     @PostMapping()
-    public NhienLieu saveNhienLieu(@RequestBody NhienLieu nhienLieu) {
+    public Reponse saveNhienLieu(@RequestBody NhienLieu nhienLieu) {
         return nhienLieuService.saveNhienLieu(nhienLieu);
+    }
+
+    @DeleteMapping("/id")
+    public Reponse deleteNhienLieu(@RequestParam("id") Long id) {
+        return nhienLieuService.deleteNhienLieu(id);
     }
 }

@@ -170,35 +170,19 @@
         <div class="start-roller"></div>
         <div class="wrapper">
           <div class="items-container roll-LL">
-            <div class="item">
-              <img src="../assets/images/toyota.png" alt="" class="company">
+            <div class="item" v-for="hangXe in listHangXe" :key="hangXe.id">
+              <el-tooltip placement="top">
+                <template #content> {{ hangXe.name }} </template>
+                <img :src="getUrlImage(hangXe.urlImage)" alt="" class="company" />
+              </el-tooltip>
             </div>
-            <div class="item">
-              <img src="../assets/images/honda.png" alt="" class="company">
-            </div>
-            <div class="item">
-              <img src="../assets/images/audi.png" alt="" class="company">
-            </div>
-            <div class="item">
-              <img src="../assets/images/vinfast.png" alt="" class="company">
-            </div>
-            <div class="item">
-              <img src="../assets/images/ford.png" alt="" class="company">
-            </div>
-            <div class="item">
-              <img src="../assets/images/mercedes.png" alt="" class="company">
-            </div>
-            <div class="item">
-              <img src="../assets/images/bmw.png" alt="" class="company">
-            </div>
-            <div class="item">
-              <img src="../assets/images/mazda.png" alt="" class="company">
-            </div>
-            <div class="item">
-              <img src="../assets/images/subaru.png" alt="" class="company">
-            </div>
-            <div class="item">
-              <img src="../assets/images/mitshubushi.png" alt="" class="company">
+          </div>
+          <div class="items-container roll-RL">
+            <div class="item" v-for="hangXe in listHangXe" :key="hangXe.id">
+              <el-tooltip placement="top">
+                <template #content> {{ hangXe.name }} </template>
+                <img :src="getUrlImage(hangXe.urlImage)" alt="" class="company" />
+              </el-tooltip>
             </div>
           </div>
         </div>
@@ -488,10 +472,30 @@
 
 <script>
 import Footer from "@/components/Footer";
+import DanhMucService from "@/services/danhmuc.service"
+import ImageService from "@/services/image.service"
 
 export default {
   name: "header",
-  components: {Footer}
+  components: {Footer},
+  data() {
+    return {
+      listHangXe: []
+    }
+  },
+  methods: {
+    getAllHangXe() {
+      DanhMucService.getAll('hangxe').then(response => (
+          this.listHangXe = response.data
+      ))
+    },
+    getUrlImage(name) {
+      return ImageService.getImage(name);
+    },
+  },
+  created() {
+    this.getAllHangXe();
+  }
 };
 </script>
 <style scoped>

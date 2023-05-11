@@ -4,7 +4,6 @@ package com.hoanganh.carservice.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.text.DecimalFormat;
 import java.util.List;
 
 @Data
@@ -63,8 +62,8 @@ public class Xe extends BaseEntity {
     private List<TinhNangXe> tinhNangs;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "userId")
-    private User user;
+    @JoinColumn(name = "nguoiDungId")
+    private NguoiDung nguoiDung;
 
     @OneToMany(mappedBy = "xe",cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<XeImage> xeImages;

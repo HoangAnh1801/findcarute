@@ -37,7 +37,8 @@ public class PhuongXaController {
         return phuongXaService.savePhuongXa(phuongXa);
     }
 
-//    @DeleteMapping(Long id) {
-//
-//    }
+    @DeleteMapping("/id")
+    public Reponse deletePhuongXa(@RequestParam("id") Long id) {
+        return phuongXaService.deletePhuongXa(id);
+    }
 }

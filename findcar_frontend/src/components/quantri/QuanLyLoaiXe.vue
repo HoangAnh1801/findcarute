@@ -23,7 +23,7 @@
         <td>{{ entry.name }}</td>
         <td>
           <button @click="handleEdit(entry.id)"><v-icon icon="mdi:mdi-pencil" /></button>
-          <button>{{entry.id}}</button>
+          <button @click="deleteById(entry.id)" > <v-icon icon="mdi:mdi-trash-can-outline" /></button>
         </td>
       </tr>
       </tbody>
@@ -44,7 +44,8 @@
                 <v-col cols="12">
                   <v-text-field
                       label="Loại xe"
-                      v-model="loaiXe.name"
+                      v-model.trim="loaiXe.name"
+                      variant="outlined"
                       >
                   </v-text-field>
                 </v-col>
@@ -64,7 +65,7 @@
 
 <script>
 import DanhMucService from "@/services/danhmuc.service"
-import ImageService from "@/services/image.service"
+import swal from 'sweetalert';
 
 export default ({
   components: {
@@ -96,10 +97,7 @@ export default ({
   methods: {
     resetModel() {
       this.loaiXe.id = '',
-      this.loaiXe.name = '',
-      this.loaiXe.urlImage = ''
-      this.imageData = '',
-      this.$refs.file.value = ''
+      this.loaiXe.name = ''
     },
     getAllLoaiXe() {
       DanhMucService.getAll('loaixe').then(response => (
@@ -107,16 +105,38 @@ export default ({
       ))
     },
     save() {
-      DanhMucService.add("loaixe", this.loaiXe).then(() => {
-            // this.resetModel();
-            this.getAllLoaiXe();
-            this.closeDialog();
-      }
-
-      )
+      DanhMucService.add("loaixe", this.loaiXe).then(response => {
+          if (response.data.status == "BAD_REQUEST") {
+            swal(response.data.message, "", "error")
+            return
+          }
+          swal(response.data.message, "", "success")
+          this.getAllLoaiXe();
+          this.closeDialog();
+      })
     },
-    getUrlImage(name) {
-      return ImageService.getImage(name);
+    deleteById(id) {
+      swal({
+        title: "Bạn có chắc chắn muốn xoá?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+          .then((willDelete) => {
+            if (willDelete) {
+              var params = {};
+              params['id'] = id;
+              DanhMucService.delete('loaixe', params).then((response) => {
+                if (response.data.status === "BAD_REQUEST") {
+                  swal(response.data.message, "", "error")
+                  return
+                }
+                swal(response.data.message, "", "success")
+                this.getAllLoaiXe();
+              })
+
+            }
+          })
     },
     findHangXeById(id) {
       DanhMucService.findByID("loaixe", id).then(response => {

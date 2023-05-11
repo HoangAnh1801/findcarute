@@ -23,7 +23,7 @@
         <td>{{ entry.name }}</td>
         <td>
           <button @click="handleEdit(entry.id)"><v-icon icon="mdi:mdi-pencil" /></button>
-          <button>{{entry.id}}</button>
+          <button @click="deleteById(entry.id)" > <v-icon icon="mdi:mdi-trash-can-outline" /></button>
         </td>
       </tr>
       </tbody>
@@ -44,7 +44,7 @@
                 <v-col cols="12">
                   <v-text-field
                       label="Tính năng"
-                      v-model="tinhNang.name"
+                      v-model.trim="tinhNang.name"
                       variant="outlined"
                       >
                   </v-text-field>
@@ -65,7 +65,7 @@
 
 <script>
 import DanhMucService from "@/services/danhmuc.service"
-import ImageService from "@/services/image.service"
+import swal from 'sweetalert';
 
 export default ({
   components: {
@@ -103,16 +103,37 @@ export default ({
       ))
     },
     save() {
-      DanhMucService.add("tinhnang", this.tinhNang).then(() => {
-            // this.resetModel();
+      DanhMucService.add("tinhnang", this.tinhNang).then(response => {
+            if (response.data.status == "BAD_REQUEST") {
+              swal(response.data.message, "", "error")
+              return
+            }
+            swal(response.data.message, "", "success")
             this.getAll();
             this.closeDialog();
-      }
-
-      )
+      })
     },
-    getUrlImage(name) {
-      return ImageService.getImage(name);
+    deleteById(id) {
+      swal({
+        title: "Bạn có chắc chắn muốn xoá?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+          .then((willDelete) => {
+            if (willDelete) {
+              var params = {};
+              params['id'] = id;
+              DanhMucService.delete('tinhnang', params).then((response) => {
+                if (response.data.status === "BAD_REQUEST") {
+                  swal(response.data.message, "", "error")
+                  return
+                }
+                this.getAll();
+                swal(response.data.message, "", "success")
+              })
+            }
+          })
     },
     findHangXeById(id) {
       DanhMucService.findByID("tinhnang", id).then(response => {
