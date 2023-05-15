@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface TinhNangRepository extends JpaRepository<TinhNangXe, Long> {
     TinhNangXe findTinhNangXeByName(String name);
+
+    List<TinhNangXe> findAllByNameContaining(String name);
 }

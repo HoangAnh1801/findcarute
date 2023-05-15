@@ -5,6 +5,8 @@ import com.hoanganh.carservice.entity.Xe;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface XeRepository extends JpaRepository<Xe, Long> {
     boolean existsXeByPhuongXaId(Long id);
 
@@ -14,4 +16,7 @@ public interface XeRepository extends JpaRepository<Xe, Long> {
 
     boolean existsAllByTinhNangs(TinhNangXe tinhNangXe);
 
+    boolean existsXeByHangXeId(Long id);
+
+    List<Xe> findAllByNguoiDungId(Long id);
 }

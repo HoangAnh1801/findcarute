@@ -20,8 +20,11 @@ public class NhienLieuService {
     @Autowired
     XeRepository xeRepository;
 
-    public List<NhienLieu> getAllNhienLieu () {
-        return nhienLieuRepository.findAll();
+    public List<NhienLieu> getAllNhienLieu (String keySearch) {
+        if (keySearch == null || keySearch.length() == 0 || keySearch.equals("null")) {
+            return nhienLieuRepository.findAll();
+        }
+        return nhienLieuRepository.findAllByNameContaining(keySearch);
     }
 
     public Optional<NhienLieu> getNhienLieuById(Long id) {

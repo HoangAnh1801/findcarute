@@ -11,4 +11,6 @@ public interface PhuongXaRepository extends JpaRepository<PhuongXa, Long> {
     PhuongXa findAllByName(String name);
 
     List<PhuongXa> findAllByQuanHuyenId(Long id);
+
+    List<PhuongXa> findAllByNameContaining(String name);
 }

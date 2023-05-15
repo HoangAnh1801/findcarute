@@ -19,8 +19,11 @@ public class LoaiXeService {
     @Autowired
     XeRepository xeRepository;
 
-    public List<LoaiXe> getAllLoaiXe() {
-        return loaiXeRepository.findAll();
+    public List<LoaiXe> getAllLoaiXe(String keySearch) {
+        if (keySearch == null || keySearch.length() == 0 || keySearch.equals("null")) {
+            return loaiXeRepository.findAll();
+        }
+        return loaiXeRepository.findAllByNameContaining(keySearch);
     }
 
     public Optional<LoaiXe> getLoaiXeById(Long id) {

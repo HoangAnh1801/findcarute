@@ -22,8 +22,11 @@ public class TinhNangService {
     @Autowired
     XeRepository xeRepository;
 
-    public List<TinhNangXe> getAllTinhNang() {
-        return tinhNangRepository.findAll();
+    public List<TinhNangXe> getAllTinhNang(String keySearch) {
+        if (keySearch == null || keySearch.length() == 0 || keySearch.equals("null")) {
+            return tinhNangRepository.findAll();
+        }
+        return tinhNangRepository.findAllByNameContaining(keySearch);
     }
 
     public Optional<TinhNangXe> getTinhNangById(Long id) {

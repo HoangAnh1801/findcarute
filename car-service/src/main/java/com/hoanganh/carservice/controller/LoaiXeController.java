@@ -16,8 +16,8 @@ public class LoaiXeController {
     LoaiXeService loaiXeService;
 
     @GetMapping()
-    public List<LoaiXe> getAllLoaiXe() {
-        return loaiXeService.getAllLoaiXe();
+    public List<LoaiXe> getAllLoaiXe(@RequestParam(name = "search", required = false) String search) {
+        return loaiXeService.getAllLoaiXe(search);
     }
 
     @GetMapping("/{id}")

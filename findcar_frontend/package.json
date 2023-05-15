@@ -17,6 +17,7 @@
     "element-plus": "^2.3.3",
     "jquery": "^3.2.1",
     "sweetalert": "^2.1.2",
+    "v-pagination-3": "^0.1.7",
     "vue": "^3.2.13",
     "vue-photo-zoom-pro": "^3.0.1",
     "vue-router": "^4.0.13",

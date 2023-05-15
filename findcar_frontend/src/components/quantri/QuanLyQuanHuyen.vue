@@ -1,11 +1,17 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-6">
+      <div class="col-12">
         <h2>Danh sách quận huyện</h2>
       </div>
-      <div class="col-6">
-        <button class="btn btn-success float-right" @click="dialog=true"><v-icon icon="mdi:mdi-plus" /> Thêm mới</button>
+      <div class="col-9">
+        <button class="btn btn-success" @click="dialog=true"><v-icon icon="mdi:mdi-plus" /> Thêm mới</button>
+      </div>
+      <div class="col-3">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" style="border-right: 0" v-model="keySearch" @input="getAllQuanHuyen" aria-label="Amount (to the nearest dollar)">
+          <span class="input-group-text bg-white"><v-icon icon="mdi:mdi-magnify-expand" /></span>
+        </div>
       </div>
     </div>
     <table class="table table-striped">
@@ -17,7 +23,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="(entry, stt) in listQuanHuyen" :key="entry.id">
+      <tr v-for="(entry, stt) in resultQuery" :key="entry.id">
         <th scope="row" style="width: 5%">{{ stt + 1 }}</th>
         <td>{{ entry.id }}</td>
         <td>{{ entry.name }}</td>
@@ -29,6 +35,9 @@
       </tr>
       </tbody>
     </table>
+    <div class="row float-right">
+      <pagination v-model="page" :records="rows" :per-page="perPage" @paginate="onPageChanged"/>
+    </div>
 
     <div class="row justify-content-center">
       <v-dialog
@@ -84,12 +93,15 @@
 import DanhMucService from "@/services/danhmuc.service"
 import ImageService from "@/services/image.service"
 import swal from 'sweetalert';
+import Pagination from 'v-pagination-3'
 
 export default ({
-  components: {
-  },
+  components: { Pagination },
   data () {
     return {
+      page: 1,
+      perPage: 5,
+      paginatedItems : this.listQuanHuyen,
       imageData: '',
       dialog: false,
       headers: [
@@ -115,6 +127,21 @@ export default ({
         name: '',
         urlImage: '',
       },
+      keySearch: ''
+    }
+  },
+  computed: {
+    rows() {
+      return this.listQuanHuyen.length
+    },
+    resultQuery(){
+      if(this.keySearch){
+        return this.listQuanHuyen.filter((item)=>{
+          return this.keySearch.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v))
+        })
+      }else{
+        return this.paginatedItems;
+      }
     }
   },
   methods: {
@@ -126,8 +153,11 @@ export default ({
       this.$refs.file.value = ''
     },
     getAllQuanHuyen() {
-      DanhMucService.getAll('quanhuyen').then(response => (
-          this.listQuanHuyen = response.data
+      var params = {};
+      params['search'] = this.keySearch;
+      DanhMucService.getAll('quanhuyen', params).then(response => (
+          this.listQuanHuyen = response.data,
+        this.paginate(this.perPage, 0)
       ))
     },
     save() {
@@ -157,12 +187,12 @@ export default ({
                     this.getAllQuanHuyen();
                     this.closeDialog();
                   })
-                      .catch(e => {
-                        this.notification(e.response.data.message, "error");
+                      .catch(() => {
+                        // this.notification(e.response.data.message, "error");
                       });
                 })
-                .catch(e => {
-                  this.notification(e.response.data.message, "error");
+                .catch(() => {
+                  // this.notification(e.response.data.message, "error");
                 });
           } else {
             // this.resetModel();
@@ -230,7 +260,17 @@ export default ({
     closeDialog() {
       this.dialog = false
       this.resetModel()
-    }
+    },
+    paginate(page_size, page_number) {
+      let itemsToParse = this.listQuanHuyen;
+      this.paginatedItems = itemsToParse.slice(
+          page_number * page_size,
+          (page_number + 1) * page_size
+      );
+    },
+    onPageChanged(page) {
+      this.paginate(this.perPage, page - 1);
+    },
   },
   created() {
     this.getAllQuanHuyen();

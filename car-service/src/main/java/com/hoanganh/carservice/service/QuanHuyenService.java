@@ -19,8 +19,11 @@ public class QuanHuyenService {
     @Autowired
     PhuongXaRepository phuongXaRepository;
 
-    public List<QuanHuyen> getAllQuanHuyen() {
-        return quanHuyenRepository.findAll();
+    public List<QuanHuyen> getAllQuanHuyen(String keySearch) {
+        if (keySearch == null || keySearch.length() == 0 || keySearch.equals("null")) {
+            return quanHuyenRepository.findAll();
+        }
+        return quanHuyenRepository.findAllByNameContaining(keySearch);
     }
 
     public Optional<QuanHuyen> getQuanHuyenById(Long id) {

@@ -9,8 +9,8 @@
       </div>
       <div class="col-3">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-          <span class="input-group-text"><v-icon icon="mdi:mdi-magnify-expand" /></span>
+          <input type="text" class="form-control" style="border-right: 0" v-model="keySearch" @input="getAllNhienLieu" aria-label="Amount (to the nearest dollar)">
+          <span class="input-group-text bg-white"><v-icon icon="mdi:mdi-magnify-expand" /></span>
         </div>
       </div>
     </div>
@@ -98,6 +98,7 @@ export default ({
         name: '',
         urlImage: '',
       },
+      keySearch: ''
     }
   },
   methods: {
@@ -106,7 +107,9 @@ export default ({
       this.nhienLieu.name = ''
     },
     getAllNhienLieu() {
-      DanhMucService.getAll('nhienlieu').then(response => (
+      var params = {};
+      params['search'] = this.keySearch;
+      DanhMucService.getAll('nhienlieu', params).then(response => (
           this.listNhienLieu = response.data
       ))
     },

@@ -1,8 +1,8 @@
 import http from "@/http-common";
 
 class DanhMuc {
-    getAll(entity) {
-        return http.get("/car/v1/"+`${entity}`);
+    getAll(entity, params) {
+        return http.get("/car/v1/"+`${entity}`, { params: params });
     }
 
     findByID(entity,id) {

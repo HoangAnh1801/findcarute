@@ -18,8 +18,8 @@ public class PhuongXaController {
     PhuongXaService phuongXaService;
 
     @GetMapping()
-    public List<PhuongXa> getAllPhuongXa() {
-        return phuongXaService.getAllPhuongXa();
+    public List<PhuongXa> getAllPhuongXa(@RequestParam(name = "search", required = false) String search) {
+        return phuongXaService.getAllPhuongXa(search);
     }
 
     @GetMapping("/{id}")

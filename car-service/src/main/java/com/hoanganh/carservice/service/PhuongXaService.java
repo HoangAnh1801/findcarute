@@ -19,8 +19,11 @@ public class PhuongXaService {
     @Autowired
     XeRepository xeRepository;
 
-    public List<PhuongXa> getAllPhuongXa() {
-        return phuongXaRepository.findAll();
+    public List<PhuongXa> getAllPhuongXa(String keySearch) {
+        if (keySearch == null || keySearch.length() == 0 || keySearch.equals("null")) {
+            return phuongXaRepository.findAll();
+        }
+        return phuongXaRepository.findAllByNameContaining(keySearch);
     }
 
     public Optional<PhuongXa> getPhuongXaById(Long id) {

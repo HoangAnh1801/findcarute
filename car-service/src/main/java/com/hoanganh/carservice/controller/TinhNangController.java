@@ -18,8 +18,8 @@ public class TinhNangController {
     TinhNangService tinhNangService;
 
     @GetMapping()
-    public List<TinhNangXe> getAllTinhNang() {
-        return tinhNangService.getAllTinhNang();
+    public List<TinhNangXe> getAllTinhNang(@RequestParam(name = "search", required = false) String search) {
+        return tinhNangService.getAllTinhNang(search);
     }
 
     @GetMapping("/{id}")

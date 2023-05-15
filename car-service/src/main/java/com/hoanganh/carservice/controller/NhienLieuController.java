@@ -17,8 +17,8 @@ public class NhienLieuController {
     NhienLieuService nhienLieuService;
 
     @GetMapping()
-    public List<NhienLieu> getAllNhienLieu() {
-        return nhienLieuService.getAllNhienLieu();
+    public List<NhienLieu> getAllNhienLieu(@RequestParam(name = "search", required = false) String search) {
+        return nhienLieuService.getAllNhienLieu(search);
     }
 
     @GetMapping("/{id}")

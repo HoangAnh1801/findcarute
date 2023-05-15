@@ -1,3 +1,9 @@
 .color-06a303 {
     color: #06a303 !important;
 }
+p.VuePagination__count.VuePagination__count {
+    display: none;
+}
+ul.VuePagination__pagination.pagination.VuePagination__pagination li {
+    margin: 2px;
+}

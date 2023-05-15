@@ -16,8 +16,8 @@ public class QuanHuyenController {
     QuanHuyenService quanHuyenService;
 
     @GetMapping()
-    public List<QuanHuyen> getAllQuanHuyen() {
-        return quanHuyenService.getAllQuanHuyen();
+    public List<QuanHuyen> getAllQuanHuyen(@RequestParam(name = "search", required = false) String search) {
+        return quanHuyenService.getAllQuanHuyen(search);
     }
 
     @GetMapping("/{id}")
