@@ -2,13 +2,22 @@
   <div class="container">
     <h2 class="text-center" style="margin-top: 100px">Đăng xe mới</h2>
     <div class="row" style="margin-top: 100px">
-      <div class="col-12">
+      <div class="col-9">
         <v-text-field
             label="Tiêu đề"
             variant="outlined"
             v-model="xe.tieuDe"
         >
         </v-text-field>
+      </div>
+      <div class="col-lg-3">
+        <v-combobox
+            label="Hãng xe"
+            item-title="name"
+            :items="listHangXe"
+            v-model="xe.hangXe"
+            variant="outlined"
+        ></v-combobox>
       </div>
     </div>
     <div class="row mt-5">
@@ -21,13 +30,13 @@
         </v-text-field>
       </div>
       <div class="col-lg-3">
-        <v-combobox
-            label="Hãng xe"
-            item-title="name"
-            :items="listHangXe"
-            v-model="xe.hangXe"
+        <v-text-field
+            label="Số ghế"
             variant="outlined"
-        ></v-combobox>
+            type="number"
+            v-model="xe.soGhe"
+        >
+        </v-text-field>
       </div>
       <div class="col-lg-2">
         <v-text-field
@@ -273,6 +282,7 @@ export default {
           name: '',
           urlImage: ''
         },
+        soGhe: '',
         namSX: '',
         loaiXe: {
           id: '',
@@ -297,7 +307,7 @@ export default {
         mota: '',
         tinhNangs: [],
         xeImages: [],
-        trangThaiDuyet: ''
+        trangThaiDuyet: 0
       }
     }
   },
@@ -355,8 +365,8 @@ export default {
       })
     },
     save() {
-      this.xe.nguoiDung.id = 1
-      this.xe.trangThaiDuyet = 1
+      this.xe.createdDate = new Date().getTime();
+      // this.xe.nguoiDung.id = this.xe
       var dataTinhNang = [];
       for (let i in this.selectdTinhNang) {
         dataTinhNang.push({id: this.selectdTinhNang[i]})
@@ -367,32 +377,6 @@ export default {
       // var currentDate = new Date().toJSON().slice(0,10).replace(/-/g,'/');
       // this.xe.createdDate = currentDate;
 
-      // var data = {
-      //   id: this.xe.id,
-      //   user: {
-      //     id: this.xe.user.id
-      //   },
-      //   createdDate: this.xe.createdDate,
-      //   tenXe: this.xe.tenXe,
-      //   tieuDe: this.xe.tieuDe,
-      //   hangXe: {
-      //     id: this.xe.hangXe.id
-      //   },
-      //   namSX: this.xe.namSx,
-      //   loaiXe: {
-      //     id: this.xe.loaiXe.id
-      //   },
-      //   nhienLieu: {
-      //     id: this.xe.nhienLieu.id
-      //   },
-      //   sdt: this.xe.sdt,
-      //   phuongXa: {
-      //     id: this.xe.phuongXa.id
-      //   },
-      //   giaXe: this.xe.giaXe,
-      //   mota: this.xe.mota,
-      //   tinhNangs: this.xe.tinhNangs,
-      // }
 
       XeService.add(this.xe).then(response => {
         let id = response.data.id
@@ -492,6 +476,8 @@ export default {
     }
   },
   created() {
+    var user = JSON.parse(localStorage.getItem('user'));
+    this.xe.nguoiDung.id = user.id;
     var id = this.$route.params.id;
     if(id != null && id != undefined) {
       this.getXeById(id)

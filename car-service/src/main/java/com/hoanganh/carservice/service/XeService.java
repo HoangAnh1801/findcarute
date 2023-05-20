@@ -7,6 +7,8 @@ import com.hoanganh.carservice.reponse.Reponse;
 import com.hoanganh.carservice.repository.XeImageRepository;
 import com.hoanganh.carservice.repository.XeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,12 +24,28 @@ public class XeService {
     @Autowired
     XeImageRepository xeImageRepository;
 
-    public List<Xe> getAllXe() {
-        return xeRepository.findAll();
+    public Page<Xe> getAllXe(Pageable pageable, String keyword, Boolean trangThaiDuyet) {
+        if (trangThaiDuyet != null) {
+            return xeRepository.findAllByTrangThaiDuyet(pageable, trangThaiDuyet);
+        }
+
+        if (keyword == null || keyword.length() == 0 || keyword.equals("null")) {
+            return xeRepository.findAll(pageable);
+        }
+
+        return xeRepository.findAllByTenXeContaining(pageable, keyword);
     }
 
     public Optional<Xe> getXeById(Long id) {
         return xeRepository.findById(id);
+    }
+
+    public Page<Xe> getXeByNguoiDungId(Pageable pageable, String keyword, Long id) {
+
+        if (keyword == null || keyword.length() == 0 || keyword.equals("null")) {
+            return xeRepository.findAllByNguoiDungId(pageable, id);
+        }
+        return xeRepository.findAllByTenXeContainingAndNguoiDungId(pageable, keyword, id);
     }
 
     public XeImage saveImage(XeImageDTO xeImageDTO) {
@@ -45,12 +63,17 @@ public class XeService {
 
     @Transactional
     public Xe saveXe(Xe xe) {
-        System.out.println(xe);
         return xeRepository.save(xe);
+    }
+
+    public void duyetXe(Long id) {
+        Xe xe = xeRepository.findById(id).get();
+        xe.setTrangThaiDuyet(true);
+        xeRepository.save(xe);
     }
 
     public Reponse deleteXe(Long id) {
         xeRepository.deleteById(id);
-        return new Reponse(HttpStatus.OK, "Đã xoá bài đăng");
+        return new Reponse(HttpStatus.OK, "Xoá thành công!");
     }
 }

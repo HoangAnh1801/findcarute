@@ -78,7 +78,6 @@ export default ({
   },
   data () {
     return {
-      imageData: '',
       dialog: false,
       headers: [
         {

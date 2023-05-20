@@ -10,6 +10,4 @@ public class LoginDTO {
 
     @NotBlank
     private String matKhau;
-
-
 }

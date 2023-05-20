@@ -7,3 +7,29 @@ p.VuePagination__count.VuePagination__count {
 ul.VuePagination__pagination.pagination.VuePagination__pagination li {
     margin: 2px;
 }
+.color-DD4238 {
+    color: #DD4238 !important;
+}
+.color-248C92 {
+    color: #248C92 !important;
+}
+.is-invalid {
+    border: 1px solid red !important;
+    border-radius: 5px;
+}
+ i.el-icon.el-input__icon.el-input__password {
+     font-size: 22px;
+     color: green;
+ }
+ .bg-9dc5e7 {
+     background: #9dc5e7 !important;
+ }
+#container-view.collapsed, #container-view.onmobile {
+    padding-left: 65px!important;
+}
+.v-sidebar-menu {
+    background-color: #2e41b38f;
+}
+.cursor-pointer {
+    cursor: pointer !important;
+}

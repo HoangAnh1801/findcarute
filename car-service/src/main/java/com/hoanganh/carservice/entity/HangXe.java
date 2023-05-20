@@ -2,6 +2,7 @@ package com.hoanganh.carservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -19,5 +20,6 @@ public class HangXe extends BaseEntity {
 
     @OneToMany(mappedBy = "hangXe")
     @JsonIgnore
+    @ToString.Exclude
     private List<Xe> xes;
 }

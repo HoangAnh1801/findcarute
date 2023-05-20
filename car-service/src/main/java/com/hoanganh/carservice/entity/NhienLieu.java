@@ -2,6 +2,8 @@ package com.hoanganh.carservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.ToString;
+
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
@@ -15,5 +17,6 @@ public class NhienLieu extends BaseEntity {
 
     @OneToMany(mappedBy = "nhienLieu")
     @JsonIgnore
+    @ToString.Exclude
     private List<Xe> xes;
 }

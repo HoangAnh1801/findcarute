@@ -7,13 +7,10 @@
           <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
               <div class="carousel-item active">
-<!--                <img :src="getUrlImage(xe.anhNen)" class="d-block w-100 img-fluid" style="max-height: 450px" alt="...">-->
                 <vue-photo-zoom-pro :url="getUrlImage(xe.anhNen)" class="d-block w-100 img-fluid" style="max-height: 450px"></vue-photo-zoom-pro>
-
               </div>
               <div class="carousel-item" v-for="image in xe.xeImages" :key="image.id">
                 <vue-photo-zoom-pro :url="getUrlImage(image.urlImage)" class="d-block w-100 img-fluid" style="max-height: 450px"></vue-photo-zoom-pro>
-<!--                <img :src="getUrlImage(image.urlImage)" class="d-block w-100 img-fluid" style="max-height: 450px" alt="...">-->
               </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
@@ -110,7 +107,7 @@
               <div class="col-lg-6">
                 <span class="demonstration col-12">Ngày nhận xe</span>
                 <el-date-picker
-                    v-model="thueXe.ngayThue"
+                    v-model="thueXes.ngayBatDau"
                     class="w-100"
                     type="date"
                     placeholder="Chọn ngày nhận xe"
@@ -123,13 +120,13 @@
               <div class="col-lg-6">
                 <span class="demonstration col-12">Ngày trả xe</span>
                 <el-date-picker
-                    v-model="thueXe.ngayTra"
+                    v-model="thueXes.ngayKetThuc"
                     @change="dateDiff()"
                     class="w-100"
                     type="date"
                     placeholder="Chọn ngày trả xe"
                     format="DD/MM/YYYY"
-                    :disabled-date="disabledDate"
+                    :disabled-date="disabledDateBeforeDateStart"
                     :shortcuts="shortcuts"
                     :size="size"
                 />
@@ -138,7 +135,7 @@
           </div>
           <div class="row mx-auto mt-4">
               <label class="form-label pl-0">Địa điểm giao nhận xe</label>
-              <input type="text" class="form-control">
+              <input type="text" class="form-control" v-model="thueXes.diaChiGiaoXe">
           </div>
 
           <div class="row mx-auto mt-5">
@@ -168,6 +165,7 @@
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -183,39 +181,49 @@ export default {
   },
   data() {
     return {
-      xe: '',
-      thueXe: {
-        id: '',
-        ngayThue: '',
-        ngayTra: ''
+      datePickerOptions: {
+        disabledDate (date) {
+          return date > new Date()
+        }
       },
-      datediff: ''
+      xe: '',
+      thueXes: {
+        id: '',
+        diaChiGiaoXe: '',
+        ngayBatDau: '',
+        ngayKetThuc: '',
+        nguoiDung: {
+          id: ''
+        },
+        xe: {
+          id: ''
+        }
+      },
+      datediff: '',
+      date: ''
     }
   },
   methods: {
+    disabledDateBeforeDateStart(time) {
+      let dateStart = new Date()
+      return  time.getTime() < dateStart
+    },
     dateDiff() {
-      console.log('ngayThue',this.thueXe.ngayThue)
-      console.log('ngayTra', this.thueXe.ngayTra)
-      var date1 = this.thueXe.ngayThue
-      var date2 = this.thueXe.ngayTra
-
+      var date1 = this.thueXes.ngayBatDau
+      var date2 = this.thueXes.ngayKetThuc
       var Difference_In_Time = date2 - date1;
-
       var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24)
-      console.log('Difference_In_Days', Difference_In_Days)
-
       this.datediff = Difference_In_Days
-
     },
     thue() {
-
-
-
-
+      var date = this.thueXes.ngayBatDau.toJSON().slice(0,10).split('-').join('-')
+      var date2 = this.thueXes.ngayKetThuc.toJSON().slice(0,10).split('-').join('-')
+      this.thueXes.ngayBatDau = date
+      this.thueXes.ngayKetThuc = date2
+      XeService.saveThueXe(this.thueXes)
     },
     formatCurrency(money) {
       money = money.toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
-      console.log(money)
       return money
     },
     getXeById(id) {
@@ -228,7 +236,10 @@ export default {
     },
   },
   created() {
+    var user = JSON.parse(localStorage.getItem('user'));
+    this.thueXes.nguoiDung.id = user.id;
     var id = this.$route.params.id;
+    this.thueXes.xe.id = id;
     this.getXeById(id)
   }
 }

@@ -1,9 +1,11 @@
 package com.hoanganh.carservice.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -65,11 +67,11 @@ public class Xe extends BaseEntity {
     @JoinColumn(name = "nguoiDungId")
     private NguoiDung nguoiDung;
 
+    @OneToMany(mappedBy = "xe", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<ThueXe> thueXes;
+
     @OneToMany(mappedBy = "xe",cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<XeImage> xeImages;
-
-//    @ManyToOne
-//    @JoinColumn(name = "typeReatlyId")
-//    private TypeReatly typeReatly;
 
 }

@@ -1,9 +1,9 @@
 .header-blue {
   background: linear-gradient(135deg, #0d8e09, #181a17);
   background-color: #184e8e;
-  padding-bottom: 80px;
+  /*padding-bottom: 80px;*/
   position: relative;
-  height: 61% !important;
+  /*height: 61% !important;*/
   /* font-family: 'Source Sans Pro', sans-serif; */
 }
 

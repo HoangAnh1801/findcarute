@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+import store from '@/store'
 
 import 'bootstrap/dist/js/bootstrap.bundle.min'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -33,5 +34,6 @@ app.use(router);
 app.use(vuetify);
 // app.use(jQuery);
 app.use(ElementPlus);
+app.use(store);
 app.component('EasyDataTable', Vue3EasyDataTable)
 app.mount("#app");
