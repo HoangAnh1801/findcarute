@@ -2,13 +2,10 @@
   <div class="container-fluid" style="margin-top: 50px; padding: 0px 50px">
     <div class="row">
       <div class="col-12">
-        <h2>Danh sách xe</h2>
+
       </div>
       <div class="col-9">
-        <router-link to="xe">
-          <button class="btn btn-success"><v-icon icon="mdi:mdi-plus" /> Thêm mới</button>
-        </router-link>
-
+        <h2>Danh sách xe đã thuê</h2>
       </div>
       <div class="col-3">
         <div class="input-group mb-3">
@@ -28,18 +25,31 @@
       <tbody>
       <tr v-for="(entry, stt) in listXe" :key="entry.id" style="vertical-align: middle;">
         <th scope="row" style="width: 5%">{{ stt + 1 }}</th>
-<!--        <td>{{ entry.id }}</td>-->
-        <td>{{ entry.tenXe }}</td>
-        <td>{{ entry.giaXe }}</td>
-        <td>{{ entry.diaChi }}</td>
-        <td><img :src="getUrlImage(entry.anhNen)" style="max-height: 100px; max-width: 230px"/></td>
+        <!--        <td>{{ entry.id }}</td>-->
+        <td>{{ entry.xe.tenXe }}</td>
         <td>
-          <el-tag v-if="entry.trangThaiDuyet == true" class="mx-1" effect="dark" type="success">
+          <template v-if="entry.trangThaiDuyet == true">
+            {{ entry.nguoiDung.sdt }}
+          </template>
+
+        </td>
+        <td>{{ entry.xe.hangXe.name }}</td>
+        <td>{{ formatDateTime(entry.ngayBatDau) }}</td>
+        <td>{{ formatDateTime(entry.ngayKetThuc) }}</td>
+<!--        <td v-if="entry.xe.nguoiDung.id == nguoiDungId">{{ entry.xe.nguoiDung.id }}</td>-->
+        <td>
+          <el-tag v-if="entry.trangThaiDuyet == true" class="mx-1 cursor-pointer" effect="dark" type="success">
             Đã duyệt
           </el-tag>
-          <el-tag v-else class="mx-1" effect="dark" type="danger">
-            Chưa duyệt
-          </el-tag>
+          <template v-else>
+            <el-tag v-if="entry.xe.nguoiDung.id == nguoiDungId" class="mx-1 cursor-pointer" @click="clickDuyet(entry.id)" effect="dark" type="danger">
+              Chưa duyệt
+            </el-tag>
+            <el-tag v-else class="mx-1 cursor-pointer" effect="dark" type="danger">
+              Chưa duyệt
+            </el-tag>
+          </template>
+
 
         </td>
         <td v-if="isQuanTri">
@@ -48,9 +58,6 @@
           </router-link>
         </td>
         <td v-else>
-          <router-link :to="{ name: 'update-xe', params: { id: entry.id } }">
-            <button><v-icon icon="mdi:mdi-pencil color-248C92"/></button>
-          </router-link>
           <button @click="deleteById(entry.id)" > <v-icon icon="mdi:mdi-trash-can-outline color-DD4238"/></button>
         </td>
       </tr>
@@ -60,7 +67,7 @@
       <v-pagination
           v-if="totalPages > 1"
           variant="flat"
-          active-color="#9dc5e7"
+          active-color="#198754"
           color="#ffffff"
           v-model="page"
           class="my-4"
@@ -68,19 +75,19 @@
           :total-visible="5"
           @update:modelValue="changeListXe"
       ></v-pagination>
+      <!--      <pagination v-model="page" :total-visible="5" :length="totalPages" :per-page="perPage" @update:modelValue="getListXe" />-->
     </div>
 
   </div>
 </template>
 
 <script>
-import ImageService from "@/services/image.service"
 import XeService from "@/services/xe.service"
 import swal from 'sweetalert';
-import AuthenService from "@/services/auth.services"
+// import AuthenService from "@/services/auth.services"
 
 export default ({
-  name: "QuanLyXe",
+  name: "DanhSachXeThue",
   data () {
     return {
       headers: [
@@ -91,23 +98,28 @@ export default ({
         // },
         {
           name: 'Tên xe',
-          code: 'tenXe',
+          code: 'xe.tenXe',
           type: 'text'
         },
         {
-          name: 'Giá tiền',
-          code: 'giaTien',
+          name: 'Số điện thoại',
+          code: 'nguoiDung.sdt',
+          type: 'text'
+        },
+        {
+          name: 'Hãng xe',
+          code: 'xe.hangXe',
+          type: 'text'
+        },
+        {
+          name: 'Ngày bắt đầu',
+          code: 'ngayBatDau',
           type: 'number'
         },
         {
-          name: 'Địa chỉ',
-          code: 'diaChi',
+          name: 'Ngày kết thúc',
+          code: 'ngayKetThuc',
           type: 'text'
-        },
-        {
-          name: 'Ảnh',
-          code: 'anhNen',
-          type: 'image'
         },
         {
           name: 'Trạng thái duyệt',
@@ -116,7 +128,6 @@ export default ({
         },
       ],
       listXe: [],
-      listAllXe: [],
       nguoiDungId: '',
       keySearch: '',
       page: 1,
@@ -144,6 +155,38 @@ export default ({
   //   return isQuanTri
   // },
   methods: {
+    clickDuyet(id) {
+      swal({
+        title: "Duyệt yêu cầu thuê xe",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      }).then((willDelete) => {
+        if (willDelete) {
+          XeService.duyetThueXe(id).then(response => {
+            swal(response.data.message,'', 'success')
+            window.load()
+          })
+        }
+      })
+    },
+    formatDateTime(date1) {
+      const dateString = date1;
+
+// Chuyển chuỗi thành đối tượng ngày
+      const date = new Date(dateString);
+
+// Lấy thông tin ngày, tháng, năm từ đối tượng ngày
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+
+// Định dạng lại thành chuỗi ngày tháng
+      const formattedDate = `${day}-${month}-${year}`;
+      console.log("Ngày tháng sau khi chuyển đổi:", formattedDate);
+      return formattedDate
+
+    },
     deleteById(id) {
       swal({
         title: "Bạn có chắc chắn muốn xoá?",
@@ -154,8 +197,8 @@ export default ({
           .then((willDelete) => {
             if (willDelete) {
               XeService.delete(id).then((response) => {
-                  swal(response.data.message, "", "success")
-                  this.getListXe(this.nguoiDungId);
+                swal(response.data.message, "", "success")
+                this.getListXe(this.nguoiDungId);
               })
             }
           })
@@ -167,57 +210,34 @@ export default ({
       params['id'] = this.nguoiDungId
       params['search'] = this.keySearch
       console.log('param', params)
-      XeService.findByNguoiDungID(params).then(response => (
-          this.listXe = response.data.content,
-          this.page_size = response.data.size,
-          this.totalPages = response.data.totalPages
+      XeService.findThueXeByNguoiDung(params).then(response => (
+          console.log('datcontent', response.data.content),
+              this.listXe = response.data.content,
+              this.page_size = response.data.size,
+              this.totalPages = response.data.totalPages
       ))
     },
-    getAllXe() {
-      let params = {}
-      params['page'] = this.page
-      params['limit'] = this.page_size
-      params['search'] = this.keySearch
-      XeService.getAll(params).then(response => {
-        this.listXe = response.data.content,
-        this.page_size = response.data.size,
-        this.totalPages = response.data.totalPages
-      })
-    },
-    getUrlImage(name) {
-      return ImageService.getImage(name);
-    },
-    async getUser(tenDn) {
-      await AuthenService.findByTenDangNhap(tenDn).then(response => {
-        this.nguoiDungId = response.data.id
-        console.log(this.nguoiDungId);
-      })
-    },
+
+    // async getUser(tenDn) {
+    //   await AuthenService.findByTenDangNhap(tenDn).then(response => {
+    //     this.nguoiDungId = response.data.id
+    //     console.log(this.nguoiDungId);
+    //   })
+    // },
     changeListXe() {
-      if (this.isQuanTri) {
-        this.getAllXe();
-      } else {
-        this.getListXe();
-      }
+      this.getListXe();
+
     }
   },
   created() {
     var user = JSON.parse(localStorage.getItem('user'));
     this.tenDangNhap = user.tenDangNhap;
     this.nguoiDungId = user.id
-    if (this.isQuanTri) {
-      this.getAllXe();
-    } else {
-      this.getListXe();
-    }
+
+    this.getListXe();
+
     // this.getListXe();
-  },
-  // watch: {
-  //   nguoiDungId() {
-  //
-  //
-  //   }
-  // }
+  }
 })
 </script>
 

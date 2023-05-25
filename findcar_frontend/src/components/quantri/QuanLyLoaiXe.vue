@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" style="margin-top: 50px; padding: 0px 50px">
     <div class="row">
       <div class="col-12">
         <h2>Danh sách loại xe</h2>
@@ -14,7 +14,7 @@
         </div>
       </div>
     </div>
-    <table class="table table-striped">
+    <table class="table" style="box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);border-radius: 5px;">
       <thead>
       <tr>
         <th scope="col">STT</th>
@@ -82,7 +82,7 @@ export default ({
   data () {
     return {
       page: 1,
-      perPage: 5,
+      perPage: 10,
       paginatedItems : this.listLoaiXe,
       imageData: '',
       dialog: false,
@@ -102,7 +102,6 @@ export default ({
       loaiXe: {
         id: '',
         name: '',
-        urlImage: '',
       },
       keySearch: ''
     }
@@ -152,6 +151,7 @@ export default ({
           }
           swal(response.data.message, "", "success")
           this.getAllLoaiXe();
+          this.resultQuery();
           this.closeDialog();
       })
     },

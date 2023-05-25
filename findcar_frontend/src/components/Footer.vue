@@ -2,7 +2,7 @@
     <!-- Footer -->
     <footer
         class="text-center text-lg-start text-white"
-        style="background-color: #1c2331"
+        style="background-color: rgb(41 27 93) !important;"
     >
       <section class="p-5">
         <div class="container text-center text-md-start mt-5">

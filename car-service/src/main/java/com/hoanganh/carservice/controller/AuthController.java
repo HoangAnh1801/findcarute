@@ -4,15 +4,14 @@ import com.hoanganh.carservice.dto.*;
 import com.hoanganh.carservice.entity.ERole;
 import com.hoanganh.carservice.entity.NguoiDung;
 import com.hoanganh.carservice.entity.QuyenTruyCap;
-import com.hoanganh.carservice.repository.NguoiDungRepository;
 import com.hoanganh.carservice.security.JwtUtils;
 import com.hoanganh.carservice.service.NguoiDungService;
 import com.hoanganh.carservice.util.Constants;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.Valid;
 import java.util.HashSet;
@@ -26,7 +25,6 @@ import java.util.Set;
 public class AuthController {
 
     private final JwtUtils jwtUtils;
-    private final NguoiDungRepository thanhVienRepository;
     @Autowired
     private final NguoiDungService thanhVienService;
 
@@ -51,7 +49,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserSignupDTO signUpRequest) {
-        if (thanhVienService.existsByTenDangNhap(signUpRequest.getTenDangNhap())) {
+        if (thanhVienService.existsByTenDangNhap(signUpRequest.getTenDangNhap()) ) {
             return ResponseEntity.ok("Error: Username is already taken!");
         }
 

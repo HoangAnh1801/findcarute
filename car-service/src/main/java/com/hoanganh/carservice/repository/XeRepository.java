@@ -11,7 +11,29 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.List;
 
 public interface XeRepository extends PagingAndSortingRepository<Xe, Long> {
-//    Page<Xe> findAllByTenXeContainingOrHOrHangXeNameOrGiaXe(Pageable pageable, String keyword);
+//    Page<Xe> findAllByTenXeContainingOrHOrHangXeContaining(Pageable pageable, String keyword);
+    Page<Xe> findAllByLoaiXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrue(Pageable pageable, Long loaixeid, Long quanid);
+
+    Page<Xe> findAllByHangXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrue(Pageable pageable, Long hangxexeid, Long quanid);
+
+    Page<Xe> findAllByLoaiXeIdAndHangXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrue(Pageable pageable, Long loaixeid, Long hangxeid, Long quanid);
+
+    Page<Xe> findAllByPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrue(Pageable pageable, Long quanHuyenId);
+
+    Page<Xe> findAllByPhuongXaQuanHuyenIdAndTenXeContainingAndTrangThaiDuyetIsTrue(Pageable pageable, Long quanHuyenId, String keySearch);
+
+    Page<Xe> findAllByLoaiXeIdAndTrangThaiDuyetIsTrue(Pageable pageable, Long id);
+
+    Page<Xe> findAllByLoaiXeIdAndTenXeContainingAndTrangThaiDuyetIsTrue(Pageable pageable, Long id, String keySearch);
+
+    Page<Xe> findAllByHangXeIdAndTrangThaiDuyetIsTrue(Pageable pageable, Long id);
+
+    Page<Xe> findAllByHangXeIdAndTenXeContainingAndTrangThaiDuyetIsTrue(Pageable pageable, Long id, String keySearch);
+
+    Page<Xe> findAllByHangXeIdAndLoaiXeIdAndTrangThaiDuyetIsTrue(Pageable pageable, Long hangxeid, Long loaixeid);
+
+    Page<Xe> findAllByHangXeIdAndLoaiXeIdAndTenXeContainingAndTrangThaiDuyetIsTrue(Pageable pageable, Long hangxeid, Long loaixeid, String keySearch);
+
     Page<Xe> findAllByTenXeContaining(Pageable pageable, String keyword);
 
     Page<Xe> findAllByTrangThaiDuyet(Pageable pageable, Boolean trangThai);
@@ -31,4 +53,6 @@ public interface XeRepository extends PagingAndSortingRepository<Xe, Long> {
     Page<Xe> findAllByNguoiDungId(Pageable pageable, Long id);
 
     Page<Xe> findAllByTenXeContainingAndNguoiDungId(Pageable pageable, String Keyword, Long id);
+
+//    Page<Xe> findAllByPhuongXaQuanHuyenIdAAndTenXeContaining(Pageable pageable, String keyword, Long id);
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" style="margin-top: 50px; padding: 0px 50px">
     <div class="row">
       <div class="col-12">
         <h2>Danh sách tính năng</h2>
@@ -14,7 +14,7 @@
         </div>
       </div>
     </div>
-    <table class="table table-striped">
+    <table class="table" style="box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);border-radius: 5px;">
       <thead>
       <tr>
         <th scope="col">STT</th>
@@ -53,7 +53,7 @@
                 <v-col cols="12">
                   <v-text-field
                       label="Tính năng"
-                      v-model.trim="tinhNang.name"
+                      v-model="tinhNang.name"
                       variant="outlined"
                       >
                   </v-text-field>
@@ -82,7 +82,7 @@ export default ({
   data () {
     return {
       page: 1,
-      perPage: 5,
+      perPage: 10,
       paginatedItems : this.listTinhNang,
       dialog: false,
       headers: [

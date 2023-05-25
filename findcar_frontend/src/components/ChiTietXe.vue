@@ -1,16 +1,27 @@
 <template>
-  <div class="container">
-    <h1>{{ xe.tenXe }}</h1>
+  <div class="container mt-5">
     <div class="row">
       <div class="col-lg-8">
         <div class="image-car">
           <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
               <div class="carousel-item active">
-                <vue-photo-zoom-pro :url="getUrlImage(xe.anhNen)" class="d-block w-100 img-fluid" style="max-height: 450px"></vue-photo-zoom-pro>
+                <inner-image-zoom
+                    class="img-fluid"
+                    style="height: 600px"
+                    :src="getUrlImage(xe.anhNen)"
+                    :zoomSrc="getUrlImage(xe.anhNen)"
+                    moveType="drag"
+                />
               </div>
               <div class="carousel-item" v-for="image in xe.xeImages" :key="image.id">
-                <vue-photo-zoom-pro :url="getUrlImage(image.urlImage)" class="d-block w-100 img-fluid" style="max-height: 450px"></vue-photo-zoom-pro>
+                <inner-image-zoom
+                    class="img-fluid"
+                    :src="getUrlImage(image.urlImage)"
+                    :zoomSrc="getUrlImage(image.urlImage)"
+                    moveType="drag"
+                />
+<!--                <vue-photo-zoom-pro :url="getUrlImage(image.urlImage)" class="d-block w-100 img-fluid" style="max-height: 450px"></vue-photo-zoom-pro>-->
               </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
@@ -22,6 +33,9 @@
               <span class="visually-hidden">Next</span>
             </button>
           </div>
+        </div>
+        <div>
+          <h1>{{ xe.tenXe }}</h1>
         </div>
 
         <div class="chitietxe">
@@ -92,10 +106,10 @@
         <div class="chitietxe mt-3">
           <div class="row justify-content-center">
             <div class="col-12 rounded-circle d-flex justify-content-center">
-              <img src="../assets/images/vf_1.jpg" style="max-height: 100px; max-width: 100px" >
+              <img src="../assets/images/avt.jpg" class="rounded-circle" style="max-height: 100px; max-width: 100px" >
             </div>
             <p class="text-center">Chủ xe</p>
-            <span class="text-center">Nguyễn Quang Vinh</span>
+            <span class="text-center">{{ xe.nguoiDung.hoTen }}</span>
             <p class="text-center">100 chuyến</p>
           </div>
         </div>
@@ -156,11 +170,11 @@
             <hr class="mt-1" />
             <div>
               <span>Tổng cộng</span>
-              <span class="float-right">4534</span>
+              <span class="float-right">{{ formatCurrency(tongPhi) }}</span>
             </div>
           </div>
 
-          <button class="btn btn-success mr-2 font-weight-bold" @click="thue"> athue</button>
+          <button class="btn btn-success mr-2 font-weight-bold" @click="thue"> Đặt xe </button>
         </div>
       </div>
     </div>
@@ -171,13 +185,13 @@
 <script>
 import XeService from "@/services/xe.service"
 import ImageService from "@/services/image.service"
-import vuePhotoZoomPro from 'vue-photo-zoom-pro'
-import 'vue-photo-zoom-pro/dist/style/vue-photo-zoom-pro.css'
+import swal from 'sweetalert';
+import InnerImageZoom from 'vue-inner-image-zoom';
 
 export default {
   name: "ChiTietXe",
   components: {
-    vuePhotoZoomPro,
+    InnerImageZoom
   },
   data() {
     return {
@@ -197,13 +211,19 @@ export default {
         },
         xe: {
           id: ''
-        }
+        },
+        // trangThaiHoanXe: false
       },
       datediff: '',
-      date: ''
+      date: '',
+      logginIn: false,
+      tongPhi: ''
     }
   },
   methods: {
+    tongTien() {
+        this.tongPhi = this.xe.giaXe*this.datediff + 188000
+    },
     disabledDateBeforeDateStart(time) {
       let dateStart = new Date()
       return  time.getTime() < dateStart
@@ -216,11 +236,20 @@ export default {
       this.datediff = Difference_In_Days
     },
     thue() {
+      if (!this.logginIn) {
+        swal('Vui lòng đăng nhập để đặt xe', '', 'success').then(
+            this.$router.push('/fincar/login')
+        )
+      } else {
       var date = this.thueXes.ngayBatDau.toJSON().slice(0,10).split('-').join('-')
       var date2 = this.thueXes.ngayKetThuc.toJSON().slice(0,10).split('-').join('-')
       this.thueXes.ngayBatDau = date
       this.thueXes.ngayKetThuc = date2
-      XeService.saveThueXe(this.thueXes)
+      XeService.saveThueXe(this.thueXes).then(
+          window.location.href = 'http://localhost:8080/danhsachxethue'
+          // this.$router.push("/danhsachxethue")
+      )
+      }
     },
     formatCurrency(money) {
       money = money.toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
@@ -237,10 +266,19 @@ export default {
   },
   created() {
     var user = JSON.parse(localStorage.getItem('user'));
-    this.thueXes.nguoiDung.id = user.id;
+    if (user) {
+      this.thueXes.nguoiDung.id = user.id;
+      this.logginIn = true
+    }
+
     var id = this.$route.params.id;
     this.thueXes.xe.id = id;
     this.getXeById(id)
+  },
+  watch: {
+    datediff() {
+      this.tongTien();
+    }
   }
 }
 </script>
@@ -250,4 +288,7 @@ export default {
     background: #f6f9f9;
     padding: 20px;
   }
+</style>
+<style src="vue-inner-image-zoom/lib/vue-inner-image-zoom.css">
+
 </style>

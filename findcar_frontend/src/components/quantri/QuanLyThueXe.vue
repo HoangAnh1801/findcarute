@@ -1,10 +1,11 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" style="margin-top: 50px; padding:0px 50px">
     <div class="row">
       <div class="col-12">
-        <h2>Danh sách thuê xe</h2>
+
       </div>
       <div class="col-9">
+        <h2>Quản lý thuê xe</h2>
 <!--        <router-link to="xe">-->
 <!--          <button class="btn btn-success"><v-icon icon="mdi:mdi-plus" /> Thêm mới</button>-->
 <!--        </router-link>-->
@@ -17,7 +18,7 @@
         </div>
       </div>
     </div>
-    <table class="table table-striped">
+    <table class="table" style="box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);border-radius: 5px;">
       <thead>
       <tr>
         <th scope="col">STT</th>
@@ -28,19 +29,27 @@
       <tbody>
       <tr v-for="(entry, stt) in listXe" :key="entry.id" style="vertical-align: middle;">
         <th scope="row" style="width: 5%">{{ stt + 1 }}</th>
-<!--        <td>{{ entry.id }}</td>-->
         <td>{{ entry.nguoiDung.hoTen }}</td>
         <td>{{ entry.nguoiDung.sdt }}</td>
         <td>{{ formatDateTime(entry.ngayBatDau) }}</td>
         <td>{{ formatDateTime(entry.ngayKetThuc) }}</td>
-        <td>
+        <td v-if="entry.xe.nguoiDung.id == nguoiDungId">
           <el-tag v-if="entry.trangThaiDuyet == true" class="mx-1 cursor-pointer" effect="dark" type="success">
             Đã duyệt
           </el-tag>
-          <el-tag v-else class="mx-1 cursor-pointer" @click="clickDuyet(entry.id)" effect="dark" type="danger">
-            Chưa duyệt
+          <template v-else>
+            <el-tag class="mx-1 cursor-pointer" @click="clickDuyet(entry.id)" effect="dark" type="danger">
+              Chưa duyệt
+            </el-tag>
+          </template>
+        </td>
+        <td>
+          <el-tag v-if="entry.trangThaiHoanXe == false" @click="xacNhan(entry.id)" class="mx-1 cursor-pointer" effect="dark" type="dangers">
+            Chưa hoàn xe
           </el-tag>
-
+          <el-tag v-else class="mx-1 cursor-pointer" :class="entry.trangThaiHoanXe == null ? 'd-none' : ''" effect="dark" type="success">
+            Đã hoàn xe
+          </el-tag>
         </td>
         <td v-if="isQuanTri">
           <router-link :to="{ name: 'duyetxe', params: { id: entry.id } }">
@@ -57,7 +66,7 @@
       <v-pagination
           v-if="totalPages > 1"
           variant="flat"
-          active-color="#198754"
+          active-color="#9dc5e7"
           color="#ffffff"
           v-model="page"
           class="my-4"
@@ -74,7 +83,7 @@
 <script>
 import XeService from "@/services/xe.service"
 import swal from 'sweetalert';
-import AuthenService from "@/services/auth.services"
+// import AuthenService from "@/services/auth.services"
 
 export default ({
   name: "QuanLyThueXe",
@@ -111,6 +120,11 @@ export default ({
           code: 'trangThaiDuyet',
           type: 'text'
         },
+        {
+          name: 'Xác nhận hoàn xe',
+          code: 'trangThaiHoanXe',
+          type: 'text'
+        },
       ],
       listXe: [],
       nguoiDungId: '',
@@ -131,15 +145,30 @@ export default ({
     },
 
   },
-  isQuanTri() {
-    let user = JSON.parse(window.localStorage.getItem('user'))
-    user = user ? user : ''
-    let permisson = user.permissions ? user.permissions : []
-    let isQuanTri = permisson.includes('admin') ? true : false
-
-    return isQuanTri
-  },
+  // isQuanTri() {
+  //   let user = JSON.parse(window.localStorage.getItem('user'))
+  //   user = user ? user : ''
+  //   let permisson = user.permissions ? user.permissions : []
+  //   let isQuanTri = permisson.includes('admin') ? true : false
+  //
+  //   return isQuanTri
+  // },
   methods: {
+    xacNhan(id) {
+      swal({
+        title: "Xác nhận đã hoàn xe!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      }).then((willDelete) => {
+        if (willDelete) {
+          XeService.xacNhanHoanXe(id).then(response => {
+            swal(response.data.message,'', 'success')
+            window.load()
+          })
+        }
+      })
+    },
     clickDuyet(id) {
       swal({
         title: "Duyệt yêu cầu thuê xe",
@@ -202,24 +231,12 @@ export default ({
           this.totalPages = response.data.totalPages
       ))
     },
-    // getAllXe() {
-    //   let params = {}
-    //   params['page'] = this.page
-    //   params['limit'] = this.page_size
-    //   params['search'] = this.keySearch
-    //   XeService.getAll(params).then(response => {
-    //     this.listXe = response.data.content,
-    //         this.page_size = response.data.size,
-    //         this.totalPages = response.data.totalPages
+    // async getUser(tenDn) {
+    //   await AuthenService.findByTenDangNhap(tenDn).then(response => {
+    //     this.nguoiDungId = response.data.id
+    //     console.log(this.nguoiDungId);
     //   })
     // },
-
-    async getUser(tenDn) {
-      await AuthenService.findByTenDangNhap(tenDn).then(response => {
-        this.nguoiDungId = response.data.id
-        console.log(this.nguoiDungId);
-      })
-    },
     changeListXe() {
         this.getListXe();
 
@@ -229,6 +246,7 @@ export default ({
     var user = JSON.parse(localStorage.getItem('user'));
     this.tenDangNhap = user.tenDangNhap;
     this.nguoiDungId = user.id
+    console.log('ủeid', this.nguoiDungId)
 
       this.getListXe();
 

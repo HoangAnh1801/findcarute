@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .authenticationManager(authenticationManager)
                 .securityContextRepository(securityContextRepository)
                 .authorizeExchange()
-                .pathMatchers( "/api/auth/**","/api/car/v1/image/**", "/api/car/v1/**").permitAll()
+                .pathMatchers( "/api/auth/**","/api/car/v1/image/**", "/api/car/v1/**", "/api/car/v1/nguoidung/**", "/**").permitAll()
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
                 .pathMatchers("/api/car/v1/**")
                 .hasAnyAuthority("user", "admin")

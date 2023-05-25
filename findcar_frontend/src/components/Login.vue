@@ -32,132 +32,128 @@
 <!--  </div>-->
 
 
-  <section class="vh-100">
-    <div class="container-fluid h-custom">
-      <div class="row d-flex justify-content-center align-items-center h-100">
-        <div class="col-md-9 col-lg-6 col-xl-5">
-          <img src="@/assets/images/logo_no_background.png"
-               class="img-fluid" alt="Sample image">
-        </div>
-        <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-          <Form @submit="handleLogin">
+    <section class="vh-100">
+      <div class="container-fluid h-custom">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col-md-9 col-lg-6 col-xl-5">
+            <img src="@/assets/images/logo_no_background.png"
+                 class="img-fluid" alt="Sample image">
+          </div>
+          <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+            <Form @submit="handleLogin">
 
-            <div class="divider d-flex align-items-center my-4">
-              <h2 class="text-center fw-bold mb-0">Đăng nhập</h2>
-            </div>
+              <div class="divider d-flex align-items-center my-4">
+                <h2 class="text-center fw-bold mb-0">Đăng nhập</h2>
+              </div>
 
+              <!-- Email input -->
+              <div class="form-outline mb-4">
+                <label class="form-label" for="form3Example3">Tên đăng nhập</label>
+                          <Field name="tenDangNhap" type="text" class="form-control form-control-lg" id="form3Example3"/>
+                          <ErrorMessage name="tenDangNhap" class="error-feedback" />
 
-            <!-- Email input -->
-            <div class="form-outline mb-4">
-<!--              <input type="email" id="form3Example3" class="form-control form-control-lg"-->
-<!--                     placeholder="Enter a valid email address" />-->
-              <label class="form-label" for="form3Example3">Email address</label>
-                        <Field name="tenDangNhap" type="text" class="form-control form-control-lg" id="form3Example3"/>
-                        <ErrorMessage name="tenDangNhap" class="error-feedback" />
+              </div>
 
-            </div>
+              <!-- Password input -->
+              <div class="form-outline mb-3">
+                <label class="form-label" for="form3Example4">Mật khẩu</label>
+                          <Field name="matKhau" type="password" class="form-control form-control-lg" id="form3Example4"/>
+                          <ErrorMessage name="matKhau" class="error-feedback" />
 
-            <!-- Password input -->
-            <div class="form-outline mb-3">
-<!--              <input type="password" id="form3Example4" class="form-control form-control-lg"-->
-<!--                     placeholder="Enter password" />-->
-              <label class="form-label" for="form3Example4">Password</label>
-                        <Field name="matKhau" type="password" class="form-control form-control-lg" id="form3Example4"/>
-                        <ErrorMessage name="matKhau" class="error-feedback" />
+              </div>
 
-            </div>
+              <div class="text-center text-lg-start mt-4 pt-2">
+                <button class="btn btn-primary btn-lg" :disabled="loading"
+                        style="padding-left: 2.5rem; padding-right: 2.5rem;">
+                  Đăng nhập
+                </button>
+                <p class="small fw-bold mt-2 pt-1 mb-0">Bạn chưa có tài khoản?
+                  <a href="#!" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo" class="link-danger">Đăng ký</a></p>
+              </div>
 
-            <div class="text-center text-lg-start mt-4 pt-2">
-              <button class="btn btn-primary btn-lg" :disabled="loading"
-                      style="padding-left: 2.5rem; padding-right: 2.5rem;">
-                Login
-              </button>
-              <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account?
-                <a href="#!" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo" class="link-danger">Register</a></p>
-            </div>
-
-            <div class="form-group">
-                        <div v-if="message" class="alert alert-danger" role="alert">
-                          {{ message }}
+              <div class="form-group">
+                          <div v-if="message" class="alert alert-danger" role="alert">
+                            {{ message }}
+                          </div>
                         </div>
-                      </div>
-          </Form>
+            </Form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Đăng ký thành viên</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <Form @submit="saveNguoiDung" ref="form" lazy-validation>
+              <div class="mb-3">
+                <label class="col-form-label">Họ và tên</label>
+                <Field name="hoTen" rules="required" v-model="nguoiDung.hoTen" class="form-control form-control-lg" v-slot="{field, errors }">
+                  <input type="text" v-bind="field" v-model="nguoiDung.hoTen" :class="[{'is-invalid': !!errors.length },'form-control']">
+                </Field>
+                <ErrorMessage name="hoTen" class="text-danger" />
+              </div>
+              <div class="mb-3">
+                <label for="tendangnhap" class="col-form-label">Tên đăng nhập</label>
+                <Field name="tendangnhap" rules="required" v-model="nguoiDung.tenDangNhap" class="form-control form-control-lg" v-slot="{field, errors }">
+                  <input type="text" @change="checkExistTenDangNhap(nguoiDung.tenDangNhap)"  v-bind="field" v-model="nguoiDung.tenDangNhap" :class="[{'is-invalid': !!errors.length || checkTenDN },'form-control']" id="tendangnhap">
+                </Field>
+                <span role="alert" class="text-danger" v-if="checkTenDN && nguoiDung.tenDangNhap.length > 0">Tên đăng nhập đã tồn tại!</span>
+                <ErrorMessage name="tendangnhap" class="text-danger" />
+              </div>
+              <div class="mb-3">
+                <label for="sdt" class="col-form-label">Số điện thoại</label>
+                <Field name="sdt" rules="required" v-model="nguoiDung.sdt" class="form-control form-control-lg" v-slot="{field, errors }">
+                  <input type="text" v-bind="field" v-model="nguoiDung.sdt" :class="[{'is-invalid': !!errors.length },'form-control']" class="form-control" id="sdt">
+                </Field>
+                <ErrorMessage name="sdt" class="text-danger" />
+              </div>
+              <div class="mb-3">
+                <label class="col-form-label">Mật khẩu</label>
+                <Field name="matKhau" rules="required" v-model="nguoiDung.matKhau" class="form-control form-control-lg" v-slot="{field, errors }">
+                  <el-input
+                      style="height: 37px!important;"
+                      class="w-100 h-100"
+                      v-model="nguoiDung.matKhau"
+                      v-bind="field"
+                      :class="[{'is-invalid': !!errors.length }]"
+                      type="password"
+                      show-password
+                  />
+                </Field>
+                <ErrorMessage name="matKhau" class="text-danger" />
+              </div>
+              <div class="mb-3">
+                <label class="col-form-label">Nhập lại mật khẩu</label>
+                <Field name="rePass" :rules="'required|confirmed:matKhau'" v-model="rePass" class="form-control form-control-lg" v-slot="{field, errors }">
+                  <el-input
+                      style="height: 37px!important;"
+                      class="w-100 h-100"
+                      v-model="rePass"
+                      v-bind="field"
+                      :class="[{'is-invalid': !!errors.length }]"
+                      type="password"
+                      show-password
+                  />
+                </Field>
+                <ErrorMessage name="rePass" class="text-danger" />
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" @click="resetData" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+                <button type="submit" class="btn btn-primary" :disabled="checkTenDN">Đăng ký</button>
+              </div>
+            </Form>
+          </div>
+
         </div>
       </div>
     </div>
-  </section>
-
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Đăng ký thành viên</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <Form @submit="saveNguoiDung" ref="form" lazy-validation>
-            <div class="mb-3">
-              <label class="col-form-label">Họ và tên</label>
-              <Field name="hoTen" rules="required" v-model="nguoiDung.hoTen" class="form-control form-control-lg" v-slot="{field, errors }">
-                <input type="text" v-bind="field" v-model="nguoiDung.hoTen" :class="[{'is-invalid': !!errors.length },'form-control']">
-              </Field>
-              <ErrorMessage name="hoTen" class="text-danger" />
-            </div>
-            <div class="mb-3">
-              <label for="tendangnhap" class="col-form-label">Tên đăng nhập</label>
-              <Field name="tendangnhap" rules="required" v-model="nguoiDung.tenDangNhap" class="form-control form-control-lg" v-slot="{field, errors }">
-                <input type="text"  v-bind="field" v-model="nguoiDung.tenDangNhap" :class="[{'is-invalid': !!errors.length },'form-control']" id="tendangnhap">
-              </Field>
-              <ErrorMessage name="tendangnhap" class="text-danger" />
-            </div>
-            <div class="mb-3">
-              <label for="sdt" class="col-form-label">Số điện thoại</label>
-              <Field name="sdt" rules="required" v-model="nguoiDung.sdt" class="form-control form-control-lg" v-slot="{field, errors }">
-                <input type="text" v-bind="field" v-model="nguoiDung.sdt" :class="[{'is-invalid': !!errors.length },'form-control']" class="form-control" id="sdt">
-              </Field>
-              <ErrorMessage name="sdt" class="text-danger" />
-            </div>
-            <div class="mb-3">
-              <label class="col-form-label">Mật khẩu</label>
-              <Field name="matKhau" rules="required" v-model="nguoiDung.matKhau" class="form-control form-control-lg" v-slot="{field, errors }">
-                <el-input
-                    style="height: 37px!important;"
-                    class="w-100 h-100"
-                    v-model="nguoiDung.matKhau"
-                    v-bind="field"
-                    :class="[{'is-invalid': !!errors.length }]"
-                    type="password"
-                    show-password
-                />
-              </Field>
-              <ErrorMessage name="matKhau" class="text-danger" />
-            </div>
-            <div class="mb-3">
-              <label class="col-form-label">Nhập lại mật khẩu</label>
-              <Field name="rePass" rules="required" v-model="rePass" class="form-control form-control-lg" v-slot="{field, errors }">
-                <el-input
-                    style="height: 37px!important;"
-                    class="w-100 h-100"
-                    v-model="rePass"
-                    v-bind="field"
-                    :class="[{'is-invalid': !!errors.length }]"
-                    type="password"
-                    show-password
-                />
-              </Field>
-              <ErrorMessage name="rePass" class="text-danger" />
-            </div>
-
-            <div class="modal-footer">
-              <button type="button" @click="resetData" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
-              <button type="submit" class="btn btn-primary">Đăng ký</button>
-            </div>
-          </Form>
-        </div>
-
-      </div>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -187,7 +183,8 @@ export default {
 
         trangThaiDuyet: true,
         role: ['user']
-      }
+      },
+      checkTenDN: false
     };
   },
   computed: {
@@ -203,23 +200,46 @@ export default {
   methods: {
     resetData() {
       this.nguoiDung.sdt = '',
-      this.nguoiDung.matKhau = '',
-      this.nguoiDung.hoTen = '',
-      this.nguoiDung.tenDangNhap = '',
-      this.rePass = ''
+          this.nguoiDung.matKhau = '',
+          this.nguoiDung.hoTen = '',
+          this.nguoiDung.tenDangNhap = '',
+          this.rePass = ''
     },
     saveNguoiDung() {
       console.log('nguoi dung', this.nguoiDung)
       AuthenService.signUp(this.nguoiDung).then(response => {
         swal(response.data, "", "success")
+        window.location.href = 'http://localhost:8080/findcar/login'
+      })
+    },
+    checkExistTenDangNhap(tendn) {
+      AuthenService.findByTenDangNhap(tendn).then(response => {
+        if (response.data instanceof Object) {
+          this.checkTenDN = true
+        } else {
+          this.checkTenDN = false
+        }
       })
     },
     handleLogin(user) {
       this.loading = true;
-      this.$store.dispatch("auth/login", user).then(
-          () => {
-            this.$router.push("/trangchu");
-            this.$router.go()
+      this.$store.dispatch("auth/login", user).then(response => {
+            if(response.status == 0) {
+              this.$store.dispatch('auth/logout');
+              localStorage.removeItem('user');
+              // this.showAlert('danger',"Vui lòng thử lại!")
+              swal('Tên đăng nhập hoặc mật khẩu không đúng!', '', 'error')
+              this.loading = false
+            } else {
+              let quantri = response.permissions.includes('admin')
+              if(quantri) {
+                this.$router.push("/trangchu");
+              } else {
+                this.$router.push("/trangchu");
+              }
+
+              this.$router.go()
+            }
           },
           (error) => {
             this.loading = false;
@@ -232,7 +252,7 @@ export default {
           }
       );
     },
-  },
+  }
 };
 </script>
 

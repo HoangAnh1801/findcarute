@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" style="margin-top: 50px; padding: 0px 50px">
     <div class="row">
       <div class="col-12">
         <h2>Danh sách quận huyện</h2>
@@ -14,7 +14,7 @@
         </div>
       </div>
     </div>
-    <table class="table table-striped">
+    <table class="table" style="box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);border-radius: 5px;">
       <thead>
       <tr>
         <th scope="col">STT</th>
@@ -27,7 +27,7 @@
         <th scope="row" style="width: 5%">{{ stt + 1 }}</th>
         <td>{{ entry.id }}</td>
         <td>{{ entry.name }}</td>
-        <td><img :src="getUrlImage(entry.urlImage)" style="max-height: 100px; max-width: 230px"/></td>
+        <td><img :src="getUrlImage(entry.urlImage)" style="max-height: 100px; width: 150px"/></td>
         <td>
           <button @click="handleEdit(entry.id)"><v-icon icon="mdi:mdi-pencil" /></button>
           <button @click="deleteById(entry.id)" > <v-icon icon="mdi:mdi-trash-can-outline" /></button>
@@ -100,7 +100,7 @@ export default ({
   data () {
     return {
       page: 1,
-      perPage: 5,
+      perPage: 8,
       paginatedItems : this.listQuanHuyen,
       imageData: '',
       dialog: false,

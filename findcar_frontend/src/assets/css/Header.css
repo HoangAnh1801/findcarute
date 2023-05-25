@@ -1,6 +1,6 @@
 .header-blue {
-  background: linear-gradient(135deg, #0d8e09, #181a17);
-  background-color: #184e8e;
+  /*background: linear-gradient(135deg, #0d8e09, #181a17);*/
+  background-color: #6eaba8;
   /*padding-bottom: 80px;*/
   position: relative;
   /*height: 61% !important;*/
@@ -254,4 +254,13 @@
 .color-primary {
   color: #0d8e09 !important;
 }
-
+.v-slide-group__content {
+  max-height: 190px;
+}
+.title-quan {
+  position: absolute;
+  bottom: 30px;
+  width: 100%;
+  line-height: 30px;
+  background: #3a3b3cb5;
+}

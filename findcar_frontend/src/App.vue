@@ -1,11 +1,5 @@
 <template>
-<!--  <div class="w-100">-->
-<!--    -->
-<!--    <v-app>-->
-<!--      <router-view />-->
-<!--    </v-app>-->
-<!--  </div>-->
-
+  <div></div>
   <div class="container-fluid px-0" v-if="isQuanTri">
     <div id="view" :class="[{'collapsed' : collapsed}]">
 
@@ -15,22 +9,26 @@
         <v-app>
           <Header @update:collapsed="onToggleCollapse"/>
           <router-view></router-view>
+          <Footer />
         </v-app>
 
       </div>
     </div>
+
   </div>
   <div class="container-fluid px-0" v-else>
     <div class="d-flex">
       <div class="container-fluid px-0">
         <HeaderHome/>
-        <v-app style="margin-top: 58px">
+        <v-app style="margin-top: 56px;">
           <router-view></router-view>
         </v-app>
 
       </div>
     </div>
+    <Footer />
   </div>
+
 </template>
 
 <script>
@@ -39,6 +37,7 @@ import HeaderHome from "@/components/HeaderHome"
 import Header from "@/components/quantri/Header"
 import { SidebarMenu } from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
+import Footer from '@/components/Footer'
 
 export default {
   name: 'App',
@@ -47,17 +46,17 @@ export default {
       menuCollapsed: false,
       menu: [
         {
-          header: 'Findcar',
+          header: 'Quản trị viên',
           hiddenOnCollapse: true,
         },
         {
           href: '/',
           title: 'Trang chủ',
-          icon: 'fa fa-user',
+          icon: 'mdi mdi-home-circle-outline',
         },
         {
           title: 'Quản lý danh mục',
-          icon: 'mdi:mdi-eye',
+          icon: 'mdi mdi-format-list-checkbox',
           child: [
             {
               href: '/admin/quanlyloaixe',
@@ -79,17 +78,21 @@ export default {
               href: '/admin/quanlyphuongxa',
               title: 'Quản lý phường xã',
             },
+            {
+              href: '/admin/quanlytinhnang',
+              title: 'Quản lý tính năng',
+            },
           ],
         },
         {
           href: '/admin/quanlyxe',
           title: 'Quản lý xe',
-          icon: 'fa fa-user',
+          icon: 'mdi mdi-car-convertible',
         },
         {
           href: '/admin/quanlynguoidung',
           title: 'Quản lý người dùng',
-          icon: 'fa fa-user',
+          icon: 'mdi mdi-account-circle-outline',
         },
       ],
     }
@@ -97,7 +100,8 @@ export default {
   components: {
     SidebarMenu,
     HeaderHome,
-    Header
+    Header,
+    Footer
   },
   computed: {
     isQuanTri() {

@@ -1,5 +1,6 @@
 import http from "@/http-common";
 import TokenService from "@/services/permission.service"
+// import authHeader from "@/services/auth-header";
 
 class AuthServices {
 
@@ -26,6 +27,10 @@ class AuthServices {
 
     findByTenDangNhap(tenDN) {
         return http.get("/auth/tendangnhap?tendangnhap=" + tenDN);
+    }
+
+    updateNguoiDung(data) {
+        return http.post("/car/v1/nguoidung", data);
     }
 
 }

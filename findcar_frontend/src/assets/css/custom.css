@@ -27,9 +27,115 @@ ul.VuePagination__pagination.pagination.VuePagination__pagination li {
 #container-view.collapsed, #container-view.onmobile {
     padding-left: 65px!important;
 }
-.v-sidebar-menu {
-    background-color: #2e41b38f;
+/*.v-sidebar-menu {*/
+/*    background-color: rgba(255, 255, 255, 0.76);*/
+/*    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);*/
+/*}*/
+/*.v-sidebar-menu .vsm--link {*/
+/*    color: #009494c2 !important;*/
+/*}*/
+
+a.vsm--link.vsm--link_level-1.vsm--link_open {
+    background-color: rgb(41, 27, 93);
 }
+/*.v-sidebar-menu .vsm--dropdown {*/
+/*    background-color: #ffffff !important;*/
+/*}*/
+/*.v-sidebar-menu .vsm--link_active {*/
+/*    background-color: #009494c2 !important;*/
+/*    font-weight: 600;*/
+/*}*/
+.v-sidebar-menu .vsm--link_level-1 .vsm--icon {
+    background-color: rgb(41, 27, 93);
+    /*color: white;*/
+}
+.v-sidebar-menu .vsm--link_level-1 .vsm--icon {
+    color: white;
+}
+.v-sidebar-menu.vsm_expanded .vsm--link_level-1.vsm--link_open .vsm--icon {
+    background-color: white;
+    color: rgb(41, 27, 93);
+}
+a.vsm--link.vsm--link_level-2 {
+    font-weight: 600;
+}
+.v-sidebar-menu .vsm--mobile-bg {
+    background-color: rgb(41, 27, 93);
+}
+/*.v-sidebar-menu .vsm--badge_default, .v-sidebar-menu .vsm--toggle-btn {*/
+/*    background-color: #009494c2 !important*/
+/*}*/
+/*.v-sidebar-menu .vsm--mobile-bg {*/
+/*    background-color: #009494c2 !important;*/
+/*    color: white !important;*/
+/*}*/
+
+.v-sidebar-menu {
+    background-color: rgba(255, 255, 255, 0.76);
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+}
+.v-sidebar-menu.vsm_expanded {
+    background-color: rgba(255, 255, 255, 0.76);
+}
+.v-sidebar-menu.vsm_collapsed {
+    background-color: rgba(255, 255, 255, 0.76);
+}
+.v-sidebar-menu.vsm_rtl {}
+.v-sidebar-menu .vsm--item {
+
+}
+.v-sidebar-menu .vsm--link {
+    color: rgb(41, 27, 93);
+}
+.v-sidebar-menu .vsm--link_active {
+    background-color: rgb(117 99 184);
+    color: white;
+}
+.v-sidebar-menu.vsm_expanded .vsm--link_level-1.vsm--link_open {
+    background-color: rgb(41, 27, 93);
+}
+.v-sidebar-menu .vsm--link_open {
+
+}
+.v-sidebar-menu.vsm_collapsed .vsm--link_level-1.vsm--link_hover, .v-sidebar-menu.vsm_collapsed .vsm--link_level-1:hover {
+    color: white;
+}
+.v-sidebar-menu .vsm--badge_default, .v-sidebar-menu .vsm--toggle-btn {
+    background-color: #9494d8;
+    color: #fff;
+}
+.v-sidebar-menu .vsm--link_mobile {}
+.v-sidebar-menu .vsm--link_level-[n] {}
+.v-sidebar-menu .vsm--link_disabled {}
+.v-sidebar-menu .vsm--title {}
+.v-sidebar-menu .vsm--icon {}
+.v-sidebar-menu .vsm--arrow {}
+.v-sidebar-menu .vsm--arrow_open {}
+.v-sidebar-menu .vsm--badge {}
+.v-sidebar-menu .vsm--badge_default {}
+.v-sidebar-menu .vsm--header {}
+.v-sidebar-menu .vsm--dropdown {
+    background: rgb(230 235 253);
+}
+.v-sidebar-menu .vsm--mobile-bg {}
+.v-sidebar-menu .vsm--toggle-btn {}
+
 .cursor-pointer {
     cursor: pointer !important;
+}
+.bg-9dc5e7 {
+    background-color: #9dc5e7 !important;
+}
+.v-input.v-input--horizontal.v-input--density-default.v-text-field.form-control {
+    padding: 0;
+}
+.custom-card {
+    border: 1px solid green !important;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+}
+.form-control:focus {
+    box-shadow: unset;
+}
+i.mdi-trash-can-outline {
+    color: red;
 }

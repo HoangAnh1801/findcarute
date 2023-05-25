@@ -24,9 +24,58 @@ public class XeService {
     @Autowired
     XeImageRepository xeImageRepository;
 
-    public Page<Xe> getAllXe(Pageable pageable, String keyword, Boolean trangThaiDuyet) {
+    public Page<Xe> getAllXe(Pageable pageable, String keyword, Boolean trangThaiDuyet, Long quanHuyenId, Long loaixeId, Long hangxeId) {
         if (trangThaiDuyet != null) {
-            return xeRepository.findAllByTrangThaiDuyet(pageable, trangThaiDuyet);
+            if (quanHuyenId != null && loaixeId == null && hangxeId == null) {
+                if (keyword == null || keyword.length() == 0 || keyword.equals("null")) {
+                    return xeRepository.findAllByPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrue(pageable, quanHuyenId);
+                }
+                return xeRepository.findAllByPhuongXaQuanHuyenIdAndTenXeContainingAndTrangThaiDuyetIsTrue(pageable, quanHuyenId, keyword);
+            }
+
+            if (quanHuyenId != null && loaixeId != null && hangxeId == null) {
+                return xeRepository.findAllByLoaiXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrue(pageable, loaixeId, quanHuyenId);
+            }
+
+            if (quanHuyenId != null && loaixeId == null && hangxeId != null) {
+                return  xeRepository.findAllByHangXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrue(pageable, hangxeId, quanHuyenId);
+            }
+
+            if (quanHuyenId != null && loaixeId == null && hangxeId != null) {
+                return xeRepository.findAllByLoaiXeIdAndHangXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrue(pageable, loaixeId, hangxeId, quanHuyenId);
+            }
+
+            if (quanHuyenId == null && loaixeId != null && hangxeId == null) {
+                if (keyword == null || keyword.length() == 0 || keyword.equals("null")) {
+                    return xeRepository.findAllByLoaiXeIdAndTrangThaiDuyetIsTrue(pageable, loaixeId);
+                }
+                return xeRepository.findAllByLoaiXeIdAndTenXeContainingAndTrangThaiDuyetIsTrue(pageable, loaixeId, keyword);
+            }
+
+            if (quanHuyenId == null && loaixeId == null && hangxeId != null) {
+                if (keyword == null || keyword.length() == 0 || keyword.equals("null")) {
+                    return xeRepository.findAllByHangXeIdAndTrangThaiDuyetIsTrue(pageable, hangxeId);
+                }
+                return xeRepository.findAllByHangXeIdAndTenXeContainingAndTrangThaiDuyetIsTrue(pageable, hangxeId, keyword);
+            }
+
+            if (quanHuyenId == null && loaixeId != null && hangxeId != null) {
+                if (keyword == null || keyword.length() == 0 || keyword.equals("null")) {
+                    return xeRepository.findAllByHangXeIdAndLoaiXeIdAndTrangThaiDuyetIsTrue(pageable,hangxeId, loaixeId);
+                }
+                return xeRepository.findAllByHangXeIdAndLoaiXeIdAndTenXeContainingAndTrangThaiDuyetIsTrue(pageable, hangxeId, loaixeId, keyword);
+            }
+
+            if (quanHuyenId != null && loaixeId != null && hangxeId != null) {
+                return  xeRepository.findAllByLoaiXeIdAndHangXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrue(pageable, loaixeId, hangxeId, quanHuyenId);
+            }
+
+            if (keyword == null || keyword.length() == 0 || keyword.equals("null")) {
+                return xeRepository.findAllByTrangThaiDuyet(pageable, trangThaiDuyet);
+            } else {
+                return xeRepository.findAllByTenXeContaining(pageable, keyword);
+            }
+
         }
 
         if (keyword == null || keyword.length() == 0 || keyword.equals("null")) {

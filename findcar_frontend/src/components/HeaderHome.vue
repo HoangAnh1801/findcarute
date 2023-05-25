@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar navbar-expand-lg navbar-light bg-dark fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background-color: rgb(41 27 93) !important; box-shadow: 0px 6px 5px rgba(0, 0, 0, 0.25)">
       <div class="container">
         <router-link to="/"><a class="navbar-brand text-white" href="#">Findcar</a></router-link>
 
@@ -63,33 +63,38 @@
               </ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white" href="#">Link</a>
+              <RouterLink to="/admin/quanlyxe" class="text-decoration-none"><a class="nav-link text-white">Xe của tôi</a></RouterLink>
+
             </li>
           </ul>
 
-          <div v-if="isLoggin">
+          <div v-if="isLoggin" class="row">
+            <div class="col-3">
             <el-dropdown size="large">
               <el-avatar
                   src="https://e7.pngegg.com/pngimages/348/800/png-clipart-man-wearing-blue-shirt-illustration-computer-icons-avatar-user-login-avatar-blue-child.png"
               />
-
               <template #dropdown>
                 <el-dropdown-menu class="user-infor-toolbar pb-0">
-                  <el-dropdown-item @click="updateThongTin()"><v-icon icon="mdi:mdi-account mr-2" ></v-icon>Trang cá nhân</el-dropdown-item>
+                  <el-dropdown-item @click="trangCaNhan"><v-icon icon="mdi:mdi-account mr-2" ></v-icon>Trang cá nhân</el-dropdown-item>
                   <el-dropdown-item @click="listxe"><v-icon icon="mdi:mdi-car-sports mr-2" ></v-icon>Danh sách xe</el-dropdown-item>
                   <el-dropdown-item @click="listxethue"><v-icon icon="mdi:mdi-car-sports mr-2" ></v-icon>Quản lý thuê xe</el-dropdown-item>
-                  <el-dropdown-item @click="updatePassword()"><v-icon icon="mdi:mdi-key mr-2" ></v-icon>Đổi mật khẩu</el-dropdown-item>
+                  <el-dropdown-item @click="listxedathue"><v-icon icon="mdi:mdi-car-sports mr-2" ></v-icon>Xe đã thuê</el-dropdown-item>
 
                   <el-dropdown-item class="bg-primary-custom"  @click="logOut"><v-icon icon="mdi:mdi-backburger mr-2"></v-icon>Đăng xuất</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
+            </div>
+            <div class="w-auto align-self-center">
+              <span class="text-white">{{ hoTen }}</span>
+            </div>
           </div>
           <div v-else>
             <span class="navbar-text">
             <a class="login" href="/findcar/login">Log In</a>
           </span>
-            <a class="btn btn-light action-button" role="button" href="#">Signup</a>
+<!--            <a class="btn btn-light action-button" role="button" href="#">Signup</a>-->
           </div>
 
         </div>
@@ -102,24 +107,35 @@ export default {
   name: "HeaderHome",
   data() {
     return {
-      isLoggin: ''
+      isLoggin: '',
+      hoTen: ''
     }
   },
   methods: {
     logOut() {
       this.$store.dispatch('auth/logout');
-      this.$router.push('/fincar/login');
+      window.location.href = 'http://localhost:8080/findcar/login'
+      // this.$router.push('/fincar/login');
     },
     listxe() {
       this.$router.push({name: 'quanlyxe'});
     },
     listxethue() {
       this.$router.push({name: 'quanlythuexe'});
+    },
+    listxedathue() {
+      this.$router.push({name: 'danhsachxethue'});
+    },
+    trangCaNhan() {
+      this.$router.push({name: 'thongtincanhan'});
     }
   },
   created() {
     this.isLoggin = localStorage.getItem('user');
-   console.log('this.isLoggin', this.isLoggin)
+    var user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      this.hoTen = user.hoVaTen
+    }
   }
 }
 </script>

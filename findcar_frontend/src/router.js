@@ -14,6 +14,10 @@ import Login from "@/components/Login"
 import DuyetXe from "@/components/quantri/DuyetXe"
 import QuanLyNguoiDung from "@/components/quantri/QuanLyNguoiDung"
 import QuanLyThueXe from "@/components/quantri/QuanLyThueXe"
+import DanhSachXe from "@/components/xe/DanhSachXe"
+import DanhSachXeThue from "@/components/xe/DanhSachXeThue"
+import ThongTinCaNhan from "@/components/nguoidung/ThongTinCaNhan"
+import DangKy from "@/components/DangKy"
 
 const routes = [
     {
@@ -28,9 +32,24 @@ const routes = [
         component: Login,
     },
     {
+        path: "/findcar/dangky",
+        name: "dangky",
+        component: DangKy,
+    },
+    {
         path: "/chitietxe/:id",
         name: "ChiTietXe",
         component: ChiTietXe,
+    },
+    {
+        path: "/danhsachxe",
+        name: "DanhSachXe",
+        component: DanhSachXe,
+    },
+    {
+        path: "/danhsachxe/:quanid",
+        name: "DanhSachXeQuan",
+        component: DanhSachXe,
     },
     {
         path: "/admin/quanlyhangxe",
@@ -88,28 +107,20 @@ const routes = [
         component: QuanLyThueXe,
     },
     {
+        path: "/danhsachxethue",
+        name: "danhsachxethue",
+        component: DanhSachXeThue,
+    },
+    {
+        path: "/thongtincanhan",
+        name: "thongtincanhan",
+        component: ThongTinCaNhan,
+    },
+    {
         path: "/xe/:id",
         name: "update-xe",
         component: Xe,
     },
-
-    // {
-    //     path: "/admin/",
-    //     name: "App",
-    //     component: App,
-    //     children: [
-    //         // { path: 'quanlyhangxe',name: 'quanlyhangxe',component: QuanLyHangXe },
-    //         { path: 'quanlyquanhuyen',name: 'quanlyquanhuyen',component: QuanLyQuanHuyen },
-    //         { path: 'quanlyphuongxa',name: 'quanlyphuongxa',component: QuanLyPhuongXa },
-    //         { path: 'quanlynhienlieu',name: 'quanlynhienlieu',component: QuanLyNhienLieu },
-    //         { path: 'quanlyloaixe',name: 'quanlyloaixe',component: QuanLyLoaiXe },
-    //         { path: 'quanlytinhnang',name: 'quanlytinhnang',component: TinhNang },
-    //         { path: 'quanlyxe',name: 'quanlyxe',component: QuanLyXe },
-    //         { path: 'xe',name: 'xe',component: Xe },
-    //         { path: 'xe/:id',name: 'update-xe',component: Xe },
-    //     ]
-    // },
-
 ]
 
 const router = createRouter({
@@ -118,11 +129,16 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const publicPages = ['', '/', '/trangchu','/findcar/login', '/ttld/noPermission', '/cstlht/admin/home'];
+    const publicPages = ['', '/', '/trangchu','/findcar/login', '/findcar/dangky', '/chitietxe', '/danhsachxe'];
+    console.log('to[path', to.path)
     const authRequired = !publicPages.includes(to.path);
+    const publics = to.path.includes(['/chitietxe/']);
     const loggedIn = localStorage.getItem('user');
 
     if (authRequired && !loggedIn) {
+        if (publics) {
+            next()
+        }
         next('/findcar/login');
     } else {
         next();

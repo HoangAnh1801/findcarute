@@ -1,14 +1,26 @@
 <template>
-  <div class="container px-5">
+  <div class="container px-5" style="margin-top: 50px; padding: 0px 50px">
     <div class="col-12">
       <div class="image-car">
         <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <vue-photo-zoom-pro :url="getUrlImage(xe.anhNen)" class="d-block w-100 img-fluid" style="max-height: 450px"></vue-photo-zoom-pro>
+              <inner-image-zoom
+                  class="img-fluid"
+                  style="height: 500px"
+                  :src="getUrlImage(xe.anhNen)"
+                  :zoomSrc="getUrlImage(xe.anhNen)"
+                  moveType="drag"
+              />
             </div>
             <div class="carousel-item" v-for="image in xe.xeImages" :key="image.id">
-              <vue-photo-zoom-pro :url="getUrlImage(image.urlImage)" class="d-block w-100 img-fluid" style="max-height: 450px"></vue-photo-zoom-pro>
+              <inner-image-zoom
+                  class="img-fluid"
+                  style="height: 500px"
+                  :src="getUrlImage(image.urlImage)"
+                  :zoomSrc="getUrlImage(image.urlImage)"
+                  moveType="drag"
+              />
             </div>
           </div>
           <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
@@ -95,7 +107,7 @@
             <img src="@/assets/images/vf_1.jpg" style="max-height: 100px; max-width: 100px" >
           </div>
           <p class="text-center">Chủ xe</p>
-          <span class="text-center">Nguyễn Quang Vinh</span>
+          <span class="text-center">{{ xe.nguoiDung.hoTen }}</span>
           <p class="text-center">100 chuyến</p>
         </div>
       </div>
@@ -103,7 +115,7 @@
       <div class="my-3">
         <div class="row justify-content-center">
           <button @click="duyetXe" class="btn btn-outline-success col-1 mr-2">Duyệt</button>
-          <button class="btn btn-outline-danger col-1">Từ chối</button>
+          <button class="btn btn-outline-danger col-1" @click="back">Quay lại</button>
         </div>
       </div>
     </div>
@@ -113,13 +125,12 @@
 <script>
 import XeService from "@/services/xe.service"
 import ImageService from "@/services/image.service"
-import vuePhotoZoomPro from 'vue-photo-zoom-pro'
-import 'vue-photo-zoom-pro/dist/style/vue-photo-zoom-pro.css'
+import InnerImageZoom from 'vue-inner-image-zoom';
 import swal from 'sweetalert';
 
 export default {
   components: {
-    vuePhotoZoomPro,
+    InnerImageZoom
   },
   data() {
     return {
@@ -129,6 +140,9 @@ export default {
     }
   },
   methods: {
+    back() {
+      this.$router.go(-1)
+    },
     duyetXe() {
       XeService.duyetXe(this.id);
       swal('Duyệt thành công', "", "success")
@@ -142,8 +156,8 @@ export default {
         this.xe = response.data
       })
     },
-    getUrlImage(name) {
-      return ImageService.getImage(name);
+    getUrlImage(url) {
+      return ImageService.getImage(url);
     },
   },
   created() {
@@ -161,4 +175,7 @@ export default {
   background: #f6f9f9;
   padding: 20px;
 }
+</style>
+<style src="vue-inner-image-zoom/lib/vue-inner-image-zoom.css">
+
 </style>

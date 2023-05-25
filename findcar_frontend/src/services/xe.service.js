@@ -37,8 +37,16 @@ class Xe {
         return http.get("/car/v1/thuexe/nguoidungid", { params: params })
     }
 
+    findThueXeByNguoiDung(params) {
+        return http.get("/car/v1/thuexe/nguoidung", { params: params })
+    }
+
     duyetThueXe(id) {
         return http.get("/car/v1/thuexe/duyet?id=" + id);
+    }
+
+    xacNhanHoanXe(id) {
+        return http.get("/car/v1/thuexe/hoanxe?id=" + id);
     }
 }
 

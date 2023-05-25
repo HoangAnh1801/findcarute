@@ -10,4 +10,6 @@ public interface ThueXeRepository extends PagingAndSortingRepository<ThueXe, Lon
     Page<ThueXe> findAllByTrangThaiDuyet(Pageable pageable, Boolean trangThai);
 
     Page<ThueXe> findAllByXeNguoiDungId(Pageable pageable, Long id);
+
+    Page<ThueXe> findAllByNguoiDungId(Pageable pageable, Long id);
 }

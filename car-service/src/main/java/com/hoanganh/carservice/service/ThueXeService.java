@@ -31,10 +31,14 @@ public class ThueXeService {
         return thueXeRepository.findAllByXeNguoiDungId(pageable, id);
     }
 
+    public Page<ThueXe> findAllByNguoiDungId(Pageable pageable, Long id) {
+        return thueXeRepository.findAllByNguoiDungId(pageable, id);
+    }
+
     public Reponse duyetThueXe(Long id) {
         ThueXe thueXe = thueXeRepository.findById(id).get();
-        System.out.println("thuexe" + thueXe);
         thueXe.setTrangThaiDuyet(true);
+        thueXe.setTrangThaiHoanXe(false);
         thueXeRepository.save(thueXe);
         return new Reponse(HttpStatus.OK, "Duyệt thành công!");
     }
@@ -44,5 +48,12 @@ public class ThueXeService {
         thueXe.setTrangThaiDuyet(false);
         thueXeRepository.save(thueXe);
         return new Reponse(HttpStatus.OK, "Huỷ duyệt yêu cầu thuê xe!");
+    }
+
+    public Reponse xacNhanHoanXe(Long id) {
+        ThueXe thueXe = thueXeRepository.findById(id).get();
+        thueXe.setTrangThaiHoanXe(true);
+        thueXeRepository.save(thueXe);
+        return new Reponse(HttpStatus.OK, "Đã xác nhận hoàn xe!");
     }
 }

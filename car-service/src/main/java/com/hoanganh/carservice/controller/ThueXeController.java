@@ -39,6 +39,17 @@ public class ThueXeController {
         return thueXeService.findByXeNguoiDungId(pageable, id);
     }
 
+    @GetMapping("/nguoidung")
+    public Page<ThueXe> findByNguoiDungId(@RequestParam("page") int page,
+                                            @RequestParam(value = "limit") int limit,
+                                            @RequestParam(name = "sortName", required = false, defaultValue = "DESC") String sortname,
+                                            @RequestParam(name = "sortBy", required = false, defaultValue = "id") String sortby,
+                                            @RequestParam("id") Long id){
+        Sort sort = Sort.by(Sort.Direction.fromString(sortname), sortby);
+        Pageable pageable = PageRequest.of(page - 1, limit, sort);
+        return thueXeService.findAllByNguoiDungId(pageable, id);
+    }
+
     @GetMapping("/duyet")
     public Reponse duyetThueXe(@RequestParam("id") Long id) {
         return thueXeService.duyetThueXe(id);
@@ -47,6 +58,11 @@ public class ThueXeController {
     @GetMapping("/huyduyet")
     public Reponse huyDuyetThueXe(@RequestParam("id") Long id) {
         return thueXeService.huyDuyetThueXe(id);
+    }
+
+    @GetMapping("/hoanxe")
+    public Reponse xacNhanHoanXe(@RequestParam("id") Long id) {
+        return thueXeService.xacNhanHoanXe(id);
     }
 
     @PostMapping()

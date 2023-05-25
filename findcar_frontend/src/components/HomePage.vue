@@ -1,5 +1,4 @@
 <template>
-
     <div class="header-blue">
       <div class="container hero">
         <div class="row">
@@ -16,7 +15,7 @@
           </div>
           <div class="col-md-5 col-lg-5 offset-lg-1 offset-xl-0 d-none d-md-block phone-holder">
             <div class="iphone-mockup">
-              <img class="device" src="https://vinfasttayninh3s.com/wp-content/uploads/2020/11/vinfast-presedent.png" />
+              <img class="device" src="../assets/images/logo_no_background.png" />
             </div>
           </div>
         </div>
@@ -112,7 +111,7 @@
     </div>
   </div>
 
-  <div class="container-fluid">
+  <div class="container-fluid mt-5">
     <h3 class="text-center">XE TẠI CÁC QUẬN</h3>
     <div class="row justify-content-center">
       <div style="max-width: 1200px">
@@ -123,17 +122,20 @@
             show-arrows
         >
           <v-slide-group-item
-              v-for="n in 6"
+              v-for="n in listQuanHuyen"
               :key="n"
               v-slot="{ isSelected, toggle, selectedClass }"
           >
             <v-card
-                color="grey-lighten-1"
                 :class="['ma-4', selectedClass]"
-                height="300"
-                width="200"
+                height="200"
+                width="300"
                 @click="toggle"
             >
+            <div class="rounded-circle" @click="getListXeByQuanId(n.id)">
+              <img :src="getUrlImage(n.urlImage)" class="img-fluid" style="height: 170px; width: 300px">
+              <span class="title-quan text-white d-block pl-2">{{ n.name }}</span>
+            </div>
               <div class="d-flex fill-height align-center justify-center">
                 <v-scale-transition>
                   <v-icon
@@ -151,261 +153,82 @@
     </div>
   </div>
 
-  <div class="container">
-    <h3 class="text-center">CUNG CẤP TẤT CẢ CÁC LOẠI XE HIỆN CÓ</h3>
+  <div class="container" style="margin-top: 30px">
+    <h3 class="text-center" style="margin-bottom: 20px">CUNG CẤP TẤT CẢ CÁC LOẠI XE HIỆN CÓ</h3>
     <div class="row row-cols-1 row-cols-md-3 g-4">
-      <div class="col-12 col-lg-3">
-        <div class="card h-100">
-          <img src="../assets/images/lai_xe_duong_deo_1.jpeg" class="card-img-top" alt="...">
+      <div class="col-12 col-lg-3" v-for="xe in listXe" :key="xe.id">
+        <div class="card h-100 custom-card">
+          <img :src="getUrlImage(xe.anhNen)" class="card-img-top" alt="..." style="height: 190px">
           <div class="card-body">
-            <h5 class="card-title text-center">Mazda CX5</h5>
+            <h5 class="card-title">{{ xe.tenXe }}</h5>
             <div class="card-text">
               <span class=""><v-icon icon="mdi:mdi-check color-primary"/></span>
-              <span class="pl-2">Giá cả hợp lý</span>
+              <span class="pl-2">Số ghế: {{ xe.soGhe }}</span>
+              <div>
+                <span class=""><v-icon icon="mdi:mdi-check color-primary"/></span>
+                <span class="pl-2">Năm sản xuất: {{ xe.namSX }}</span>
+              </div>
+              <div>
+                <span class=""><v-icon icon="mdi:mdi-check color-primary"/></span>
+                <span class="pl-2">Nhiên liệu: {{ xe.nhienLieu.name }}</span>
+              </div>
             </div>
           </div>
           <div class="card-footer bg-white border-0">
-            <button class="col-6 btn btn-outline-success">Thuê ngay</button>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-lg-3">
-        <div class="card h-100">
-          <img src="../assets/images/lai_xe_duong_deo_1.jpeg" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This is a short card.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-lg-3">
-        <div class="card h-100">
-          <img src="../assets/images/lai_xe_duong_deo_1.jpeg" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-lg-3">
-        <div class="card h-100">
-          <img src="../assets/images/lai_xe_duong_deo_1.jpeg" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+            <button class="col-6 btn btn-success" @click="xemChiTiet(xe.id)">Xem chi tiết</button>
           </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="container">
-    <h3 class="text-center">TIN TỨC</h3>
-    <div class="row justify-content-center">
-      <div style="max-width: 1200px">
-        <v-slide-group
-            v-model="model"
-            class="pa-4"
-            selected-class="bg-success"
-            show-arrows
-        >
-          <v-slide-group-item>
-            <v-card
-                class="mx-auto me-3"
-                max-width="300"
-            >
-              <v-img
-                  class="align-end text-white"
-                  height="200"
-                  src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-                  cover
-              >
-                <v-card-title>Top 10 Australian beaches Top 10 Australian beaches Top 10 Australian beaches</v-card-title>
-              </v-img>
-
-              <v-card-subtitle class="pt-4">
-                Number 10
-              </v-card-subtitle>
-
-              <v-card-text>
-                <div>Whitehaven Beach</div>
-
-                <div>Whitsunday Island, Whitsunday Islands</div>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-btn color="orange">
-                  Xem
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-            <v-card
-                class="mx-auto me-3"
-                max-width="400"
-            >
-              <v-img
-                  class="align-end text-white"
-                  height="200"
-                  src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-                  cover
-              >
-                <v-card-title>Top 10 Australian beaches</v-card-title>
-              </v-img>
-
-              <v-card-subtitle class="pt-4">
-                Number 10
-              </v-card-subtitle>
-
-              <v-card-text>
-                <div>Whitehaven Beach</div>
-
-                <div>Whitsunday Island, Whitsunday Islands</div>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-btn color="orange">
-                  Share
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-            <v-card
-                class="mx-auto me-3"
-                max-width="400"
-            >
-              <v-img
-                  class="align-end text-white"
-                  height="200"
-                  src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-                  cover
-              >
-                <v-card-title>Top 10 Australian beaches</v-card-title>
-              </v-img>
-
-              <v-card-subtitle class="pt-4">
-                Number 10
-              </v-card-subtitle>
-
-              <v-card-text>
-                <div>Whitehaven Beach</div>
-
-                <div>Whitsunday Island, Whitsunday Islands</div>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-btn color="orange">
-                  Share
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-            <v-card
-                class="mx-auto me-3"
-                max-width="400"
-            >
-              <v-img
-                  class="align-end text-white"
-                  height="200"
-                  src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-                  cover
-              >
-                <v-card-title>Top 10 Australian beaches</v-card-title>
-              </v-img>
-
-              <v-card-subtitle class="pt-4">
-                Number 10
-              </v-card-subtitle>
-
-              <v-card-text>
-                <div>Whitehaven Beach</div>
-
-                <div>Whitsunday Island, Whitsunday Islands</div>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-btn color="orange">
-                  Share
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-            <v-card
-                class="mx-auto me-3"
-                max-width="400"
-            >
-              <v-img
-                  class="align-end text-white"
-                  height="200"
-                  src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-                  cover
-              >
-                <v-card-title>Top 10 Australian beaches</v-card-title>
-              </v-img>
-
-              <v-card-subtitle class="pt-4">
-                Number 10
-              </v-card-subtitle>
-
-              <v-card-text>
-                <div>Whitehaven Beach</div>
-
-                <div>Whitsunday Island, Whitsunday Islands</div>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-btn color="orange">
-                  Share
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-            <v-card
-                class="mx-auto me-3"
-                max-width="400"
-            >
-              <v-img
-                  class="align-end text-white"
-                  height="200"
-                  src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-                  cover
-              >
-                <v-card-title>Top 10 Australian beaches</v-card-title>
-              </v-img>
-
-              <v-card-subtitle class="pt-4">
-                Number 10
-              </v-card-subtitle>
-
-              <v-card-text>
-                <div>Whitehaven Beach</div>
-
-                <div>Whitsunday Island, Whitsunday Islands</div>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-btn color="orange">
-                  Share
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-slide-group-item>
-        </v-slide-group>
-      </div>
+    <div class="row justify-content-center" style="margin-top: 30px">
+      <RouterLink to="danhsachxe" class="col-2 text-center">
+        <button class="btn btn-outline-warning ">Xem tất cả</button>
+      </RouterLink>
     </div>
   </div>
-  <Footer />
+
 </template>
 
 <script>
-import Footer from "@/components/Footer";
 import DanhMucService from "@/services/danhmuc.service"
 import ImageService from "@/services/image.service"
+import XeService from "@/services/xe.service"
 
 export default {
   name: "header",
-  components: {Footer},
   data() {
     return {
-      listHangXe: []
+      listHangXe: [],
+      listQuanHuyen: [],
+      page: 1,
+      page_size: 8,
+      listXe: []
     }
   },
   methods: {
+    getListXeByQuanId(id) {
+      this.$router.push({ name: 'DanhSachXeQuan', params: { quanid: id } });
+    },
+    xemChiTiet(id) {
+      this.$router.push({ name: 'ChiTietXe', params: { id: id } });
+    },
+    getListXe() {
+      let params = {}
+      params['page'] = this.page
+      params['limit'] = this.page_size
+      params['trangThai'] = true
+      params['search'] = this.keySearch
+      XeService.getAll(params).then(response => (
+          this.listXe = response.data.content
+      ))
+    },
+    getAllQuanHuyen() {
+      var params = {};
+      params['search'] = '';
+      DanhMucService.getAll('quanhuyen', params).then(response => (
+          this.listQuanHuyen = response.data
+      ))
+    },
     getAllHangXe() {
       DanhMucService.getAll('hangxe').then(response => (
           this.listHangXe = response.data
@@ -417,6 +240,8 @@ export default {
   },
   created() {
     this.getAllHangXe();
+    this.getAllQuanHuyen();
+    this.getListXe();
   }
 };
 </script>

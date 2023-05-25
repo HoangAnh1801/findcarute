@@ -25,10 +25,13 @@ public class XeController {
                                  @RequestParam(name = "sortName", required = false, defaultValue = "DESC") String sortname,
                                  @RequestParam(name = "sortBy", required = false, defaultValue = "id") String sortby,
                                  @RequestParam(name = "trangThai", required = false) Boolean trangThai,
+                                 @RequestParam(name = "quanid", required = false) Long quanid,
+                                 @RequestParam(name = "loaixeid", required = false) Long loaixeid,
+                                 @RequestParam(name = "hangxeid", required = false) Long hangxeid,
                                  @RequestParam(name = "search", required = false) String keyword) {
         Sort sort = Sort.by(Sort.Direction.fromString(sortname), sortby);
         Pageable pageable = PageRequest.of(page - 1, limit, sort);
-        return xeService.getAllXe(pageable, keyword, trangThai);
+        return xeService.getAllXe(pageable, keyword, trangThai, quanid, loaixeid, hangxeid);
     }
 
     @GetMapping("/nguoidung")

@@ -16,11 +16,5 @@ public class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Boolean isDelete = Boolean.FALSE;
-
-    private Timestamp createdDate;
-
-    private Long modifyBy;
-
-    private Timestamp modifyDate;
+    private Timestamp ngayTao;
 }

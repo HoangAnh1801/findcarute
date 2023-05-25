@@ -1,46 +1,66 @@
 <template>
   <div class="container">
-    <h2 class="text-center" style="margin-top: 100px">Đăng xe mới</h2>
-    <div class="row" style="margin-top: 100px">
+    <h2 class="text-center" style="margin-top: 50px">Đăng xe mới</h2>
+    <Form @submit="save" ref="form" lazy-validation>
+    <div class="row" style="margin-top: 50px">
       <div class="col-9">
-        <v-text-field
-            label="Tiêu đề"
-            variant="outlined"
-            v-model="xe.tieuDe"
-        >
-        </v-text-field>
+        <label class="font-weight-medium">Tiêu đề<span class="text-danger">*</span></label>
+        <Field name="tieuDe" rules="required" v-model="xe.tieuDe" class="" v-slot="{field, errors }">
+          <v-text-field
+              :class="[{'is-invalid': !!errors.length },'form-control']"
+              v-bind="field"
+              variant="outlined"
+              v-model="xe.tieuDe"
+          >
+          </v-text-field>
+        </Field>
+        <ErrorMessage name="tieuDe" class="text-danger" />
       </div>
       <div class="col-lg-3">
-        <v-combobox
-            label="Hãng xe"
-            item-title="name"
-            :items="listHangXe"
-            v-model="xe.hangXe"
-            variant="outlined"
-        ></v-combobox>
+        <label class="font-weight-medium">Hãng xe</label>
+        <Field name="hangXe" rules="selected" v-model="xe.hangXe" class="" v-slot="{ errors }">
+          <v-combobox
+              item-title="name"
+              :class="[{'is-invalid': !!errors.length },'form-control']"
+              :items="listHangXe"
+              v-model="xe.hangXe"
+              variant="outlined"
+          ></v-combobox>
+        </Field>
+        <ErrorMessage name="hangXe" class="text-danger" />
       </div>
     </div>
     <div class="row mt-5">
       <div class="col-lg-7">
+        <label class="font-weight-medium">Tên xe<span class="text-danger">*</span></label>
+        <Field name="tenXe" rules="required" v-model="xe.tenXe" class="" v-slot="{field, errors }">
         <v-text-field
-            label="Tên xe"
             variant="outlined"
             v-model="xe.tenXe"
+            :class="[{'is-invalid': !!errors.length },'form-control']"
+            v-bind="field"
         >
         </v-text-field>
+        </Field>
+        <ErrorMessage name="tenXe" class="text-danger" />
       </div>
       <div class="col-lg-3">
-        <v-text-field
-            label="Số ghế"
-            variant="outlined"
-            type="number"
-            v-model="xe.soGhe"
-        >
-        </v-text-field>
+        <label class="font-weight-medium">Số ghế<span class="text-danger">*</span></label>
+        <Field name="soGhe" rules="required" v-model="xe.soGhe" v-slot="{field, errors }">
+          <v-text-field
+              variant="outlined"
+              type="text"
+              v-model="xe.soGhe"
+              v-bind="field"
+              :class="[{'is-invalid': !!errors.length },'form-control']"
+          >
+          </v-text-field>
+        </Field>
+        <ErrorMessage name="soGhe" class="text-danger" />
       </div>
       <div class="col-lg-2">
+        <label class="font-weight-medium">Năm sản xuất</label>
         <v-text-field
-            label="Năm sản xuất"
             variant="outlined"
             type="number"
             v-model="xe.namSX"
@@ -50,132 +70,123 @@
     </div>
     <div class="row mt-5">
       <div class="col-lg-4">
-        <v-combobox
-            label="Loại xe"
-            item-title="name"
-            :items="listLoaiXe"
-            v-model="xe.loaiXe"
-            variant="outlined"
-        ></v-combobox>
+        <label class="font-weight-medium">Loại xe<span class="text-danger">*</span></label>
+        <Field name="loaiXe" rules="selected" v-model="xe.loaiXe" class="" v-slot="{ errors }">
+          <v-combobox
+              item-title="name"
+              :items="listLoaiXe"
+              :class="[{'is-invalid': !!errors.length },'form-control']"
+              v-model="xe.loaiXe"
+              variant="outlined"
+          ></v-combobox>
+        </Field>
+        <ErrorMessage name="loaiXe" class="text-danger" />
       </div>
       <div class="col-lg-4">
-        <v-combobox
-            label="Nhiên liệu"
-            item-title="name"
-            v-model="xe.nhienLieu"
-            :items="listNhienLieu"
-            variant="outlined"
-        ></v-combobox>
+        <label class="font-weight-medium">Loại nhiên liệu<span class="text-danger">*</span></label>
+        <Field name="nhienLieu" rules="selected" v-model="xe.nhienLieu" class="" v-slot="{ errors }">
+          <v-combobox
+              item-title="name"
+              :class="[{'is-invalid': !!errors.length },'form-control']"
+              v-model="xe.nhienLieu"
+              :items="listNhienLieu"
+              variant="outlined"
+          ></v-combobox>
+        </Field>
+        <ErrorMessage name="nhienLieu" class="text-danger" />
       </div>
       <div class="col-lg-4">
-        <v-text-field
-            label="Số điện thoại"
-            variant="outlined"
-            v-model="xe.sdt"
-        >
-        </v-text-field>
+        <label class="font-weight-medium">Số điện thoại<span class="text-danger">*</span></label>
+        <Field name="sdt" rules="required" v-model="xe.sdt" class="" v-slot="{field, errors }">
+          <v-text-field
+              v-bind="field"
+              variant="outlined"
+              :class="[{'is-invalid': !!errors.length },'form-control']"
+              v-model="xe.sdt"
+          >
+          </v-text-field>
+        </Field>
+        <ErrorMessage name="sdt" class="text-danger" />
       </div>
     </div>
 
     <div class="row mt-5">
       <div class="col-12">
-        <v-text-field
-            label="Địa chỉ"
-            variant="outlined"
-            v-model="xe.diaChi"
-        >
-        </v-text-field>
+        <label class="font-weight-medium">Địa chỉ<span class="text-danger">*</span></label>
+        <Field name="diaChi" rules="required" v-model="xe.diaChi" class="" v-slot="{field, errors }">
+          <v-text-field
+              v-bind="field"
+              :class="[{'is-invalid': !!errors.length },'form-control']"
+              variant="outlined"
+              v-model="xe.diaChi"
+          >
+          </v-text-field>
+        </Field>
+        <ErrorMessage name="diaChi" class="text-danger" />
       </div>
     </div>
 
     <div class="row mt-5">
       <div class="col-lg-4">
+        <label class="font-weight-medium">Quận/huyện<span class="text-danger">*</span></label>
+        <Field name="quanHuyen" rules="selected" v-model="xe.nhienLieu" class="" v-slot="{ errors }">
         <v-combobox
-            label="Quận/huyện"
             item-title="name"
             :items="listQuanHuyen"
+            :class="[{'is-invalid': !!errors.length },'form-control']"
             v-model="xe.phuongXa.quanHuyen"
             variant="outlined"
         ></v-combobox>
+        </Field>
+        <ErrorMessage name="quanHuyen" class="text-danger" />
       </div>
       <div class="col-lg-4">
-        <v-combobox
-            label="Phường/xã"
-            item-title="name"
-            :items="listPhuongXa"
-            v-model="xe.phuongXa"
-            variant="outlined"
-        ></v-combobox>
+        <label class="font-weight-medium">Quận/huyện<span class="text-danger">*</span></label>
+        <Field name="phuongXa" rules="selected" v-model="xe.nhienLieu" class="" v-slot="{ errors }">
+          <v-combobox
+              item-title="name"
+              :class="[{'is-invalid': !!errors.length },'form-control']"
+              :items="listPhuongXa"
+              v-model="xe.phuongXa"
+              variant="outlined"
+          ></v-combobox>
+        </Field>
+        <ErrorMessage name="phuongXa" class="text-danger" />
       </div>
       <div class="col-lg-4">
-        <v-text-field
-            label="Giá xe"
-            variant="outlined"
-            v-model="xe.giaXe"
-            type="number"
-        >
-        </v-text-field>
+        <label class="font-weight-medium">Giá xe<span class="text-danger">*</span></label>
+        <Field name="giaXe" rules="required" v-model="xe.giaXe" class="" v-slot="{field, errors }">
+          <v-text-field
+              v-bind="field"
+              :class="[{'is-invalid': !!errors.length },'form-control']"
+              variant="outlined"
+              v-model="xe.giaXe"
+              type="number"
+          >
+          </v-text-field>
+        </Field>
+        <ErrorMessage name="giaXe" class="text-danger" />
       </div>
     </div>
-<!--    <div class="row mt-5">-->
-<!--      <div class="image-preview position-relative d-inline-flex" v-if="imageData.length > 0">-->
-<!--        <v-icon icon="mdi:mdi-close-circle-outline" class="position-absolute remove-img" @click="remove()"/>-->
-<!--        <img :src="imageData" class="image-pre" style="max-height: 100px; max-width: 230px">-->
-<!--      </div>-->
-<!--      <div v-if="xe.id != '' && imageData.length == 0" class="image-preview position-relative d-inline-flex">-->
-<!--        <v-icon icon="mdi:mdi-close-circle-outline" class="position-absolute remove-img" @click="remove()"/>-->
-<!--        <img :src="getUrlImage(xe.anhNen)" class="image-pre" style="max-height: 100px; max-width: 230px">-->
-<!--      </div>-->
-<!--      <v-file-input class="input-image border-color-cus mt-2" density="counter"-->
-<!--                    counter-->
-<!--                    variant="outlined"-->
-<!--                    prepend-icon="mdi:mdi-camera"-->
-<!--                    @change="onFileChange" ref="avt"-->
-<!--                    required></v-file-input>-->
-<!--    </div>-->
     <div class="row mt-5">
       <v-textarea label="Mô tả" variant="outlined" v-model="xe.mota"></v-textarea>
     </div>
-    <div class="col-12">
+    <div class="col-12 mt-4">
+      <label class="font-weight-medium">Tính năng<span class="text-danger">*</span></label>
       <v-select
           v-model="selectdTinhNang"
           :items="tinhNangs"
           item-title="name"
           item-value="id"
           chips
-          label="Tính năng"
           multiple
           variant="outlined"
       ></v-select>
-
-<!--      <v-item-group multiple selected-class="bg-primary-tb" v-model="selectdTinhNang">-->
-<!--        <v-item-->
-<!--            v-for="entry in tinhNang"-->
-<!--            :key="entry.id"-->
-<!--            :value="entry.id"-->
-<!--            v-slot="{ selectedClass, toggle }"-->
-<!--        >-->
-<!--          <v-chip-->
-<!--              prepend-icon="mdi:mdi-label"-->
-<!--              :class="selectedClass"-->
-<!--              class="ma-2 pa-4"-->
-<!--              @click="toggle"-->
-
-<!--          >-->
-<!--            {{ entry.name }}-->
-<!--          </v-chip>-->
-<!--        </v-item>-->
-<!--      </v-item-group>-->
     </div>
 
     <div class="col-12">
 
       <v-card-item class="pa-5">
-<!--        <ul>-->
-<!--          <li>{{ $t('post-form.note-img1') }}</li>-->
-<!--          <li>{{ $t('post-form.note-img2') }}</li>-->
-<!--          <li>{{ $t('post-form.note-img3') }}</li>-->
-<!--        </ul>-->
         <div
             class="dropzone-container"
             @dragover="dragover"
@@ -238,13 +249,11 @@
       </v-card-item>
 
     </div>
-
-
-    <div class="row justify-content-center">
-      <button class="btn btn-outline-success col-1 mr-2 font-weight-bold" @click="save">Lưu</button>
-      <button class="btn btn-outline-danger col-1">anh</button>
-    </div>
-
+      <div class="row justify-content-center">
+        <button class="btn btn-outline-success col-1 mr-2 font-weight-bold" type="submit">Lưu</button>
+        <button class="btn btn-outline-danger col-1" @click="back">Quay lại</button>
+      </div>
+    </Form>
   </div>
 </template>
 
@@ -252,9 +261,15 @@
 import DanhMucService from "@/services/danhmuc.service"
 import XeService from "@/services/xe.service"
 import ImageService from "@/services/image.service"
+import { Form, Field, ErrorMessage } from "vee-validate";
 
 export default {
   name: "Xe",
+  components: {
+    Form,
+    Field,
+    ErrorMessage,
+  },
   data() {
     return {
       toggle: 1,
@@ -274,7 +289,7 @@ export default {
         nguoiDung: {
           id: ''
         },
-        createdDate: '',
+        ngayTao: '',
         tieuDe: '',
         tenXe: '',
         hangXe: {
@@ -312,6 +327,9 @@ export default {
     }
   },
   methods: {
+    back() {
+      this.$router.go(-1)
+    },
     getUrlImage(name) {
       return ImageService.getImage(name);
     },
@@ -359,13 +377,12 @@ export default {
           this.selectdTinhNang.push(response.data.tinhNangs[i].id)
         }
         // this.selectdTinhNang = (dataTinhNang);
-        // console.log(this.selectdTinhNang)
         this.xe = response.data
 
       })
     },
     save() {
-      this.xe.createdDate = new Date().getTime();
+      this.xe.ngayTao = new Date().getTime();
       // this.xe.nguoiDung.id = this.xe
       var dataTinhNang = [];
       for (let i in this.selectdTinhNang) {
@@ -373,16 +390,12 @@ export default {
       }
       this.xe.tinhNangs = dataTinhNang
 
-
-      // var currentDate = new Date().toJSON().slice(0,10).replace(/-/g,'/');
-      // this.xe.createdDate = currentDate;
-
-
       XeService.add(this.xe).then(response => {
         let id = response.data.id
         this.xe = response.data
         this.updateAvatarXe()
         this.updateImages(id)
+
       }).catch(() => {
         // this.notification(e.response.data.message, "error");
 
@@ -471,7 +484,6 @@ export default {
   },
   watch: {
     'xe.phuongXa.quanHuyen.id'() {
-      console.log('watch', this.xe.phuongXa.quanHuyen.id)
       this.getPhuongXa(this.xe.phuongXa.quanHuyen.id);
     }
   },
