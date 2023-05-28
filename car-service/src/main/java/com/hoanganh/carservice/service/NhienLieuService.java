@@ -1,7 +1,6 @@
 package com.hoanganh.carservice.service;
 
 import com.hoanganh.carservice.entity.NhienLieu;
-import com.hoanganh.carservice.entity.TinhNangXe;
 import com.hoanganh.carservice.reponse.Reponse;
 import com.hoanganh.carservice.repository.NhienLieuRepository;
 import com.hoanganh.carservice.repository.XeRepository;
@@ -24,7 +23,7 @@ public class NhienLieuService {
         if (keySearch == null || keySearch.length() == 0 || keySearch.equals("null")) {
             return nhienLieuRepository.findAll();
         }
-        return nhienLieuRepository.findAllByNameContaining(keySearch);
+        return nhienLieuRepository.findAllByTenContaining(keySearch);
     }
 
     public Optional<NhienLieu> getNhienLieuById(Long id) {
@@ -32,7 +31,7 @@ public class NhienLieuService {
     }
 
     public Reponse saveNhienLieu(NhienLieu nhienLieu) {
-        NhienLieu exitsNhienLieu = nhienLieuRepository.findNhienLieuByName(nhienLieu.getName());
+        NhienLieu exitsNhienLieu = nhienLieuRepository.findNhienLieuByTen(nhienLieu.getTen());
 
         if (nhienLieu.getId() != null && exitsNhienLieu!= null) {
             if (nhienLieu.getId() != exitsNhienLieu.getId()) {

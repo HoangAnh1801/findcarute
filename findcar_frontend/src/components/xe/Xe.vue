@@ -20,7 +20,7 @@
         <label class="font-weight-medium">Hãng xe</label>
         <Field name="hangXe" rules="selected" v-model="xe.hangXe" class="" v-slot="{ errors }">
           <v-combobox
-              item-title="name"
+              item-title="ten"
               :class="[{'is-invalid': !!errors.length },'form-control']"
               :items="listHangXe"
               v-model="xe.hangXe"
@@ -73,7 +73,7 @@
         <label class="font-weight-medium">Loại xe<span class="text-danger">*</span></label>
         <Field name="loaiXe" rules="selected" v-model="xe.loaiXe" class="" v-slot="{ errors }">
           <v-combobox
-              item-title="name"
+              item-title="ten"
               :items="listLoaiXe"
               :class="[{'is-invalid': !!errors.length },'form-control']"
               v-model="xe.loaiXe"
@@ -86,7 +86,7 @@
         <label class="font-weight-medium">Loại nhiên liệu<span class="text-danger">*</span></label>
         <Field name="nhienLieu" rules="selected" v-model="xe.nhienLieu" class="" v-slot="{ errors }">
           <v-combobox
-              item-title="name"
+              item-title="ten"
               :class="[{'is-invalid': !!errors.length },'form-control']"
               v-model="xe.nhienLieu"
               :items="listNhienLieu"
@@ -131,7 +131,7 @@
         <label class="font-weight-medium">Quận/huyện<span class="text-danger">*</span></label>
         <Field name="quanHuyen" rules="selected" v-model="xe.nhienLieu" class="" v-slot="{ errors }">
         <v-combobox
-            item-title="name"
+            item-title="ten"
             :items="listQuanHuyen"
             :class="[{'is-invalid': !!errors.length },'form-control']"
             v-model="xe.phuongXa.quanHuyen"
@@ -144,7 +144,7 @@
         <label class="font-weight-medium">Quận/huyện<span class="text-danger">*</span></label>
         <Field name="phuongXa" rules="selected" v-model="xe.nhienLieu" class="" v-slot="{ errors }">
           <v-combobox
-              item-title="name"
+              item-title="ten"
               :class="[{'is-invalid': !!errors.length },'form-control']"
               :items="listPhuongXa"
               v-model="xe.phuongXa"
@@ -176,7 +176,7 @@
       <v-select
           v-model="selectdTinhNang"
           :items="tinhNangs"
-          item-title="name"
+          item-title="ten"
           item-value="id"
           chips
           multiple
@@ -229,8 +229,8 @@
             </div>
           </div>
           <div class="preview-container mt-4" v-if="xe.id && files.length == 0">
-            <div v-for="file in xe.xeImages" :key="file.id" class="preview-card">
-              <div class="preview-img"><img :src="getUrlImage(file.urlImage)"/></div>
+            <div v-for="file in xe.xeAnhs" :key="file.id" class="preview-card">
+              <div class="preview-img"><img :src="getUrlImage(file.urlAnh)"/></div>
               <p class="p-img-name">
                 {{ file.name }}
               </p>
@@ -262,6 +262,7 @@ import DanhMucService from "@/services/danhmuc.service"
 import XeService from "@/services/xe.service"
 import ImageService from "@/services/image.service"
 import { Form, Field, ErrorMessage } from "vee-validate";
+import swal from 'sweetalert';
 
 export default {
   name: "Xe",
@@ -294,34 +295,34 @@ export default {
         tenXe: '',
         hangXe: {
           id: '',
-          name: '',
-          urlImage: ''
+          ten: '',
+          urlAnh: ''
         },
         soGhe: '',
         namSX: '',
         loaiXe: {
           id: '',
-          name: ''
+          ten: ''
         },
         nhienLieu: {
           id: '',
-          name: ''
+          ten: ''
         },
         sdt: '',
         diaChi: '',
         phuongXa: {
           id: '',
-          name: '',
+          ten: '',
           quanHuyen: {
             id: '',
-            name: ''
+            ten: ''
           },
         },
         giaXe: '',
         anhNen: '',
         mota: '',
         tinhNangs: [],
-        xeImages: [],
+        xeAnhs: [],
         trangThaiDuyet: 0
       }
     }
@@ -395,6 +396,9 @@ export default {
         this.xe = response.data
         this.updateAvatarXe()
         this.updateImages(id)
+        swal('Thêm mới thành công!', '', 'success').then(
+            // window.location.href = 'http://localhost:8080/admin/quanlyxe'
+        )
 
       }).catch(() => {
         // this.notification(e.response.data.message, "error");
@@ -410,7 +414,7 @@ export default {
         ImageService.uploadImage(formData)
             .then(response => {
               this.xe.anhNen = response.data.urlFile
-              this.xe.xeImages = []
+              this.xe.xeAnhs = []
               XeService.add(this.xe).then(() => {
               }).catch(e => {
                 this.notification(e.response.data.message, "error");
@@ -431,8 +435,8 @@ export default {
           ImageService.uploadImage(formData)
               .then(response => {
                 let postImage = {
-                  urlImage: response.data.urlFile,
-                  nameImage: response.data.fileName,
+                  urlAnh: response.data.urlFile,
+                  tenAnh: response.data.fileName,
                   xe: {
                     id: id,
                   },

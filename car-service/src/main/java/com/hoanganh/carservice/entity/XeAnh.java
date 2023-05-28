@@ -8,14 +8,14 @@ import javax.persistence.*;
 
 @Entity
 @Data
-public class XeImage {
+public class XeAnh {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nameImage;
+    private String tenAnh;
 
-    private String urlImage;
+    private String urlAnh;
 
     @ManyToOne
     @JsonIgnore

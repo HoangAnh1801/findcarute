@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid py-3" style="background-color: rgb(41 27 93) !important; box-shadow: 0px 6px 5px rgba(0, 0, 0, 0.25)">
+  <div class="container-fluid py-3" style="background-color: #f9c63f !important; box-shadow: 0px 6px 5px rgba(0, 0, 0, 0.25)">
     <div class="row">
       <div class="col-4">
         <span class="" style="color: white;
@@ -48,19 +48,23 @@ export default {
   methods: {
     listxedathue() {
       this.$router.push({name: 'danhsachxethue'});
+      window.scrollTo(0, 0);
     },
     trangCaNhan() {
       this.$router.push({name: 'thongtincanhan'});
+      window.scrollTo(0, 0);
     },
     logOut() {
       this.$store.dispatch('auth/logout');
-      this.$router.push('/fincar/login');
+      window.location.href = 'http://localhost:8080/findcar/login'
     },
     listxe() {
       this.$router.push({name: 'quanlyxe'});
+      window.scrollTo(0, 0);
     },
     listxethue() {
       this.$router.push({name: 'quanlythuexe'});
+      window.scrollTo(0, 0);
     }
   },
   created() {

@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 public class NhienLieu extends BaseEntity {
     @NotBlank(message = "{com.sdt.validate.notblank}")
-    private String name;
+    private String ten;
 
     @OneToMany(mappedBy = "nhienLieu")
     @JsonIgnore

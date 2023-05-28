@@ -23,7 +23,7 @@ public class PhuongXaService {
         if (keySearch == null || keySearch.length() == 0 || keySearch.equals("null")) {
             return phuongXaRepository.findAll();
         }
-        return phuongXaRepository.findAllByNameContaining(keySearch);
+        return phuongXaRepository.findAllByTenContaining(keySearch);
     }
 
     public Optional<PhuongXa> getPhuongXaById(Long id) {
@@ -31,7 +31,7 @@ public class PhuongXaService {
     }
 
     public Reponse savePhuongXa(PhuongXa phuongXa) {
-        PhuongXa exitsPhuongXa = phuongXaRepository.findAllByName(phuongXa.getName());
+        PhuongXa exitsPhuongXa = phuongXaRepository.findAllByTen(phuongXa.getTen());
 
         if (phuongXa.getId() != null && exitsPhuongXa!= null) {
             if (phuongXa.getId() != exitsPhuongXa.getId()) {

@@ -23,7 +23,7 @@ public class LoaiXeService {
         if (keySearch == null || keySearch.length() == 0 || keySearch.equals("null")) {
             return loaiXeRepository.findAll();
         }
-        return loaiXeRepository.findAllByNameContaining(keySearch);
+        return loaiXeRepository.findAllByTenContaining(keySearch);
     }
 
     public Optional<LoaiXe> getLoaiXeById(Long id) {
@@ -31,7 +31,7 @@ public class LoaiXeService {
     }
 
     public Reponse saveLoaiXe(LoaiXe loaiXe) {
-        LoaiXe existLoaiXe = loaiXeRepository.findLoaiXeByName(loaiXe.getName());
+        LoaiXe existLoaiXe = loaiXeRepository.findLoaiXeByTen(loaiXe.getTen());
         if (loaiXe.getId() != null && existLoaiXe!= null) {
             if (loaiXe.getId() != existLoaiXe.getId()) {
                 return new Reponse(HttpStatus.BAD_REQUEST, "Loại xe đã tồn tại");

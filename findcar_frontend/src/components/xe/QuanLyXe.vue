@@ -6,7 +6,7 @@
       </div>
       <div class="col-9">
         <router-link to="xe">
-          <button class="btn btn-success"><v-icon icon="mdi:mdi-plus" /> Thêm mới</button>
+          <button class="btn btn-warning"><v-icon icon="mdi:mdi-plus" /> Thêm mới</button>
         </router-link>
 
       </div>
@@ -32,7 +32,7 @@
         <td>{{ entry.tenXe }}</td>
         <td>{{ entry.giaXe }}</td>
         <td>{{ entry.diaChi }}</td>
-        <td><img :src="getUrlImage(entry.anhNen)" style="max-height: 100px; max-width: 230px"/></td>
+        <td><img :src="getUrlImage(entry.anhNen)" style="height: 100px; width: 160px"/></td>
         <td>
           <el-tag v-if="entry.trangThaiDuyet == true" class="mx-1" effect="dark" type="success">
             Đã duyệt

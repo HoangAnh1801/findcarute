@@ -20,7 +20,7 @@ import java.util.List;
 public class PhuongXa extends BaseEntity {
 
     @NotBlank(message = "{com.sdt.validate.notblank}")
-    private String name;
+    private String ten;
 
     @ManyToOne
     @JoinColumn(name = "quanHuyenId")

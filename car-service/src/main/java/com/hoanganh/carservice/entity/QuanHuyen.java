@@ -19,9 +19,9 @@ import java.util.List;
 public class QuanHuyen extends BaseEntity {
 
     @NotBlank(message = "{com.sdt.validate.notblank}")
-    private String name;
+    private String ten;
 
-    private String urlImage;
+    private String urlAnh;
 
     @OneToMany(mappedBy = "quanHuyen")
     @JsonIgnore

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-9dc5e7">
+  <div class="bg-f9c63f">
     <div class="container py-3">
       <div class="row justify-content-center">
         <div class="col-lg-3 px-0">
@@ -7,7 +7,7 @@
             <el-option
                 v-for="loaixe in listLoaiXe"
                 :key="loaixe.id"
-                :label="loaixe.name"
+                :label="loaixe.ten"
                 :value="loaixe.id"
             />
           </el-select>
@@ -51,7 +51,7 @@
                       <div class="col-md-6 col-lg-6 col-xl-6">
                         <h5 class="text-black">{{ xe.tenXe }}</h5>
                         <div class="mb-2 text-muted small">
-                          <span v-for="tinhNang in xe.tinhNangs" :key="tinhNang.id" class="mr-5 px-3 d-inline-block"><v-icon icon="mdi:mdi-check" /> {{ tinhNang.name }}</span>
+                          <span v-for="tinhNang in xe.tinhNangs" :key="tinhNang.id" class="mr-5 px-3 d-inline-block"><v-icon icon="mdi:mdi-check" /> {{ tinhNang.ten }}</span>
                         </div>
                         <p class="text-truncate mb-4 mb-md-0 text-black">
                           {{ xe.mota }}
@@ -131,7 +131,7 @@
                     v-for="hangxe in listHangXe"
                     :key="hangxe.id"
                 >
-                  {{ hangxe.name }}
+                  {{ hangxe.ten }}
                 </v-chip>
               </v-chip-group>
             </v-card-text>
@@ -153,7 +153,7 @@
                     :key="quanhuyen.id"
                     selected-class="text-success"
                 >
-                  {{ quanhuyen.name }}
+                  {{ quanhuyen.ten }}
                 </v-chip>
               </v-chip-group>
             </v-card-text>
@@ -175,7 +175,7 @@
                     :key="nhienlieu.id"
                     selected-class="text-success"
                 >
-                  {{ nhienlieu.name }}
+                  {{ nhienlieu.ten }}
                 </v-chip>
               </v-chip-group>
             </v-card-text>
@@ -260,6 +260,7 @@ export default {
     },
     xemChiTiet(id) {
       this.$router.push({ name: 'ChiTietXe', params: { id: id } });
+      window.scrollTo(0, 0);
     },
     getListXe() {
       let params = {}
@@ -299,7 +300,7 @@ export default {
     },
     findAll() {
       this.$router.push({name: 'DanhSachXe'});
-      window.location.href = 'http://localhost:8081/danhsachxe'
+      window.location.href = 'http://localhost:8080/danhsachxe'
     },
     quanHuyen() {
       this.quanid = this.quanHuyen;

@@ -2,7 +2,7 @@ package com.hoanganh.carservice.service;
 
 import com.hoanganh.carservice.dto.XeImageDTO;
 import com.hoanganh.carservice.entity.Xe;
-import com.hoanganh.carservice.entity.XeImage;
+import com.hoanganh.carservice.entity.XeAnh;
 import com.hoanganh.carservice.reponse.Reponse;
 import com.hoanganh.carservice.repository.XeImageRepository;
 import com.hoanganh.carservice.repository.XeRepository;
@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -97,17 +96,17 @@ public class XeService {
         return xeRepository.findAllByTenXeContainingAndNguoiDungId(pageable, keyword, id);
     }
 
-    public XeImage saveImage(XeImageDTO xeImageDTO) {
-        XeImage xeImage = new XeImage();
+    public XeAnh saveImage(XeImageDTO xeImageDTO) {
+        XeAnh xeAnh = new XeAnh();
 
-        xeImage.setNameImage(xeImageDTO.getNameImage());
-        xeImage.setUrlImage(xeImageDTO.getUrlImage());
-        xeImage.setXe(xeImageDTO.getXe());
+        xeAnh.setTenAnh(xeImageDTO.getTenAnh());
+        xeAnh.setUrlAnh(xeImageDTO.getUrlAnh());
+        xeAnh.setXe(xeImageDTO.getXe());
         if (xeImageDTO.getId() != null) {
-            xeImage.setId(xeImageDTO.getId());
+            xeAnh.setId(xeImageDTO.getId());
         }
 
-        return xeImageRepository.save(xeImage);
+        return xeImageRepository.save(xeAnh);
     }
 
     @Transactional

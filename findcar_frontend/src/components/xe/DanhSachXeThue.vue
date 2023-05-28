@@ -33,7 +33,7 @@
           </template>
 
         </td>
-        <td>{{ entry.xe.hangXe.name }}</td>
+        <td>{{ entry.xe.hangXe.ten }}</td>
         <td>{{ formatDateTime(entry.ngayBatDau) }}</td>
         <td>{{ formatDateTime(entry.ngayKetThuc) }}</td>
 <!--        <td v-if="entry.xe.nguoiDung.id == nguoiDungId">{{ entry.xe.nguoiDung.id }}</td>-->
@@ -52,13 +52,18 @@
 
 
         </td>
+        <td>
+          <el-tag v-if="entry.trangThaiHuy == true" class="mx-1 cursor-pointer" effect="dark" type="warning">
+            Đã huỷ
+          </el-tag>
+        </td>
         <td v-if="isQuanTri">
           <router-link :to="{ name: 'duyetxe', params: { id: entry.id } }">
             <button><v-icon icon="mdi:mdi-eye color-248C92"/></button>
           </router-link>
         </td>
         <td v-else>
-          <button @click="deleteById(entry.id)" > <v-icon icon="mdi:mdi-trash-can-outline color-DD4238"/></button>
+          <button @click="deleteById(entry.id, entry.trangThaiDuyet)" :disabled="entry.trangThaiHuy == true" > <v-icon icon="mdi:mdi-close-outline color-DD4238"/></button>
         </td>
       </tr>
       </tbody>
@@ -126,6 +131,11 @@ export default ({
           code: 'trangThaiDuyet',
           type: 'text'
         },
+        {
+          name: 'Trạng thái huỷ',
+          code: 'trangThaiHuy',
+          type: 'text'
+        },
       ],
       listXe: [],
       nguoiDungId: '',
@@ -187,19 +197,23 @@ export default ({
       return formattedDate
 
     },
-    deleteById(id) {
+    deleteById(id, trangThai) {
       swal({
-        title: "Bạn có chắc chắn muốn xoá?",
+        title: "Bạn có chắc chắn muốn huỷ thuê xe?",
         icon: "warning",
         buttons: true,
         dangerMode: true,
       })
           .then((willDelete) => {
             if (willDelete) {
-              XeService.delete(id).then((response) => {
-                swal(response.data.message, "", "success")
-                this.getListXe(this.nguoiDungId);
-              })
+              if (trangThai == true) {
+                swal('Không thể huỷ thuê xe. Yêu cầu thuê xe đã được duyệt!', '', 'error')
+              } else {
+                XeService.huyThueXe(id).then(response => {
+                  swal(response.data.message, "", "success")
+                  this.getListXe();
+                })
+              }
             }
           })
     },

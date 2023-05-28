@@ -1,10 +1,7 @@
 package com.hoanganh.carservice.service;
 
-import com.hoanganh.carservice.entity.QuanHuyen;
 import com.hoanganh.carservice.entity.TinhNangXe;
 import com.hoanganh.carservice.reponse.Reponse;
-import com.hoanganh.carservice.repository.PhuongXaRepository;
-import com.hoanganh.carservice.repository.QuanHuyenRepository;
 import com.hoanganh.carservice.repository.TinhNangRepository;
 import com.hoanganh.carservice.repository.XeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +23,7 @@ public class TinhNangService {
         if (keySearch == null || keySearch.length() == 0 || keySearch.equals("null")) {
             return tinhNangRepository.findAll();
         }
-        return tinhNangRepository.findAllByNameContaining(keySearch);
+        return tinhNangRepository.findAllByTenContaining(keySearch);
     }
 
     public Optional<TinhNangXe> getTinhNangById(Long id) {
@@ -34,7 +31,7 @@ public class TinhNangService {
     }
 
     public Reponse save(TinhNangXe tinhNang) {
-        TinhNangXe exitsTinhNang = tinhNangRepository.findTinhNangXeByName(tinhNang.getName());
+        TinhNangXe exitsTinhNang = tinhNangRepository.findTinhNangXeByTen(tinhNang.getTen());
 
         if (tinhNang.getId() != null && exitsTinhNang!= null) {
             if (tinhNang.getId() != exitsTinhNang.getId()) {

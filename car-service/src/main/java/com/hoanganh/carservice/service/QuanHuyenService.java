@@ -23,7 +23,7 @@ public class QuanHuyenService {
         if (keySearch == null || keySearch.length() == 0 || keySearch.equals("null")) {
             return quanHuyenRepository.findAll();
         }
-        return quanHuyenRepository.findAllByNameContaining(keySearch);
+        return quanHuyenRepository.findAllByTenContaining(keySearch);
     }
 
     public Optional<QuanHuyen> getQuanHuyenById(Long id) {
@@ -31,7 +31,7 @@ public class QuanHuyenService {
     }
 
     public QuanHuyen saveQuanHuyen(QuanHuyen quanHuyen) {
-        QuanHuyen exitsQuanHuyen = quanHuyenRepository.findByName(quanHuyen.getName());
+        QuanHuyen exitsQuanHuyen = quanHuyenRepository.findByTen(quanHuyen.getTen());
         System.out.println("exitsQuanHuyen" + exitsQuanHuyen);
         if (quanHuyen.getId() != null && exitsQuanHuyen!= null) {
             if (quanHuyen.getId() != exitsQuanHuyen.getId()) {

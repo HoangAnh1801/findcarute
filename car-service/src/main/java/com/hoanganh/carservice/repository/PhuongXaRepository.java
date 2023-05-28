@@ -8,9 +8,9 @@ import java.util.List;
 public interface PhuongXaRepository extends JpaRepository<PhuongXa, Long> {
     boolean existsAllByQuanHuyenId(Long id);
 
-    PhuongXa findAllByName(String name);
+    PhuongXa findAllByTen(String name);
 
     List<PhuongXa> findAllByQuanHuyenId(Long id);
 
-    List<PhuongXa> findAllByNameContaining(String name);
+    List<PhuongXa> findAllByTenContaining(String name);
 }

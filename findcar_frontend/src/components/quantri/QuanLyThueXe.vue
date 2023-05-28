@@ -145,14 +145,7 @@ export default ({
     },
 
   },
-  // isQuanTri() {
-  //   let user = JSON.parse(window.localStorage.getItem('user'))
-  //   user = user ? user : ''
-  //   let permisson = user.permissions ? user.permissions : []
-  //   let isQuanTri = permisson.includes('admin') ? true : false
-  //
-  //   return isQuanTri
-  // },
+
   methods: {
     xacNhan(id) {
       swal({
@@ -197,7 +190,6 @@ export default ({
 
 // Định dạng lại thành chuỗi ngày tháng
       const formattedDate = `${day}-${month}-${year}`;
- console.log("Ngày tháng sau khi chuyển đổi:", formattedDate);
       return formattedDate
 
     },

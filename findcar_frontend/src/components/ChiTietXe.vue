@@ -2,37 +2,22 @@
   <div class="container mt-5">
     <div class="row">
       <div class="col-lg-8">
-        <div class="image-car">
-          <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <inner-image-zoom
-                    class="img-fluid"
-                    style="height: 600px"
-                    :src="getUrlImage(xe.anhNen)"
-                    :zoomSrc="getUrlImage(xe.anhNen)"
-                    moveType="drag"
-                />
-              </div>
-              <div class="carousel-item" v-for="image in xe.xeImages" :key="image.id">
-                <inner-image-zoom
-                    class="img-fluid"
-                    :src="getUrlImage(image.urlImage)"
-                    :zoomSrc="getUrlImage(image.urlImage)"
-                    moveType="drag"
-                />
-<!--                <vue-photo-zoom-pro :url="getUrlImage(image.urlImage)" class="d-block w-100 img-fluid" style="max-height: 450px"></vue-photo-zoom-pro>-->
-              </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Next</span>
-            </button>
-          </div>
+        <div class="image-car" style="height: 500px">
+
+          <el-carousel :interval="5000" arrow="always" >
+            <el-carousel-item
+                style="height: 500px"
+                v-for="image in xe.xeAnhs"
+                :key="image.id">
+              <inner-image-zoom
+                  class="img-fluid"
+                  :src="getUrlImage(image.urlAnh)"
+                  :zoomSrc="getUrlImage(image.urlAnh)"
+                  moveType="drag"
+              />
+            </el-carousel-item>
+          </el-carousel>
+
         </div>
         <div>
           <h1>{{ xe.tenXe }}</h1>
@@ -45,7 +30,7 @@
             </div>
             <div class="col-lg-5">
               <p> Số ghế: 5</p>
-              <p> Nhiên liệu: {{ xe.nhienLieu.name }}</p>
+              <p> Nhiên liệu: {{ xe.nhienLieu.ten }}</p>
             </div>
             <div class="col-lg-5">
               <p>Truyền động: Số tự động</p>
@@ -65,7 +50,7 @@
             </div>
             <div class="col-lg-10">
               <div class="">
-                <span v-for="tinhNang in xe.tinhNangs" :key="tinhNang.id" class="mr-5 px-3 d-inline-block"><v-icon icon="mdi:mdi-check" /> {{ tinhNang.name }}</span>
+                <span v-for="tinhNang in xe.tinhNangs" :key="tinhNang.id" class="mr-5 px-3 d-inline-block"><v-icon icon="mdi:mdi-check" /> {{ tinhNang.ten }}</span>
               </div>
             </div>
           </div>
@@ -126,7 +111,7 @@
                     type="date"
                     placeholder="Chọn ngày nhận xe"
                     format="DD/MM/YYYY"
-                    :disabled-date="disabledDate"
+                    :disabled-date="disdabledate1"
                     :shortcuts="shortcuts"
                     :size="size"
                 />
@@ -140,7 +125,7 @@
                     type="date"
                     placeholder="Chọn ngày trả xe"
                     format="DD/MM/YYYY"
-                    :disabled-date="disabledDateBeforeDateStart"
+                    :disabled-date="disdabledate1"
                     :shortcuts="shortcuts"
                     :size="size"
                 />
@@ -174,7 +159,7 @@
             </div>
           </div>
 
-          <button class="btn btn-success mr-2 font-weight-bold" @click="thue"> Đặt xe </button>
+          <button class="btn btn-warning mr-2 font-weight-bold mt-3 col-12" @click="thue"> Đặt xe </button>
         </div>
       </div>
     </div>
@@ -187,19 +172,23 @@ import XeService from "@/services/xe.service"
 import ImageService from "@/services/image.service"
 import swal from 'sweetalert';
 import InnerImageZoom from 'vue-inner-image-zoom';
+import {functionMixins} from "@/mixin/functionMixins";
+import moment from 'moment';
 
 export default {
   name: "ChiTietXe",
   components: {
     InnerImageZoom
   },
+  mixins: [
+    functionMixins,
+  ],
   data() {
     return {
-      datePickerOptions: {
-        disabledDate (date) {
-          return date > new Date()
-        }
+      selectedDate: null,
+      pickerOptions: {
       },
+
       xe: '',
       thueXes: {
         id: '',
@@ -217,12 +206,29 @@ export default {
       datediff: '',
       date: '',
       logginIn: false,
-      tongPhi: ''
+      tongPhi: '',
+      thueXe: [],
+      formattedDate: '',
+      disabledRangesData: []
     }
   },
   methods: {
     tongTien() {
         this.tongPhi = this.xe.giaXe*this.datediff + 188000
+    },
+    disdabledate1(time) {
+      const dataDisable = this.disabledRangesData
+
+      for (const range of dataDisable) {
+        if (
+            time >= range.ngayBatDau.getTime() &&
+            time <= range.ngayKetThuc.getTime()
+        ) {
+          return true;
+        }
+      }
+      let dateStart = new Date()
+      return false || time.getTime() < dateStart
     },
     disabledDateBeforeDateStart(time) {
       let dateStart = new Date()
@@ -241,13 +247,15 @@ export default {
             this.$router.push('/fincar/login')
         )
       } else {
-      var date = this.thueXes.ngayBatDau.toJSON().slice(0,10).split('-').join('-')
-      var date2 = this.thueXes.ngayKetThuc.toJSON().slice(0,10).split('-').join('-')
+        console.log('thuexe', this.thueXes.ngayBatDau)
+      // var date = this.thueXes.ngayBatDau.toJSON().slice(0,10).split('-').join('-')
+      var date = moment(this.thueXes.ngayBatDau).utcOffset(7).format('YYYY-MM-DD');
+      var date2 = moment(this.thueXes.ngayKetThuc).utcOffset(7).format('YYYY-MM-DD');
       this.thueXes.ngayBatDau = date
       this.thueXes.ngayKetThuc = date2
+        console.log('thuexe', this.thueXes)
       XeService.saveThueXe(this.thueXes).then(
-          window.location.href = 'http://localhost:8080/danhsachxethue'
-          // this.$router.push("/danhsachxethue")
+          window.location.href = 'http://localhost:8080/danhsachxethue',
       )
       }
     },
@@ -263,6 +271,20 @@ export default {
     getUrlImage(name) {
       return ImageService.getImage(name);
     },
+    getThueXeByXeId(id) {
+      XeService.findThueXeByXeId(id).then(response => {
+        var result = []
+        var data = response.data
+        data.forEach(function (thue) {
+          var item = {}
+          item.ngayBatDau = new Date(moment((thue).ngayBatDau).format('YYYY-MM-DD '));
+          item.ngayKetThuc = new Date(moment((thue).ngayKetThuc).format('YYYY-MM-DD '));
+          result.push(item)
+        })
+          this.disabledRangesData = result
+        this.thueXe = response.data[0]
+      })
+    }
   },
   created() {
     var user = JSON.parse(localStorage.getItem('user'));
@@ -273,7 +295,8 @@ export default {
 
     var id = this.$route.params.id;
     this.thueXes.xe.id = id;
-    this.getXeById(id)
+    this.getXeById(id);
+    this.getThueXeByXeId(id);
   },
   watch: {
     datediff() {
@@ -288,6 +311,34 @@ export default {
     background: #f6f9f9;
     padding: 20px;
   }
+  img.iiz__img {
+    height: 500px !important;
+    width: 700px !important;
+  }
+  .v-card.v-card--link.v-theme--light.v-card--density-default.v-card--variant-elevated.ma-4 {
+      width: 700px !important;
+  }
+  .v-slide-group__container {
+      height: 500px !important;
+  }
+
+
+
+  .el-carousel__item h3 {
+    color: #475669;
+    opacity: 0.75;
+    line-height: 300px;
+    margin: 0;
+    text-align: center;
+  }
+
+  /*.el-carousel__item:nth-child(2n) {*/
+  /*  background-color: #99a9bf;*/
+  /*}*/
+
+  /*.el-carousel__item:nth-child(2n + 1) {*/
+  /*  background-color: #d3dce6;*/
+  /*}*/
 </style>
 <style src="vue-inner-image-zoom/lib/vue-inner-image-zoom.css">
 

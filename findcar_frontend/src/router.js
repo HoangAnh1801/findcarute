@@ -18,8 +18,14 @@ import DanhSachXe from "@/components/xe/DanhSachXe"
 import DanhSachXeThue from "@/components/xe/DanhSachXeThue"
 import ThongTinCaNhan from "@/components/nguoidung/ThongTinCaNhan"
 import DangKy from "@/components/DangKy"
+import HellWorld from "@/components/HelloWorld"
 
 const routes = [
+    {
+        path: "/test",
+        name: "test",
+        component: HellWorld,
+    },
     {
         path: "/trangchu",
         alias: ["", "/"],
@@ -129,7 +135,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const publicPages = ['', '/', '/trangchu','/findcar/login', '/findcar/dangky', '/chitietxe', '/danhsachxe'];
+    const publicPages = ['', '/', '/trangchu','/findcar/login', '/findcar/dangky', '/chitietxe', '/danhsachxe', '/test'];
     console.log('to[path', to.path)
     const authRequired = !publicPages.includes(to.path);
     const publics = to.path.includes(['/chitietxe/']);

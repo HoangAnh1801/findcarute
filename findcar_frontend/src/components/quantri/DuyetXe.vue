@@ -1,39 +1,22 @@
 <template>
   <div class="container px-5" style="margin-top: 50px; padding: 0px 50px">
     <div class="col-12">
-      <div class="image-car">
-        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <inner-image-zoom
-                  class="img-fluid"
-                  style="height: 500px"
-                  :src="getUrlImage(xe.anhNen)"
-                  :zoomSrc="getUrlImage(xe.anhNen)"
-                  moveType="drag"
-              />
-            </div>
-            <div class="carousel-item" v-for="image in xe.xeImages" :key="image.id">
-              <inner-image-zoom
-                  class="img-fluid"
-                  style="height: 500px"
-                  :src="getUrlImage(image.urlImage)"
-                  :zoomSrc="getUrlImage(image.urlImage)"
-                  moveType="drag"
-              />
-            </div>
-          </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-          </button>
-        </div>
+      <div class="image-car" style="height: 500px; margin: 0px 70px">
+        <el-carousel :interval="5000" arrow="always" >
+          <el-carousel-item
+              style="height: 500px"
+              v-for="image in xe.xeAnhs"
+              :key="image.id">
+            <inner-image-zoom
+                class="img-fluid"
+                :src="getUrlImage(image.urlAnh)"
+                :zoomSrc="getUrlImage(image.urlAnh)"
+                moveType="drag"
+            />
+          </el-carousel-item>
+        </el-carousel>
       </div>
-      <div>
+      <div style="margin: 0px 70px">
         <h2>{{ xe.tenXe }}</h2>
       </div>
       <div class="chitietxe">
@@ -43,7 +26,7 @@
           </div>
           <div class="col-lg-5">
             <p> Số ghế: 5</p>
-            <p> Nhiên liệu: {{ xe.nhienLieu.name }}</p>
+            <p> Nhiên liệu: {{ xe.nhienLieu.ten }}</p>
           </div>
           <div class="col-lg-5">
             <p>Truyền động: Số tự động</p>
@@ -63,7 +46,7 @@
           </div>
           <div class="col-lg-10">
             <div class="">
-              <span v-for="tinhNang in xe.tinhNangs" :key="tinhNang.id" class="mr-5 px-3 d-inline-block"><v-icon icon="mdi:mdi-check" /> {{ tinhNang.name }}</span>
+              <span v-for="tinhNang in xe.tinhNangs" :key="tinhNang.id" class="mr-5 px-3 d-inline-block"><v-icon icon="mdi:mdi-check" /> {{ tinhNang.ten }}</span>
             </div>
           </div>
         </div>
@@ -104,7 +87,7 @@
       <div class="chitietxe mt-3">
         <div class="row justify-content-center">
           <div class="col-12 rounded-circle d-flex justify-content-center">
-            <img src="@/assets/images/vf_1.jpg" style="max-height: 100px; max-width: 100px" >
+            <img src="@/assets/images/avt.jpg" class="rounded-circle" style="max-height: 100px; max-width: 100px" >
           </div>
           <p class="text-center">Chủ xe</p>
           <span class="text-center">{{ xe.nguoiDung.hoTen }}</span>
@@ -173,7 +156,14 @@ export default {
 <style scoped>
 .chitietxe {
   background: #f6f9f9;
+  margin: 0px 70px;
   padding: 20px;
+}
+.v-card.v-card--link.v-theme--light.v-card--density-default.v-card--variant-elevated.ma-4 {
+  width: 1000px !important;
+}
+.v-slide-group__container {
+  height: 800px !important;
 }
 </style>
 <style src="vue-inner-image-zoom/lib/vue-inner-image-zoom.css">

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface LoaiXeRepository extends JpaRepository<LoaiXe, Long> {
-    LoaiXe findLoaiXeByName(String name);
+    LoaiXe findLoaiXeByTen(String name);
 
-    List<LoaiXe> findAllByNameContaining(String name);
+    List<LoaiXe> findAllByTenContaining(String name);
 }

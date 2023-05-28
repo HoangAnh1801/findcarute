@@ -7,9 +7,9 @@ import lombok.Data;
 public class XeImageDTO {
     private Long id;
 
-    private String nameImage;
+    private String tenAnh;
 
-    private String urlImage;
+    private String urlAnh;
 
     private Xe xe;
 }

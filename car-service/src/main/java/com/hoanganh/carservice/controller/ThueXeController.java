@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/car/v1/thuexe")
 public class ThueXeController {
@@ -68,5 +70,15 @@ public class ThueXeController {
     @PostMapping()
     public ThueXe save(@RequestBody ThueXe thueXe) {
         return thueXeService.save(thueXe);
+    }
+
+    @GetMapping("/xeid")
+    public List<ThueXe> findThueXeByXeId(@RequestParam("id") Long id) {
+        return thueXeService.findThueXeByXeId(id);
+    }
+
+    @GetMapping("/huythue")
+    public  Reponse huyThueXe(@RequestParam("id") Long id) {
+        return thueXeService.huyThueXe(id);
     }
 }

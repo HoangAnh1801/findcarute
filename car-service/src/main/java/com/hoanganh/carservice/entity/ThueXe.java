@@ -21,6 +21,8 @@ public class ThueXe extends BaseEntity{
 
     private Boolean trangThaiDuyet = Boolean.FALSE;
 
+    private Boolean trangThaiHuy = Boolean.FALSE;
+
     private Boolean trangThaiHoanXe;
 
     @ManyToOne(optional = false)

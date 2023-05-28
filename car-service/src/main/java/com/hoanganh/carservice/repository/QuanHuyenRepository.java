@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface QuanHuyenRepository extends JpaRepository<QuanHuyen, Long> {
-    QuanHuyen findByName(String name);
+    QuanHuyen findByTen(String name);
 
-    List<QuanHuyen> findAllByNameContaining(String name);
+    List<QuanHuyen> findAllByTenContaining(String name);
 }

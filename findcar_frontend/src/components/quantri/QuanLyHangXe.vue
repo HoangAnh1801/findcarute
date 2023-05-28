@@ -5,7 +5,7 @@
         <h2>Danh sách hãng xe</h2>
       </div>
       <div class="col-9">
-        <button class="btn btn-success" @click="dialog=true"><v-icon icon="mdi:mdi-plus" /> Thêm mới</button>
+        <button class="btn btn-warning" @click="dialog=true"><v-icon icon="mdi:mdi-plus" /> Thêm mới</button>
       </div>
       <div class="col-3">
         <div class="input-group mb-3">
@@ -26,8 +26,8 @@
       <tr v-for="(entry, stt) in resultQuery" :key="entry.id">
         <th scope="row" style="width: 5%">{{ stt + 1 }}</th>
         <td>{{ entry.id }}</td>
-        <td>{{ entry.name }}</td>
-        <td><img :src="getUrlImage(entry.urlImage)" style="max-height: 100px; max-width: 230px"/></td>
+        <td>{{ entry.ten }}</td>
+        <td><img :src="getUrlImage(entry.urlAnh)" style="max-height: 100px; max-width: 230px"/></td>
         <td>
           <button @click="handleEdit(entry.id)"><v-icon icon="mdi:mdi-pencil" /></button>
           <button @click="deleteById(entry.id)" > <v-icon icon="mdi:mdi-trash-can-outline" /></button>
@@ -55,7 +55,7 @@
                 <v-col cols="12">
                   <v-text-field
                       label="Tên hãng xe"
-                      v-model="hangXe.name"
+                      v-model="hangXe.ten"
                       variant="outlined"
                       >
                   </v-text-field>
@@ -68,7 +68,7 @@
                 </div>
                 <div v-if="hangXe.id != '' && imageData.length == 0" class="image-preview position-relative d-inline-flex">
                   <v-icon icon="mdi:mdi-close-circle-outline" class="position-absolute remove-img" @click="removeImg()"/>
-                  <img :src="getUrlImage(hangXe.urlImage)" class="image-pre" style="max-height: 100px; max-width: 230px">
+                  <img :src="getUrlImage(hangXe.urlAnh)" class="image-pre" style="max-height: 100px; max-width: 230px">
                 </div>
                 <v-file-input class="input-image border-color-cus mt-2" density="counter"
                               counter
@@ -118,15 +118,15 @@ export default ({
         },
         {
           name: 'Ảnh',
-          code: 'urlImage',
+          code: 'urlAnh',
           type: 'image'
         },
       ],
       listHangXe: [],
       hangXe: {
         id: '',
-        name: '',
-        urlImage: '',
+        ten: '',
+        urlAnh: '',
       },
       keySearch: ''
     }
@@ -138,7 +138,7 @@ export default ({
     resultQuery(){
       if(this.keySearch){
         return this.listHangXe.filter((item)=>{
-          return this.keySearch.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v))
+          return this.keySearch.toLowerCase().split(' ').every(v => item.ten.toLowerCase().includes(v))
         })
       }else{
         return this.paginatedItems;
@@ -158,8 +158,8 @@ export default ({
     },
     resetModel() {
       this.hangXe.id = '',
-      this.hangXe.name = '',
-      this.hangXe.urlImage = ''
+      this.hangXe.ten = '',
+      this.hangXe.urlAnh = ''
       this.imageData = '',
       this.$refs.file.value = ''
     },
@@ -198,7 +198,7 @@ export default ({
       DanhMucService.add("hangxe", this.hangXe).then(response => {
         if (response.data.id != null) {
           let id = response.data.id;
-          let name = response.data.name;
+          let ten = response.data.ten;
           let formData = new FormData();
           let file = this.$refs.file.files[0];
           formData.append('file', file);
@@ -208,8 +208,8 @@ export default ({
                 .then(response => {
                   let update = {
                     id: id,
-                    name: name,
-                    urlImage: response.data.urlFile,
+                    ten: ten,
+                    urlAnh: response.data.urlFile,
                   }
                   DanhMucService.add("hangxe", update).then(() => {
 
@@ -219,11 +219,9 @@ export default ({
                     this.closeDialog();
                   })
                       .catch(() => {
-                        this.notification("error");
                       });
                 })
-                .catch(e => {
-                  this.notification(e.response.data.message, "error");
+                .catch(() => {
                 });
           } else {
             // this.resetModel();
@@ -252,7 +250,7 @@ export default ({
     },
     onFileChange(e) {
       var fileData = e.target.files[0]
-      this.hangXe.urlImage = fileData.name
+      this.hangXe.urlAnh = fileData.name
       var input = e.target
       if (input.files && fileData) {
         var reader = new FileReader()
@@ -264,7 +262,7 @@ export default ({
     },
     removeImg() {
       this.imageData = '';
-      this.hangXe.urlImage = '';
+      this.hangXe.urlAnh = '';
       this.$refs.file.value = ''
     },
     closeDialog() {

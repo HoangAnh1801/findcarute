@@ -5,7 +5,7 @@
         <h2>Danh sách quận huyện</h2>
       </div>
       <div class="col-9">
-        <button class="btn btn-success" @click="dialog=true"><v-icon icon="mdi:mdi-plus" /> Thêm mới</button>
+        <button class="btn btn-warning" @click="dialog=true"><v-icon icon="mdi:mdi-plus" /> Thêm mới</button>
       </div>
       <div class="col-3">
         <div class="input-group mb-3">
@@ -18,7 +18,7 @@
       <thead>
       <tr>
         <th scope="col">STT</th>
-        <th scope="col" v-for="itemHeader in headers" :key="itemHeader.id">{{ itemHeader.name }}</th>
+        <th scope="col" v-for="itemHeader in headers" :key="itemHeader.id">{{ itemHeader.ten }}</th>
         <th scope="col">Thao tác</th>
       </tr>
       </thead>
@@ -26,8 +26,8 @@
       <tr v-for="(entry, stt) in resultQuery" :key="entry.id">
         <th scope="row" style="width: 5%">{{ stt + 1 }}</th>
         <td>{{ entry.id }}</td>
-        <td>{{ entry.name }}</td>
-        <td><img :src="getUrlImage(entry.urlImage)" style="max-height: 100px; width: 150px"/></td>
+        <td>{{ entry.ten }}</td>
+        <td><img :src="getUrlImage(entry.urlAnh)" style="max-height: 100px; width: 150px"/></td>
         <td>
           <button @click="handleEdit(entry.id)"><v-icon icon="mdi:mdi-pencil" /></button>
           <button @click="deleteById(entry.id)" > <v-icon icon="mdi:mdi-trash-can-outline" /></button>
@@ -54,7 +54,7 @@
                 <v-col cols="12">
                   <v-text-field
                       label="Tên quận huyện"
-                      v-model="quanHuyen.name"
+                      v-model="quanHuyen.ten"
                       variant="outlined"
                       >
                   </v-text-field>
@@ -67,7 +67,7 @@
                 </div>
                 <div v-if="quanHuyen.id != '' && imageData.length == 0" class="image-preview position-relative d-inline-flex">
                   <v-icon icon="mdi:mdi-close-circle-outline" class="position-absolute remove-img" @click="removeImg()"/>
-                  <img :src="getUrlImage(quanHuyen.urlImage)" class="image-pre" style="max-height: 100px; max-width: 230px">
+                  <img :src="getUrlImage(quanHuyen.urlAnh)" class="image-pre" style="max-height: 100px; max-width: 230px">
                 </div>
                 <v-file-input class="input-image border-color-cus mt-2" density="counter"
                               counter
@@ -112,20 +112,20 @@ export default ({
         },
         {
           name: 'Tên quận/ huyện',
-          code: 'name',
+          code: 'ten',
           type: 'text'
         },
         {
           name: 'Ảnh',
-          code: 'urlImage',
+          code: 'urlAnh',
           type: 'image'
         },
       ],
       listQuanHuyen: [],
       quanHuyen: {
         id: '',
-        name: '',
-        urlImage: '',
+        ten: '',
+        urlAnh: '',
       },
       keySearch: ''
     }
@@ -137,7 +137,7 @@ export default ({
     resultQuery(){
       if(this.keySearch){
         return this.listQuanHuyen.filter((item)=>{
-          return this.keySearch.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v))
+          return this.keySearch.toLowerCase().split(' ').every(v => item.ten.toLowerCase().includes(v))
         })
       }else{
         return this.paginatedItems;
@@ -147,8 +147,8 @@ export default ({
   methods: {
     resetModel() {
       this.quanHuyen.id = '',
-      this.quanHuyen.name = '',
-      this.quanHuyen.urlImage = ''
+      this.quanHuyen.ten = '',
+      this.quanHuyen.urlAnh = ''
       this.imageData = '',
       this.$refs.file.value = ''
     },
@@ -166,7 +166,7 @@ export default ({
         // if (response)
         if (response.data.id != null) {
           let id = response.data.id;
-          let name = response.data.name;
+          let ten = response.data.ten;
           let formData = new FormData();
           let file = this.$refs.file.files[0];
           formData.append('file', file);
@@ -177,8 +177,8 @@ export default ({
                 .then(response => {
                   let update = {
                     id: id,
-                    name: name,
-                    urlImage: response.data.urlFile,
+                    ten: ten,
+                    urlAnh: response.data.urlFile,
                   }
                   DanhMucService.add("quanhuyen", update).then(() => {
 
@@ -201,7 +201,7 @@ export default ({
           }
         }
             // this.resetModel();
-            this.getAllHangXe();
+            this.getAllQuanHuyen();
             this.closeDialog();
       }
 
@@ -242,7 +242,7 @@ export default ({
     },
     onFileChange(e) {
       var fileData = e.target.files[0]
-      this.quanHuyen.urlImage = fileData.name
+      this.quanHuyen.urlAnh = fileData.name
       var input = e.target
       if (input.files && fileData) {
         var reader = new FileReader()
@@ -254,7 +254,7 @@ export default ({
     },
     removeImg() {
       this.imageData = '';
-      this.quanHuyen.urlImage = '';
+      this.quanHuyen.urlAnh = '';
       this.$refs.file.value = ''
     },
     closeDialog() {

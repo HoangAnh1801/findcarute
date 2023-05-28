@@ -13,7 +13,7 @@ defineRule('required', values => {
 defineRule('selected', value => {
     console.log('value', value)
      // Check if it's empty.
-    if (Object.keys(value.name).length == 0) {
+    if (Object.keys(value.ten).length == 0) {
         return 'Trường này không được để trống!'
     }
     if ((!value && value === undefined) || value === null || value.length === 0) {

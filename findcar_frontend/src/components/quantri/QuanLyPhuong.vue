@@ -5,7 +5,7 @@
         <h2>Danh sách phường xã</h2>
       </div>
       <div class="col-9">
-        <button class="btn btn-success" @click="dialog=true"><v-icon icon="mdi:mdi-plus" /> Thêm mới</button>
+        <button class="btn btn-warning" @click="dialog=true"><v-icon icon="mdi:mdi-plus" /> Thêm mới</button>
       </div>
       <div class="col-3">
         <div class="input-group mb-3">
@@ -18,7 +18,7 @@
       <thead>
       <tr>
         <th scope="col">STT</th>
-        <th scope="col" v-for="itemHeader in headers" :key="itemHeader.id">{{ itemHeader.name }}</th>
+        <th scope="col" v-for="itemHeader in headers" :key="itemHeader.id">{{ itemHeader.ten }}</th>
         <th scope="col">Thao tác</th>
       </tr>
       </thead>
@@ -26,7 +26,7 @@
       <tr v-for="(entry, stt) in resultQuery" :key="entry.id">
         <th scope="row" style="width: 5%">{{ stt + 1 }}</th>
         <td>{{ entry.id }}</td>
-        <td>{{ entry.name }}</td>
+        <td>{{ entry.ten }}</td>
         <td>
           <button @click="handleEdit(entry.id)"><v-icon icon="mdi:mdi-pencil" /></button>
           <button @click="deleteById(entry.id)" > <v-icon icon="mdi:mdi-trash-can-outline" /></button>
@@ -55,7 +55,7 @@
                       v-model="phuongXa.quanHuyen"
                       label="Quận huyện"
                       :items="listQuanHuyen"
-                      item-title="name"
+                      item-title="ten"
                       variant="outlined"
                   ></v-combobox>
                 </v-col>
@@ -64,7 +64,7 @@
                 <v-col cols="12">
                   <v-text-field
                       label="Tên phường/xã"
-                      v-model.trim="phuongXa.name"
+                      v-model.trim="phuongXa.ten"
                       variant="outlined"
                       >
                   </v-text-field>
@@ -85,7 +85,6 @@
 
 <script>
 import DanhMucService from "@/services/danhmuc.service"
-import ImageService from "@/services/image.service"
 import swal from 'sweetalert';
 import Pagination from 'v-pagination-3'
 
@@ -94,7 +93,7 @@ export default ({
   data () {
     return {
       page: 1,
-      perPage: 5,
+      perPage: 10,
       paginatedItems : this.listPhuongXa,
       imageData: '',
       dialog: false,
@@ -106,7 +105,7 @@ export default ({
         },
         {
           name: 'Phường xã',
-          code: 'name',
+          code: 'ten',
           type: 'text'
         }
       ],
@@ -114,7 +113,7 @@ export default ({
       listPhuongXa: [],
       phuongXa: {
         id: '',
-        name: '',
+        ten: '',
       },
       keySearch: ''
     }
@@ -126,7 +125,7 @@ export default ({
     resultQuery(){
       if(this.keySearch){
         return this.listPhuongXa.filter((item)=>{
-          return this.keySearch.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v))
+          return this.keySearch.toLowerCase().split(' ').every(v => item.ten.toLowerCase().includes(v))
         })
       }else{
         return this.paginatedItems;
@@ -146,7 +145,7 @@ export default ({
     },
     resetModel() {
       this.phuongXa.id = '',
-      this.phuongXa.name = ''
+      this.phuongXa.ten = ''
     },
     getAllQuanHuyen() {
       DanhMucService.getAll('quanhuyen').then(response => (
@@ -194,9 +193,6 @@ export default ({
 
             }
           })
-    },
-    getUrlImage(name) {
-      return ImageService.getImage(name);
     },
     findHangXeById(id) {
       DanhMucService.findByID("phuongxa", id).then(response => {

@@ -25,7 +25,7 @@ public class HangXeService {
         if (keySearch == null || keySearch.length() == 0 || keySearch.equals("null")) {
             return hangXeRepository.findAll();
         }
-        return hangXeRepository.findAllByNameContaining(keySearch);
+        return hangXeRepository.findAllByTenContaining(keySearch);
     }
 
     public Optional<HangXe> getHangXeById(Long id) {

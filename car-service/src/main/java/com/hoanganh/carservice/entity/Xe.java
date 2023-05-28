@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -72,6 +71,6 @@ public class Xe extends BaseEntity {
     private List<ThueXe> thueXes;
 
     @OneToMany(mappedBy = "xe",cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<XeImage> xeImages;
+    private List<XeAnh> xeAnhs;
 
 }

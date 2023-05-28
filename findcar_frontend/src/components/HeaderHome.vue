@@ -1,7 +1,7 @@
 <template>
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background-color: rgb(41 27 93) !important; box-shadow: 0px 6px 5px rgba(0, 0, 0, 0.25)">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background-color: #f9c63f !important; box-shadow: 0px 6px 5px rgba(0, 0, 0, 0.25)">
       <div class="container">
-        <router-link to="/"><a class="navbar-brand text-white" href="#">Findcar</a></router-link>
+        <router-link to="/" class="text-decoration-none mr-5"><a class="navbar-brand text-white" href="#">Findcar</a></router-link>
 
         <button
             class="navbar-toggler"
@@ -17,54 +17,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active text-white" aria-current="page" href="#">Trang chủ</a>
+              <router-link to="/" class="text-decoration-none"><a class="nav-link active" href="#">Trang chủ</a></router-link>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white" href="#">Link</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a
-                  class="nav-link dropdown-toggle text-white"
-                  href="#"
-                  id="loaixe"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-              >
-                Loại xe
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="loaixe">
-                <li><a class="dropdown-item text-white" href="#">Action</a></li>
-                <li><a class="dropdown-item text-white" href="#">Another action</a></li>
-                <li><hr class="dropdown-divider" /></li>
-                <li>
-                  <a class="dropdown-item text-white" href="#">Something else here</a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a
-                  class="nav-link dropdown-toggle text-white"
-                  href="#"
-                  id="navbarDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-              >
-                Hãng xe
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><hr class="dropdown-divider" /></li>
-                <li>
-                  <a class="dropdown-item" href="#">Something else here</a>
-                </li>
-              </ul>
+              <RouterLink to="/admin/xe" @click="handleRouterLinkClick" class="text-decoration-none"><a class="nav-link" aria-current="page" href="#">Trở thành chủ xe</a></RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink to="/admin/quanlyxe" class="text-decoration-none"><a class="nav-link text-white">Xe của tôi</a></RouterLink>
-
+              <RouterLink to="/admin/quanlyxe" @click="handleRouterLinkClick" class="text-decoration-none"><a class="nav-link">Xe của tôi</a></RouterLink>
             </li>
           </ul>
 
@@ -92,7 +51,7 @@
           </div>
           <div v-else>
             <span class="navbar-text">
-            <a class="login" href="/findcar/login">Log In</a>
+            <a class="login btn btn-warning" href="/findcar/login">Đăng nhập</a> / <a class="login btn btn bg-e9a900" href="/findcar/dangky">Đăng ký</a>
           </span>
 <!--            <a class="btn btn-light action-button" role="button" href="#">Signup</a>-->
           </div>
@@ -112,6 +71,10 @@ export default {
     }
   },
   methods: {
+    handleRouterLinkClick() {
+      // Di chuyển đến đầu trang
+      window.scrollTo(0, 0);
+    },
     logOut() {
       this.$store.dispatch('auth/logout');
       window.location.href = 'http://localhost:8080/findcar/login'
@@ -119,15 +82,19 @@ export default {
     },
     listxe() {
       this.$router.push({name: 'quanlyxe'});
+      window.scrollTo(0, 0);
     },
     listxethue() {
       this.$router.push({name: 'quanlythuexe'});
+      window.scrollTo(0, 0);
     },
     listxedathue() {
       this.$router.push({name: 'danhsachxethue'});
+      window.scrollTo(0, 0);
     },
     trangCaNhan() {
       this.$router.push({name: 'thongtincanhan'});
+      window.scrollTo(0, 0);
     }
   },
   created() {

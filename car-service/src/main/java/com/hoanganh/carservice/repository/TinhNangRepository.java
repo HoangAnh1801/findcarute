@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface TinhNangRepository extends JpaRepository<TinhNangXe, Long> {
-    TinhNangXe findTinhNangXeByName(String name);
+    TinhNangXe findTinhNangXeByTen(String name);
 
-    List<TinhNangXe> findAllByNameContaining(String name);
+    List<TinhNangXe> findAllByTenContaining(String name);
 }

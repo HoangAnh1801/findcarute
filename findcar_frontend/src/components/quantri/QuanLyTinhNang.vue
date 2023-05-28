@@ -2,10 +2,10 @@
   <div class="container-fluid" style="margin-top: 50px; padding: 0px 50px">
     <div class="row">
       <div class="col-12">
-        <h2>Danh sách tính năng</h2>
+        <h2>Danh sách tính năng xe</h2>
       </div>
       <div class="col-9">
-        <button class="btn btn-success" @click="dialog=true"><v-icon icon="mdi:mdi-plus" /> Thêm mới</button>
+        <button class="btn btn-warning" @click="dialog=true"><v-icon icon="mdi:mdi-plus" /> Thêm mới</button>
       </div>
       <div class="col-3">
         <div class="input-group mb-3">
@@ -18,7 +18,7 @@
       <thead>
       <tr>
         <th scope="col">STT</th>
-        <th scope="col" v-for="itemHeader in headers" :key="itemHeader.id">{{ itemHeader.name }}</th>
+        <th scope="col" v-for="itemHeader in headers" :key="itemHeader.id">{{ itemHeader.ten }}</th>
         <th scope="col">Thao tác</th>
       </tr>
       </thead>
@@ -26,7 +26,7 @@
       <tr v-for="(entry, stt) in resultQuery" :key="entry.id">
         <th scope="row" style="width: 5%">{{ stt + 1 }}</th>
         <td>{{ entry.id }}</td>
-        <td>{{ entry.name }}</td>
+        <td>{{ entry.ten }}</td>
         <td>
           <button @click="handleEdit(entry.id)"><v-icon icon="mdi:mdi-pencil" /></button>
           <button @click="deleteById(entry.id)" > <v-icon icon="mdi:mdi-trash-can-outline" /></button>
@@ -53,7 +53,7 @@
                 <v-col cols="12">
                   <v-text-field
                       label="Tính năng"
-                      v-model="tinhNang.name"
+                      v-model="tinhNang.ten"
                       variant="outlined"
                       >
                   </v-text-field>
@@ -93,14 +93,14 @@ export default ({
         },
         {
           name: 'Tính năng',
-          code: 'name',
+          code: 'ten',
           type: 'text'
         }
       ],
       listTinhNang: [],
       tinhNang: {
         id: '',
-        name: '',
+        ten: '',
       },
       keySearch: ''
     }
@@ -112,7 +112,7 @@ export default ({
     resultQuery(){
       if(this.keySearch){
         return this.listTinhNang.filter((item)=>{
-          return this.keySearch.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v))
+          return this.keySearch.toLowerCase().split(' ').every(v => item.ten.toLowerCase().includes(v))
         })
       }else{
         return this.paginatedItems;
@@ -122,7 +122,7 @@ export default ({
   methods: {
     resetModel() {
       this.tinhNang.id = '',
-      this.tinhNang.name = ''
+      this.tinhNang.ten = ''
     },
     getAll() {
       var params = {};

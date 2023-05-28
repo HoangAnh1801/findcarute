@@ -48,6 +48,14 @@ class Xe {
     xacNhanHoanXe(id) {
         return http.get("/car/v1/thuexe/hoanxe?id=" + id);
     }
+
+    findThueXeByXeId(id) {
+        return http.get("/car/v1/thuexe/xeid?id=" + id);
+    }
+
+    huyThueXe(id) {
+        return http.get("/car/v1/thuexe/huythue?id=" + id);
+    }
 }
 
 export default new Xe();

@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @Entity
 public class TinhNangXe extends BaseEntity {
-    private String name;
+    private String ten;
 
     @ManyToMany(mappedBy = "tinhNangs", cascade = {CascadeType.MERGE})
     @JsonIgnore

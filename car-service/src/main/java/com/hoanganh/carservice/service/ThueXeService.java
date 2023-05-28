@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 
 
 @Service
@@ -28,7 +29,7 @@ public class ThueXeService {
     }
 
     public Page<ThueXe> findByXeNguoiDungId(Pageable pageable, Long id) {
-        return thueXeRepository.findAllByXeNguoiDungId(pageable, id);
+        return thueXeRepository.findAllByXeNguoiDungIdAndTrangThaiHuyIsFalse(pageable, id);
     }
 
     public Page<ThueXe> findAllByNguoiDungId(Pageable pageable, Long id) {
@@ -55,5 +56,16 @@ public class ThueXeService {
         thueXe.setTrangThaiHoanXe(true);
         thueXeRepository.save(thueXe);
         return new Reponse(HttpStatus.OK, "Đã xác nhận hoàn xe!");
+    }
+
+    public List<ThueXe> findThueXeByXeId(long id) {
+        return thueXeRepository.findByXeId(id);
+    }
+
+    public Reponse huyThueXe(Long id) {
+        ThueXe thueXe = thueXeRepository.findById(id).get();
+        thueXe.setTrangThaiHuy(true);
+        thueXeRepository.save(thueXe);
+        return new Reponse(HttpStatus.OK, "Đã huỷ thuê xe!");
     }
 }

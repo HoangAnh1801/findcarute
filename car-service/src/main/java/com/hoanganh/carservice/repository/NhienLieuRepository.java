@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface NhienLieuRepository extends JpaRepository<NhienLieu, Long> {
-    NhienLieu findNhienLieuByName(String name);
+    NhienLieu findNhienLieuByTen(String name);
 
-    List<NhienLieu> findAllByNameContaining(String name);
+    List<NhienLieu> findAllByTenContaining(String name);
 }

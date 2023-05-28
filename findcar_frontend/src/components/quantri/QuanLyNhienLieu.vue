@@ -2,10 +2,10 @@
   <div class="container-fluid" style="margin-top: 50px; padding: 0px 50px">
     <div class="row">
       <div class="col-12">
-        <h2>Danh sách nhiên liệu</h2>
+        <h2>Danh sách loại nhiên liệu</h2>
       </div>
       <div class="col-9">
-        <button class="btn btn-success" @click="dialog=true"><v-icon icon="mdi:mdi-plus" /> Thêm mới</button>
+        <button class="btn btn-warning" @click="dialog=true"><v-icon icon="mdi:mdi-plus" /> Thêm mới</button>
       </div>
       <div class="col-3">
         <div class="input-group mb-3">
@@ -18,7 +18,7 @@
       <thead>
       <tr>
         <th scope="col">STT</th>
-        <th scope="col" v-for="itemHeader in headers" :key="itemHeader.id">{{ itemHeader.name }}</th>
+        <th scope="col" v-for="itemHeader in headers" :key="itemHeader.id">{{ itemHeader.ten }}</th>
         <th scope="col">Thao tác</th>
       </tr>
       </thead>
@@ -26,7 +26,7 @@
       <tr v-for="(entry, stt) in listNhienLieu" :key="entry.id">
         <th scope="row" style="width: 5%">{{ stt + 1 }}</th>
         <td>{{ entry.id }}</td>
-        <td>{{ entry.name }}</td>
+        <td>{{ entry.ten }}</td>
         <td>
           <button @click="handleEdit(entry.id)"><v-icon icon="mdi:mdi-pencil" /></button>
           <button @click="deleteById(entry.id)" > <v-icon icon="mdi:mdi-trash-can-outline" /></button>
@@ -50,7 +50,7 @@
                 <v-col cols="12">
                   <v-text-field
                       label="Nhiên liệu"
-                      v-model.trim="nhienLieu.name"
+                      v-model.trim="nhienLieu.ten"
                       variant="outlined"
                       >
                   </v-text-field>
@@ -87,15 +87,14 @@ export default ({
         },
         {
           name: 'Nhiên liệu',
-          code: 'name',
+          code: 'ten',
           type: 'text'
         }
       ],
       listNhienLieu: [],
       nhienLieu: {
         id: '',
-        name: '',
-        urlImage: '',
+        ten: '',
       },
       keySearch: ''
     }
@@ -103,7 +102,7 @@ export default ({
   methods: {
     resetModel() {
       this.nhienLieu.id = '',
-      this.nhienLieu.name = ''
+      this.nhienLieu.ten = ''
     },
     getAllNhienLieu() {
       var params = {};

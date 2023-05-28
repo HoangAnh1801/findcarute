@@ -14,7 +14,7 @@ import java.util.List;
 public class LoaiXe extends BaseEntity {
 
     @NotBlank(message = "{com.sdt.validate.notblank}")
-    private String name;
+    private String ten;
 
     @OneToMany(mappedBy = "loaiXe")
     @JsonIgnore

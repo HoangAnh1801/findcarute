@@ -3,12 +3,12 @@
       <div class="container hero">
         <div class="row">
           <div class="col-12 col-lg-6 col-xl-5 offset-xl-1">
-            <h1 class="txt-name pr-3" data-text="GIỚI THIỆU FINDCAR">GIỚI THIỆU FINDCAR</h1>
-            <p>
+            <h1 class="txt-name pr-3 text-black" data-text="GIỚI THIỆU FINDCAR">GIỚI THIỆU FINDCAR</h1>
+            <p class="text-black">
               Chúng tôi chuyên cho thuê xe ô tô tại Đà Nẵng, Cho thuê xe các loại 4 chỗ, 7 chỗ. Quý khách lưu ý, xe thuê theo tháng/năm sẽ có giá khác ưu đãi hơn.
             </p>
-            <p>Các loại xe đời mới, cao cấp và chất lượng với giá rẻ, quý khách hoàn toàn có thể yên tâm với dịch vụ cho thuê xe du lịch, xe tự lái tại Đà Nẵng.</p>
-            <button class="btn btn-light btn-lg action-button" type="button">
+            <p class="text-black">Các loại xe đời mới, cao cấp và chất lượng với giá rẻ, quý khách hoàn toàn có thể yên tâm với dịch vụ cho thuê xe du lịch, xe tự lái tại Đà Nẵng.</p>
+            <button class="btn btn-outline-secondary" type="button">
               Khám phá ngay<i class="fa fa-long-arrow-right ml-2"></i>
             </button>
 
@@ -93,16 +93,16 @@
           <div class="items-container roll-LL">
             <div class="item" v-for="hangXe in listHangXe" :key="hangXe.id">
               <el-tooltip placement="top">
-                <template #content> {{ hangXe.name }} </template>
-                <img :src="getUrlImage(hangXe.urlImage)" alt="" class="company" />
+                <template #content> {{ hangXe.ten }} </template>
+                <img :src="getUrlImage(hangXe.urlAnh)" alt="" class="company" />
               </el-tooltip>
             </div>
           </div>
           <div class="items-container roll-RL">
             <div class="item" v-for="hangXe in listHangXe" :key="hangXe.id">
               <el-tooltip placement="top">
-                <template #content> {{ hangXe.name }} </template>
-                <img :src="getUrlImage(hangXe.urlImage)" alt="" class="company" />
+                <template #content> {{ hangXe.ten }} </template>
+                <img :src="getUrlImage(hangXe.urlAnh)" alt="" class="company" />
               </el-tooltip>
             </div>
           </div>
@@ -133,8 +133,8 @@
                 @click="toggle"
             >
             <div class="rounded-circle" @click="getListXeByQuanId(n.id)">
-              <img :src="getUrlImage(n.urlImage)" class="img-fluid" style="height: 170px; width: 300px">
-              <span class="title-quan text-white d-block pl-2">{{ n.name }}</span>
+              <img :src="getUrlImage(n.urlAnh)" class="img-fluid" style="height: 170px; width: 300px">
+              <span class="title-quan text-white d-block pl-2">{{ n.ten }}</span>
             </div>
               <div class="d-flex fill-height align-center justify-center">
                 <v-scale-transition>
@@ -162,26 +162,26 @@
           <div class="card-body">
             <h5 class="card-title">{{ xe.tenXe }}</h5>
             <div class="card-text">
-              <span class=""><v-icon icon="mdi:mdi-check color-primary"/></span>
+              <span class=""><v-icon icon="mdi:mdi-check color-f9c63f"/></span>
               <span class="pl-2">Số ghế: {{ xe.soGhe }}</span>
               <div>
-                <span class=""><v-icon icon="mdi:mdi-check color-primary"/></span>
+                <span class=""><v-icon icon="mdi:mdi-check color-f9c63f"/></span>
                 <span class="pl-2">Năm sản xuất: {{ xe.namSX }}</span>
               </div>
               <div>
-                <span class=""><v-icon icon="mdi:mdi-check color-primary"/></span>
+                <span class=""><v-icon icon="mdi:mdi-check color-f9c63f"/></span>
                 <span class="pl-2">Nhiên liệu: {{ xe.nhienLieu.name }}</span>
               </div>
             </div>
           </div>
-          <div class="card-footer bg-white border-0">
-            <button class="col-6 btn btn-success" @click="xemChiTiet(xe.id)">Xem chi tiết</button>
+          <div class="card-footer bg-white border-0 my-2">
+            <button class="col-6 btn btn-warning col-12" @click="xemChiTiet(xe.id)">Xem chi tiết</button>
           </div>
         </div>
       </div>
     </div>
     <div class="row justify-content-center" style="margin-top: 30px">
-      <RouterLink to="danhsachxe" class="col-2 text-center">
+      <RouterLink to="danhsachxe" @click="handleRouterLinkClick" class="text-center">
         <button class="btn btn-outline-warning ">Xem tất cả</button>
       </RouterLink>
     </div>
@@ -206,11 +206,16 @@ export default {
     }
   },
   methods: {
+    handleRouterLinkClick() {
+      // Di chuyển đến đầu trang
+      window.scrollTo(0, 0);
+    },
     getListXeByQuanId(id) {
       this.$router.push({ name: 'DanhSachXeQuan', params: { quanid: id } });
     },
     xemChiTiet(id) {
       this.$router.push({ name: 'ChiTietXe', params: { id: id } });
+      window.scrollTo(0, 0);
     },
     getListXe() {
       let params = {}
