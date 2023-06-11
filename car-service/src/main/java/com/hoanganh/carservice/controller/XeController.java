@@ -56,6 +56,11 @@ public class XeController {
         xeService.duyetXe(id);
     }
 
+    @GetMapping("/huyduyet")
+    public void huyDuyetXe(@RequestParam("id") Long id) {
+        xeService.huyDuyetXe(id);
+    }
+
     @PostMapping()
     public Xe saveXe(@RequestBody Xe xe) {
         return xeService.saveXe(xe);

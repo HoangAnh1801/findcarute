@@ -13,8 +13,42 @@
           <div class="custom-form-dangky">
             <Form @submit="saveNguoiDung" ref="form" lazy-validation>
               <h2>Đăng ký tài khoản</h2>
-            <div class="mb-3">
-              <label class="col-form-label">Họ và tên</label>
+              <div class="">
+                <div class="row justify-content-center">
+                  <div class="col-12 mt-5">
+                    <div class="form-check">
+                      <v-radio-group v-model="nguoiDung.role">
+                        <div class="row">
+                            <div class="col-6">
+                              <v-radio class="text-black font-weight-medium" label="Chủ xe" :value="chuxe"></v-radio>
+                            </div>
+                          <div class="col-6">
+                            <v-radio class="font-weight-medium" label="Thuê xe" :value="'user'"></v-radio>
+                          </div>
+
+                        </div>
+
+                      </v-radio-group>
+<!--                      <input class="form-check-input" type="radio" v-model="nguoiDung.role" :value="chuxe" name="flexRadioDefault" id="flexRadioDefault1">-->
+<!--                      <label class="form-check-label" for="flexRadioDefault1">-->
+<!--                        Chủ xe-->
+<!--                      </label>-->
+                    </div>
+                  </div>
+<!--                  <div class="col-6">-->
+<!--                    <div class="form-check">-->
+<!--&lt;!&ndash;                      <input class="form-check-input" type="radio" v-model="nguoiDung.role" :value="user" name="flexRadioDefault" id="flexRadioDefault2" checked>&ndash;&gt;-->
+<!--&lt;!&ndash;                      <label class="form-check-label" for="flexRadioDefault2">&ndash;&gt;-->
+<!--&lt;!&ndash;                        Thuê xe&ndash;&gt;-->
+<!--&lt;!&ndash;                      </label>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                  </div>-->
+                </div>
+
+
+              </div>
+            <div class="mb-3 mt-0">
+              <label class="col-form-label mt-0">Họ và tên</label>
               <Field name="hoTen" rules="required" v-model="nguoiDung.hoTen" class="form-control form-control-lg" v-slot="{field, errors }">
                 <input type="text" v-bind="field" v-model="nguoiDung.hoTen" :class="[{'is-invalid': !!errors.length },'form-control']">
               </Field>
@@ -66,7 +100,7 @@
               <ErrorMessage name="rePass" class="text-danger" />
             </div>
             <div class="modal-footer">
-              <button type="submit" class="btn btn col-12 bg-color-5fcf86 text-white" :disabled="checkTenDN">Đăng ký</button>
+              <button type="submit" class="btn btn-warning col-12  text-white" :disabled="checkTenDN">Đăng ký</button>
             </div>
           </Form>
           </div>
@@ -100,9 +134,8 @@ export default {
         tenDangNhap: '',
         sdt: '',
         matKhau: '',
-
-        trangThaiDuyet: true,
-        role: ['user']
+        trangThaiDuyet: false,
+        role: []
       },
       checkTenDN: false
     };
@@ -127,10 +160,15 @@ export default {
     },
     saveNguoiDung() {
       console.log('nguoi dung', this.nguoiDung)
+      if (this.nguoiDung.role == 'user') {
+        this.nguoiDung.role = ['user']
+      } else {
+        this.nguoiDung.role = ['chuxe']
+      }
       AuthenService.signUp(this.nguoiDung).then(response => {
         swal(response.data, "", "success")
-        this.$router.push('/fincar/login')
-        // window.location.href = 'http://localhost:8080/findcar/login'
+        // this.$router.push('/fincar/login')
+        window.location.href = 'http://localhost:8080/findcar/login'
       })
     },
     checkExistTenDangNhap(tendn) {
@@ -265,5 +303,8 @@ label {
   height: 15%;
   padding: 2px;
   overflow: hidden;
+}
+.v-selection-control.v-selection-control--inline.v-selection-control--density-default.v-radio {
+  margin-right: 50px;
 }
 </style>

@@ -156,7 +156,7 @@ export default {
       AuthenService.updateNguoiDung(this.nguoiDung).then(() => {
         swal('Cập nhật thành công', "", "success")
         this.$store.dispatch('auth/logout')
-        window.location.href = 'http://localhost:8081/findcar/login'
+        window.location.href = 'http://localhost:8080/findcar/login'
         // this.$router.push('/fincar/login')
       })
     },

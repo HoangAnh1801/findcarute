@@ -14,14 +14,14 @@
         </div>
         <div class="col-lg-6">
           <div class="input-group">
-            <input type="text" @keypress.enter="getListXe" class="form-control" v-model="keySearch" aria-label="Dollar amount (with dot and two decimal places)">
-              <v-icon icon="mdi:mdi-magnify" @click="getListXe" class="align-self-center" style="background: #3d7cca; padding: 18px"></v-icon>
+            <input type="text" @keypress.enter="getListXe" placeholder="Nhập tên xe..." class="form-control" v-model="keySearch" aria-label="Dollar amount (with dot and two decimal places)">
+              <v-icon icon="mdi:mdi-magnify" @click="getListXe" class="align-self-center" style="background: #e9a900; padding: 18px"></v-icon>
           </div>
         </div>
         <div class="col-auto">
-          <RouterLink to="xe">
-            <button class="btn" style="background: rgb(61, 124, 202);">Đăng xe</button>
-          </RouterLink>
+<!--          <RouterLink to="/findcar/xe" v-if="user.p">-->
+<!--            <button class="btn btn bg-e9a900">Đăng xe</button>-->
+<!--          </RouterLink>-->
         </div>
       </div>
     </div>
@@ -30,9 +30,9 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-9">
-        <section style="box-shadow: rgba(0, 0, 0, 0.25) 0px 2px 16px; padding: 50px;">
+        <section v-if="listXe.length > 0" style="box-shadow: rgba(0, 0, 0, 0.25) 0px 2px 16px; padding: 50px;">
           <div class="container py-5">
-            <div class="row justify-content-center mb-3 px-4" v-for="xe in listXe" :key="xe.id">
+            <div class="row justify-content-center mb-3" v-for="xe in listXe" :key="xe.id">
               <div class="col-md-12 col-xl-12">
                 <div class="card shadow-0 border rounded-3">
                   <div class="card-body p-2">
@@ -59,11 +59,11 @@
                       </div>
                       <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
                         <div class="d-flex flex-row align-items-center mb-1">
-                          <h4 class="mb-1 me-1 text-black">{{ formatCurrency(xe.giaXe) }}</h4>
+                          <h4 class="mb-1 me-1 text-danger">{{ formatCurrency(xe.giaXe) }}</h4>
                         </div>
                         <!--                    <h6 class="text-success">Free shipping</h6>-->
                         <div class="d-flex flex-column mt-4">
-                          <button class="btn btn-outline-success btn-sm" @click="xemChiTiet(xe.id)" type="button">Xem chi tiết</button>
+                          <button class="btn btn-outline-warning btn-sm" @click="xemChiTiet(xe.id)" type="button">Xem chi tiết</button>
                           <!--                      <button class="btn btn-outline-primary btn-sm mt-2" type="button">-->
                           <!--                        Add to wishlist-->
                           <!--                      </button>-->
@@ -77,6 +77,23 @@
 
           </div>
         </section>
+        <div v-else class="row justify-content-center">
+          <img src="../../assets/images/noresult.png" style="height: 400px; width: 400px;"/>
+          <h2 class="text-center">không có kết quả tìm kiếm</h2>
+        </div>
+        <div class="row justify-content-center">
+          <v-pagination
+              v-if="listXe.length > 0"
+              variant="flat"
+              active-color="warning"
+              color="#ffffff"
+              v-model="page"
+              class="my-4"
+              :length="totalPages"
+              :total-visible="5"
+              @update:modelValue="getListXe"
+          ></v-pagination>
+        </div>
       </div>
       <div class="col-3">
         <div style="box-shadow: rgba(0, 0, 0, 0.25) 0px 2px 16px;">
@@ -86,11 +103,10 @@
           >
             <v-toolbar
                 flat
-                color="#9dc5e7"
+                color="#f9c63f"
                 dark
             >
               <v-btn icon>
-<!--                <v-icon>mdi-close</v-icon>-->
               </v-btn>
               <v-toolbar-title>Tìm kiếm theo</v-toolbar-title>
             </v-toolbar>
@@ -158,27 +174,6 @@
               </v-chip-group>
             </v-card-text>
 
-            <v-card-text>
-              <h2 class="text-h6 mb-2">
-                Loại nhiên liệu
-              </h2>
-
-              <v-chip-group
-                  v-model="nhienLieu"
-                  column
-              >
-                <v-chip
-                    filter
-                    variant="outlined"
-                    :value="nhienlieu.id"
-                    v-for="nhienlieu in listNhienLieu"
-                    :key="nhienlieu.id"
-                    selected-class="text-success"
-                >
-                  {{ nhienlieu.ten }}
-                </v-chip>
-              </v-chip-group>
-            </v-card-text>
           </v-card>
         </div>
 
@@ -187,18 +182,7 @@
 
   </div>
 
-  <div class="row">
-    <v-pagination
-        variant="flat"
-        active-color="#9dc5e7"
-        color="#ffffff"
-        v-model="page"
-        class="my-4"
-        :length="totalPages"
-        :total-visible="5"
-        @update:modelValue="getListXe"
-    ></v-pagination>
-  </div>
+
   </div>
 </template>
 
@@ -225,16 +209,10 @@ export default {
       findAll: false,
       listQuanHuyen: [],
       quanHuyen: '',
-      listNhienLieu: [],
-      nhienLieu: ''
+      nhienLieu: '',
     }
   },
   methods: {
-    getAllLoaiNhienLieu() {
-      DanhMucService.getAll('nhienlieu').then(response => (
-          this.listNhienLieu = response.data
-      ))
-    },
     getAllQuanHuyen() {
       DanhMucService.getAll('quanhuyen').then(response => (
           this.listQuanHuyen = response.data
@@ -289,7 +267,6 @@ export default {
     this.getAllLoaiXe();
     this.getAllHangXe();
     this.getAllQuanHuyen();
-    this.getAllLoaiNhienLieu();
   },
   watch: {
     loaiXe() {

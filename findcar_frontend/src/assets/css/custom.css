@@ -199,3 +199,18 @@ i.mdi-trash-can-outline {
 .el-carousel__container {
     height: 500px !important;
 }
+.card.h-100.custom-card:hover {
+    transition: transform .2s ease-in-out;
+    transform: scale(1.1);
+}
+button.page-link {
+    border: 0;
+    color: black;
+}
+button.page-link.active {
+    background-color: #e9a900;
+    color: black;
+}
+i.mdi-pencil.mdi.v-icon.notranslate.v-theme--light.v-icon--size-default {
+    color: #00870a;
+}

@@ -44,12 +44,15 @@
           </template>
         </td>
         <td>
-          <el-tag v-if="entry.trangThaiHoanXe == false" @click="xacNhan(entry.id)" class="mx-1 cursor-pointer" effect="dark" type="dangers">
-            Chưa hoàn xe
-          </el-tag>
-          <el-tag v-else class="mx-1 cursor-pointer" :class="entry.trangThaiHoanXe == null ? 'd-none' : ''" effect="dark" type="success">
-            Đã hoàn xe
-          </el-tag>
+          <template v-if="entry.trangThaiNhanXe == true">
+            <el-tag v-if="entry.trangThaiHoanXe == false" @click="xacNhan(entry.id)" class="mx-1 cursor-pointer" effect="dark" type="dangers">
+              Chưa hoàn xe
+            </el-tag>
+            <el-tag v-else class="mx-1 cursor-pointer" :class="entry.trangThaiHoanXe == null ? 'd-none' : ''" effect="dark" type="success">
+              Đã hoàn xe
+            </el-tag>
+          </template>
+
         </td>
         <td v-if="isQuanTri">
           <router-link :to="{ name: 'duyetxe', params: { id: entry.id } }">
@@ -57,7 +60,7 @@
           </router-link>
         </td>
         <td v-else>
-          <button @click="deleteById(entry.id)" > <v-icon icon="mdi:mdi-trash-can-outline color-DD4238"/></button>
+          <button @click="deleteById(entry.id)" :disabled="entry.trangThaiDuyet == true"> <v-icon icon="mdi:mdi-trash-can-outline color-DD4238"/></button>
         </td>
       </tr>
       </tbody>
@@ -172,7 +175,7 @@ export default ({
         if (willDelete) {
           XeService.duyetThueXe(id).then(response => {
             swal(response.data.message,'', 'success')
-            window.load()
+            window.location.reload()
           })
         }
       })
@@ -195,14 +198,14 @@ export default ({
     },
     deleteById(id) {
       swal({
-        title: "Bạn có chắc chắn muốn xoá?",
+        title: "Xoá yêu cầu thuê xe?",
         icon: "warning",
         buttons: true,
         dangerMode: true,
       })
           .then((willDelete) => {
             if (willDelete) {
-              XeService.delete(id).then((response) => {
+              XeService.deleteYeuCau(id).then((response) => {
                 swal(response.data.message, "", "success")
                 this.getListXe(this.nguoiDungId);
               })
@@ -223,26 +226,15 @@ export default ({
           this.totalPages = response.data.totalPages
       ))
     },
-    // async getUser(tenDn) {
-    //   await AuthenService.findByTenDangNhap(tenDn).then(response => {
-    //     this.nguoiDungId = response.data.id
-    //     console.log(this.nguoiDungId);
-    //   })
-    // },
     changeListXe() {
         this.getListXe();
-
     }
   },
   created() {
     var user = JSON.parse(localStorage.getItem('user'));
     this.tenDangNhap = user.tenDangNhap;
     this.nguoiDungId = user.id
-    console.log('ủeid', this.nguoiDungId)
-
-      this.getListXe();
-
-    // this.getListXe();
+    this.getListXe();
   }
 })
 </script>

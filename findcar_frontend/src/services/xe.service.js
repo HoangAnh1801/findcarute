@@ -14,7 +14,15 @@ class Xe {
     }
 
     duyetXe(id) {
+        return http.get("/car/v1/xe/huyduyet?id=" + id);
+    }
+
+    huyDuyetXe(id) {
         return http.get("/car/v1/xe/duyetxe?id=" + id);
+    }
+
+    daNhanXe(id) {
+        return http.get("/car/v1/thuexe/nhanxe?id=" + id);
     }
 
     add(data) {
@@ -55,6 +63,10 @@ class Xe {
 
     huyThueXe(id) {
         return http.get("/car/v1/thuexe/huythue?id=" + id);
+    }
+
+    deleteYeuCau(id) {
+        return http.delete("/car/v1/thuexe?id=" + id);
     }
 }
 

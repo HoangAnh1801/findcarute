@@ -33,15 +33,24 @@ public class XeService {
             }
 
             if (quanHuyenId != null && loaixeId != null && hangxeId == null) {
-                return xeRepository.findAllByLoaiXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrue(pageable, loaixeId, quanHuyenId);
+                if (keyword == null || keyword.length() == 0 || keyword.equals("null")) {
+                    return xeRepository.findAllByLoaiXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrue(pageable, loaixeId, quanHuyenId);
+                }
+                return xeRepository.findAllByLoaiXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrueAndTenXeContaining(pageable, loaixeId, quanHuyenId, keyword);
             }
 
             if (quanHuyenId != null && loaixeId == null && hangxeId != null) {
-                return  xeRepository.findAllByHangXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrue(pageable, hangxeId, quanHuyenId);
+                if (keyword == null || keyword.length() == 0 || keyword.equals("null")) {
+                    return  xeRepository.findAllByHangXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrue(pageable, hangxeId, quanHuyenId);
+                }
+                return  xeRepository.findAllByHangXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrueAndTenXeContaining(pageable, hangxeId, quanHuyenId, keyword);
             }
 
             if (quanHuyenId != null && loaixeId == null && hangxeId != null) {
-                return xeRepository.findAllByLoaiXeIdAndHangXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrue(pageable, loaixeId, hangxeId, quanHuyenId);
+                if (keyword == null || keyword.length() == 0 || keyword.equals("null")) {
+                    return xeRepository.findAllByLoaiXeIdAndHangXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrue(pageable, loaixeId, hangxeId, quanHuyenId);
+                }
+                return xeRepository.findAllByLoaiXeIdAndHangXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrueAndTenXeContaining(pageable, loaixeId, hangxeId, quanHuyenId, keyword);
             }
 
             if (quanHuyenId == null && loaixeId != null && hangxeId == null) {
@@ -66,7 +75,10 @@ public class XeService {
             }
 
             if (quanHuyenId != null && loaixeId != null && hangxeId != null) {
-                return  xeRepository.findAllByLoaiXeIdAndHangXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrue(pageable, loaixeId, hangxeId, quanHuyenId);
+                if (keyword == null || keyword.length() == 0 || keyword.equals("null")) {
+                    return  xeRepository.findAllByLoaiXeIdAndHangXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrue(pageable, loaixeId, hangxeId, quanHuyenId);
+                }
+                return  xeRepository.findAllByLoaiXeIdAndHangXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrueAndTenXeContaining(pageable, loaixeId, hangxeId, quanHuyenId, keyword);
             }
 
             if (keyword == null || keyword.length() == 0 || keyword.equals("null")) {
@@ -117,6 +129,12 @@ public class XeService {
     public void duyetXe(Long id) {
         Xe xe = xeRepository.findById(id).get();
         xe.setTrangThaiDuyet(true);
+        xeRepository.save(xe);
+    }
+
+    public void huyDuyetXe(Long id) {
+        Xe xe = xeRepository.findById(id).get();
+        xe.setTrangThaiDuyet(false);
         xeRepository.save(xe);
     }
 

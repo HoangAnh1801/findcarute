@@ -8,7 +8,7 @@ import java.util.List;
 public interface NguoiDungRepository extends JpaRepository<NguoiDung, Long> {
     List<NguoiDung> findAllByHoTenContaining(String name);
 
-    NguoiDung findByTenDangNhapAndAndMatKhau(String tenDangNhap,String matKhau);
+    NguoiDung findByTenDangNhapAndAndMatKhauAndTrangThaiDuyetIsTrue(String tenDangNhap,String matKhau);
 
     Boolean existsByTenDangNhap(String ten);
 

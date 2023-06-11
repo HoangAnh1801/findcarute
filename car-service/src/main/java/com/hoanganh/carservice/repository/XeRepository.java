@@ -14,9 +14,15 @@ public interface XeRepository extends PagingAndSortingRepository<Xe, Long> {
 //    Page<Xe> findAllByTenXeContainingOrHOrHangXeContaining(Pageable pageable, String keyword);
     Page<Xe> findAllByLoaiXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrue(Pageable pageable, Long loaixeid, Long quanid);
 
+    Page<Xe> findAllByLoaiXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrueAndTenXeContaining(Pageable pageable, Long loaixeid, Long quanid, String keySearch);
+
     Page<Xe> findAllByHangXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrue(Pageable pageable, Long hangxexeid, Long quanid);
 
+    Page<Xe> findAllByHangXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrueAndTenXeContaining(Pageable pageable, Long hangxexeid, Long quanid, String keySearch);
+
     Page<Xe> findAllByLoaiXeIdAndHangXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrue(Pageable pageable, Long loaixeid, Long hangxeid, Long quanid);
+
+    Page<Xe> findAllByLoaiXeIdAndHangXeIdAndPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrueAndTenXeContaining(Pageable pageable, Long loaixeid, Long hangxeid, Long quanid, String keySearch);
 
     Page<Xe> findAllByPhuongXaQuanHuyenIdAndTrangThaiDuyetIsTrue(Pageable pageable, Long quanHuyenId);
 

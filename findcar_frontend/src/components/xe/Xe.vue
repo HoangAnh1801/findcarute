@@ -141,7 +141,7 @@
         <ErrorMessage name="quanHuyen" class="text-danger" />
       </div>
       <div class="col-lg-4">
-        <label class="font-weight-medium">Quận/huyện<span class="text-danger">*</span></label>
+        <label class="font-weight-medium">Phường/ xã<span class="text-danger">*</span></label>
         <Field name="phuongXa" rules="selected" v-model="xe.nhienLieu" class="" v-slot="{ errors }">
           <v-combobox
               item-title="ten"
@@ -161,6 +161,7 @@
               :class="[{'is-invalid': !!errors.length },'form-control']"
               variant="outlined"
               v-model="xe.giaXe"
+              @input="formatCurrency()"
               type="number"
           >
           </v-text-field>
@@ -323,11 +324,28 @@ export default {
         mota: '',
         tinhNangs: [],
         xeAnhs: [],
-        trangThaiDuyet: 0
+        trangThaiDuyet: 1
       }
     }
   },
   methods: {
+      resetData() {
+          this.xe.id = '',
+          this.xe.tieuDe = '',
+          this.xe.hangXe.id = '',
+              this.xe.hangXe.ten = '',
+              this.xe.tenXe = '',
+              this.xe.soGhe = '',
+              this.xe.namSX = '',
+              this.xe.loaiXe.id = '',
+              this.xe.nhienLieu.id = '',
+              this.xe.sdt = '',
+              this.xe.diaChi = '',
+              this.xe.phuongXa.quanHuyen.id = '',
+              this.xe.phuongXa.id = '',
+              this.xe.mota = '',
+              this.xe.tinhNangs = []
+      },
     back() {
       this.$router.go(-1)
     },
@@ -382,36 +400,31 @@ export default {
 
       })
     },
-    save() {
+    async save() {
       this.xe.ngayTao = new Date().getTime();
-      // this.xe.nguoiDung.id = this.xe
       var dataTinhNang = [];
       for (let i in this.selectdTinhNang) {
         dataTinhNang.push({id: this.selectdTinhNang[i]})
       }
       this.xe.tinhNangs = dataTinhNang
-
-      XeService.add(this.xe).then(response => {
+      await XeService.add(this.xe).then(response => {
         let id = response.data.id
         this.xe = response.data
         this.updateAvatarXe()
         this.updateImages(id)
-        swal('Thêm mới thành công!', '', 'success').then(
-            // window.location.href = 'http://localhost:8080/admin/quanlyxe'
-        )
 
       }).catch(() => {
         // this.notification(e.response.data.message, "error");
 
       });
     },
-    updateAvatarXe() {
+    async updateAvatarXe() {
       let file = this.$refs.file.files[0];
       let formData = new FormData();
       formData.append('file', file);
       formData.append('path', "xe//" + this.xe.id);
       if (file != null) {
-        ImageService.uploadImage(formData)
+        await ImageService.uploadImage(formData)
             .then(response => {
               this.xe.anhNen = response.data.urlFile
               this.xe.xeAnhs = []
@@ -425,14 +438,14 @@ export default {
             });
       }
     },
-    updateImages(id) {
+    async updateImages(id) {
       for (let i = 0; i < this.files.length; i++) {
         let file = this.$refs.file.files[i];
         let formData = new FormData();
         formData.append('file', file);
         formData.append('path', "xe//" + id);
         if (file != null) {
-          ImageService.uploadImage(formData)
+          await ImageService.uploadImage(formData)
               .then(response => {
                 let postImage = {
                   urlAnh: response.data.urlFile,
@@ -452,6 +465,11 @@ export default {
               });
         }
       }
+      swal('Thêm mới thành công!', '', 'success').then(
+          // window.location.href = 'http://localhost:8080/admin/quanlyxe'
+          this.$router.push('/findcar/quanlyxe'),
+          window.scrollTo(0, 0)
+      )
     },
     /*image*/
     remove(i) {
@@ -485,6 +503,19 @@ export default {
       this.isDragging = false
     },
     /*image-end*/
+    formatCurrency() {
+      this.xe.giaXe = this.xe.giaXe.replace(/[^\d.]/g, '');
+
+      // Định dạng số tiền theo định dạng tiền tệ
+      const formattedAmount = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND'
+      }).format(this.xe.giaXe);
+
+      // Gán số tiền đã được định dạng vào trường văn bản
+      this.xe.giaXe = formattedAmount;
+      console.log('this.xe.giaXe', this.xe.giaXe)
+    }
   },
   watch: {
     'xe.phuongXa.quanHuyen.id'() {

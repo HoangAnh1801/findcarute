@@ -60,35 +60,35 @@ export default {
           child: [
             {
               href: '/admin/quanlyloaixe',
-              title: 'Quản lý loại xe',
+              title: 'Loại xe',
             },
             {
               href: '/admin/quanlyhangxe',
-              title: 'Quản lý hãng xe',
+              title: 'Hãng xe',
             },
             {
               href: '/admin/quanlynhienlieu',
-              title: 'Quản lý nhiên liệu',
+              title: 'Loại nhiên liệu',
             },
             {
               href: '/admin/quanlyquanhuyen',
-              title: 'Quản lý quận huyện',
+              title: 'Quận huyện',
             },
             {
               href: '/admin/quanlyphuongxa',
-              title: 'Quản lý phường xã',
+              title: 'Phường xã',
             },
             {
               href: '/admin/quanlytinhnang',
-              title: 'Quản lý tính năng',
+              title: 'Tính năng',
             },
           ],
         },
-        {
-          href: '/admin/quanlyxe',
-          title: 'Quản lý xe',
-          icon: 'mdi mdi-car-convertible',
-        },
+        // {
+        //   href: '/findcar/quanlyxe',
+        //   title: 'Quản lý xe',
+        //   icon: 'mdi mdi-car-convertible',
+        // },
         {
           href: '/admin/quanlynguoidung',
           title: 'Quản lý người dùng',

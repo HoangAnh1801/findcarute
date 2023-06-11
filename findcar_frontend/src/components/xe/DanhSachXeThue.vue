@@ -36,33 +36,30 @@
         <td>{{ entry.xe.hangXe.ten }}</td>
         <td>{{ formatDateTime(entry.ngayBatDau) }}</td>
         <td>{{ formatDateTime(entry.ngayKetThuc) }}</td>
-<!--        <td v-if="entry.xe.nguoiDung.id == nguoiDungId">{{ entry.xe.nguoiDung.id }}</td>-->
         <td>
           <el-tag v-if="entry.trangThaiDuyet == true" class="mx-1 cursor-pointer" effect="dark" type="success">
             Đã duyệt
           </el-tag>
-          <template v-else>
-            <el-tag v-if="entry.xe.nguoiDung.id == nguoiDungId" class="mx-1 cursor-pointer" @click="clickDuyet(entry.id)" effect="dark" type="danger">
-              Chưa duyệt
-            </el-tag>
             <el-tag v-else class="mx-1 cursor-pointer" effect="dark" type="danger">
               Chưa duyệt
             </el-tag>
-          </template>
-
-
         </td>
         <td>
           <el-tag v-if="entry.trangThaiHuy == true" class="mx-1 cursor-pointer" effect="dark" type="warning">
             Đã huỷ
           </el-tag>
         </td>
-        <td v-if="isQuanTri">
-          <router-link :to="{ name: 'duyetxe', params: { id: entry.id } }">
-            <button><v-icon icon="mdi:mdi-eye color-248C92"/></button>
-          </router-link>
+        <td>
+          <template v-if="entry.trangThaiNhanXe === false">
+            <el-tag @click="daNhanXe(entry.id, entry.trangThaiDuyet)" class="mx-1 cursor-pointer" effect="dark" type="warning">
+              Chưa nhận
+            </el-tag>
+          </template>
+          <el-tag v-else class="mx-1 cursor-pointer" effect="dark" type="success">
+            Đã nhận
+          </el-tag>
         </td>
-        <td v-else>
+        <td>
           <button @click="deleteById(entry.id, entry.trangThaiDuyet)" :disabled="entry.trangThaiHuy == true" > <v-icon icon="mdi:mdi-close-outline color-DD4238"/></button>
         </td>
       </tr>
@@ -80,7 +77,6 @@
           :total-visible="5"
           @update:modelValue="changeListXe"
       ></v-pagination>
-      <!--      <pagination v-model="page" :total-visible="5" :length="totalPages" :per-page="perPage" @update:modelValue="getListXe" />-->
     </div>
 
   </div>
@@ -89,25 +85,19 @@
 <script>
 import XeService from "@/services/xe.service"
 import swal from 'sweetalert';
-// import AuthenService from "@/services/auth.services"
 
 export default ({
   name: "DanhSachXeThue",
   data () {
     return {
       headers: [
-        // {
-        //   name: 'ID',
-        //   code: 'id',
-        //   type: 'text'
-        // },
         {
           name: 'Tên xe',
           code: 'xe.tenXe',
           type: 'text'
         },
         {
-          name: 'Số điện thoại',
+          name: 'Số điện thoại chủ xe',
           code: 'nguoiDung.sdt',
           type: 'text'
         },
@@ -136,6 +126,11 @@ export default ({
           code: 'trangThaiHuy',
           type: 'text'
         },
+        {
+          name: 'Đã nhận xe',
+          code: 'trangThaiNhanXe',
+          type: 'text'
+        }
       ],
       listXe: [],
       nguoiDungId: '',
@@ -156,24 +151,36 @@ export default ({
     },
 
   },
-  // isQuanTri() {
-  //   let user = JSON.parse(window.localStorage.getItem('user'))
-  //   user = user ? user : ''
-  //   let permisson = user.permissions ? user.permissions : []
-  //   let isQuanTri = permisson.includes('admin') ? true : false
-  //
-  //   return isQuanTri
-  // },
   methods: {
     clickDuyet(id) {
       swal({
-        title: "Duyệt yêu cầu thuê xe",
+        title: "Duyệt yêu cầu thuê xe?",
         icon: "warning",
         buttons: true,
         dangerMode: true,
       }).then((willDelete) => {
         if (willDelete) {
           XeService.duyetThueXe(id).then(response => {
+            swal(response.data.message,'', 'success')
+            window.load()
+          })
+        }
+      })
+    },
+    daNhanXe(id, trangThaiDuyet) {
+      console.log('trangThaiDuyet', trangThaiDuyet)
+      swal({
+        title: "Xác nhận đã nhận xe?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      }).then((willDelete) => {
+        if (willDelete) {
+          if (trangThaiDuyet == false) {
+            swal('Yêu cầu thuê xe chưa được duyệt!','', 'error')
+            return
+          }
+          XeService.daNhanXe(id).then(response => {
             swal(response.data.message,'', 'success')
             window.load()
           })
@@ -193,7 +200,6 @@ export default ({
 
 // Định dạng lại thành chuỗi ngày tháng
       const formattedDate = `${day}-${month}-${year}`;
-      console.log("Ngày tháng sau khi chuyển đổi:", formattedDate);
       return formattedDate
 
     },
@@ -223,21 +229,12 @@ export default ({
       params['limit'] = this.page_size
       params['id'] = this.nguoiDungId
       params['search'] = this.keySearch
-      console.log('param', params)
       XeService.findThueXeByNguoiDung(params).then(response => (
-          console.log('datcontent', response.data.content),
               this.listXe = response.data.content,
               this.page_size = response.data.size,
               this.totalPages = response.data.totalPages
       ))
     },
-
-    // async getUser(tenDn) {
-    //   await AuthenService.findByTenDangNhap(tenDn).then(response => {
-    //     this.nguoiDungId = response.data.id
-    //     console.log(this.nguoiDungId);
-    //   })
-    // },
     changeListXe() {
       this.getListXe();
 
@@ -249,8 +246,6 @@ export default ({
     this.nguoiDungId = user.id
 
     this.getListXe();
-
-    // this.getListXe();
   }
 })
 </script>

@@ -81,4 +81,14 @@ public class ThueXeController {
     public  Reponse huyThueXe(@RequestParam("id") Long id) {
         return thueXeService.huyThueXe(id);
     }
+
+    @GetMapping("/nhanxe")
+    public  Reponse daNhanXe(@RequestParam("id") Long id) {
+        return thueXeService.daNhanXe(id);
+    }
+
+    @DeleteMapping()
+    public Reponse deleteYeuCau(@RequestParam("id") Long id) {
+        return thueXeService.deleteYeuCauThueXe(id);
+    }
 }

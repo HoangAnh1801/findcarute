@@ -18,14 +18,14 @@
       <thead>
       <tr>
         <th scope="col">STT</th>
-        <th scope="col" v-for="itemHeader in headers" :key="itemHeader.id">{{ itemHeader.ten }}</th>
+        <th scope="col" v-for="itemHeader in headers" :key="itemHeader.id">{{ itemHeader.name }}</th>
         <th scope="col">Thao tác</th>
       </tr>
       </thead>
       <tbody>
       <tr v-for="(entry, stt) in resultQuery" :key="entry.id">
         <th scope="row" style="width: 5%">{{ stt + 1 }}</th>
-        <td>{{ entry.id }}</td>
+<!--        <td>{{ entry.id }}</td>-->
         <td>{{ entry.ten }}</td>
         <td>
           <button @click="handleEdit(entry.id)"><v-icon icon="mdi:mdi-pencil" /></button>
@@ -87,11 +87,11 @@ export default ({
       imageData: '',
       dialog: false,
       headers: [
-        {
-          name: 'ID',
-          code: 'id',
-          type: 'text'
-        },
+        // {
+        //   name: 'ID',
+        //   code: 'id',
+        //   type: 'text'
+        // },
         {
           name: 'Loại xe',
           code: 'ten',

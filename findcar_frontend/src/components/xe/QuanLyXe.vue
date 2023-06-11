@@ -5,7 +5,7 @@
         <h2>Danh sách xe</h2>
       </div>
       <div class="col-9">
-        <router-link to="xe">
+        <router-link to="/findcar/xe">
           <button class="btn btn-warning"><v-icon icon="mdi:mdi-plus" /> Thêm mới</button>
         </router-link>
 
@@ -28,26 +28,12 @@
       <tbody>
       <tr v-for="(entry, stt) in listXe" :key="entry.id" style="vertical-align: middle;">
         <th scope="row" style="width: 5%">{{ stt + 1 }}</th>
-<!--        <td>{{ entry.id }}</td>-->
         <td>{{ entry.tenXe }}</td>
         <td>{{ entry.giaXe }}</td>
+        <td>{{ entry.hangXe.ten }}</td>
         <td>{{ entry.diaChi }}</td>
         <td><img :src="getUrlImage(entry.anhNen)" style="height: 100px; width: 160px"/></td>
         <td>
-          <el-tag v-if="entry.trangThaiDuyet == true" class="mx-1" effect="dark" type="success">
-            Đã duyệt
-          </el-tag>
-          <el-tag v-else class="mx-1" effect="dark" type="danger">
-            Chưa duyệt
-          </el-tag>
-
-        </td>
-        <td v-if="isQuanTri">
-          <router-link :to="{ name: 'duyetxe', params: { id: entry.id } }">
-            <button><v-icon icon="mdi:mdi-eye color-248C92"/></button>
-          </router-link>
-        </td>
-        <td v-else>
           <router-link :to="{ name: 'update-xe', params: { id: entry.id } }">
             <button><v-icon icon="mdi:mdi-pencil color-248C92"/></button>
           </router-link>
@@ -84,11 +70,6 @@ export default ({
   data () {
     return {
       headers: [
-        // {
-        //   name: 'ID',
-        //   code: 'id',
-        //   type: 'text'
-        // },
         {
           name: 'Tên xe',
           code: 'tenXe',
@@ -100,6 +81,11 @@ export default ({
           type: 'number'
         },
         {
+          name: 'Hãng xe',
+          code: 'hangXe.ten',
+          type: 'text'
+        },
+        {
           name: 'Địa chỉ',
           code: 'diaChi',
           type: 'text'
@@ -108,11 +94,6 @@ export default ({
           name: 'Ảnh',
           code: 'anhNen',
           type: 'image'
-        },
-        {
-          name: 'Trạng thái duyệt',
-          code: 'trangThaiDuyet',
-          type: 'text'
         },
       ],
       listXe: [],
@@ -135,14 +116,6 @@ export default ({
     },
 
   },
-  // isQuanTri() {
-  //   let user = JSON.parse(window.localStorage.getItem('user'))
-  //   user = user ? user : ''
-  //   let permisson = user.permissions ? user.permissions : []
-  //   let isQuanTri = permisson.includes('admin') ? true : false
-  //
-  //   return isQuanTri
-  // },
   methods: {
     deleteById(id) {
       swal({
@@ -205,19 +178,8 @@ export default ({
     var user = JSON.parse(localStorage.getItem('user'));
     this.tenDangNhap = user.tenDangNhap;
     this.nguoiDungId = user.id
-    if (this.isQuanTri) {
-      this.getAllXe();
-    } else {
       this.getListXe();
-    }
-    // this.getListXe();
   },
-  // watch: {
-  //   nguoiDungId() {
-  //
-  //
-  //   }
-  // }
 })
 </script>
 

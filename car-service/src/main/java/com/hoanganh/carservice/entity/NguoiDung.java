@@ -7,10 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Entity
@@ -29,7 +26,11 @@ public class NguoiDung {
 
     private String sdt;
 
-    private Boolean trangThaiDuyet = Boolean.TRUE;
+    private Boolean trangThaiDuyet = Boolean.FALSE;
+
+    private Boolean trangThaiNopPhi = Boolean.FALSE;
+
+    private Date ngayNopPhi;
 
     @OneToMany(mappedBy = "nguoiDung", cascade = CascadeType.ALL)
     @JsonIgnore

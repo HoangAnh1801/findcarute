@@ -40,6 +40,7 @@ public class ThueXeService {
         ThueXe thueXe = thueXeRepository.findById(id).get();
         thueXe.setTrangThaiDuyet(true);
         thueXe.setTrangThaiHoanXe(false);
+        thueXe.setTrangThaiNhanXe(false);
         thueXeRepository.save(thueXe);
         return new Reponse(HttpStatus.OK, "Duyệt thành công!");
     }
@@ -67,5 +68,17 @@ public class ThueXeService {
         thueXe.setTrangThaiHuy(true);
         thueXeRepository.save(thueXe);
         return new Reponse(HttpStatus.OK, "Đã huỷ thuê xe!");
+    }
+
+    public Reponse deleteYeuCauThueXe(Long id) {
+        thueXeRepository.deleteById(id);
+        return new Reponse(HttpStatus.OK, "Đã xoá yêu cầu thuê xe!");
+    }
+
+    public Reponse daNhanXe(Long id) {
+        ThueXe thueXe = thueXeRepository.findById(id).get();
+        thueXe.setTrangThaiNhanXe(Boolean.TRUE);
+        thueXeRepository.save(thueXe);
+        return new Reponse(HttpStatus.OK, "Xác nhận đã nhận xe!");
     }
 }

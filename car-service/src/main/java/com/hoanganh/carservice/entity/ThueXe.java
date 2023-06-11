@@ -25,6 +25,8 @@ public class ThueXe extends BaseEntity{
 
     private Boolean trangThaiHoanXe;
 
+    private Boolean trangThaiNhanXe = Boolean.FALSE;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "nguoiDungId")
     private NguoiDung nguoiDung;

@@ -88,7 +88,7 @@ const routes = [
         component: TinhNang,
     },
     {
-        path: "/admin/quanlyxe",
+        path: "/findcar/quanlyxe",
         name: "quanlyxe",
         component: QuanLyXe,
     },
@@ -103,17 +103,17 @@ const routes = [
         component: DuyetXe,
     },
     {
-        path: "/admin/xe",
+        path: "/findcar/xe",
         name: "xe",
         component: Xe,
     },
     {
-        path: "/quanlythuexe",
+        path: "/findcar/quanlythuexe",
         name: "quanlythuexe",
         component: QuanLyThueXe,
     },
     {
-        path: "/danhsachxethue",
+        path: "/findcar/danhsachxethue",
         name: "danhsachxethue",
         component: DanhSachXeThue,
     },

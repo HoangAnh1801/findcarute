@@ -15,15 +15,26 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0" v-if="isLoggin">
+            <li class="nav-item">
+              <router-link to="/" class="text-decoration-none"><a class="nav-link active" href="#">Trang chủ</a></router-link>
+            </li>
+            <li class="nav-item" v-if="this.user.permissions[0] === 'chuxe'">
+              <RouterLink to="/findcar/xe" @click="handleRouterLinkClick" class="text-decoration-none"><a class="nav-link" aria-current="page" href="#">Xe cho thuê</a></RouterLink>
+            </li>
+            <li class="nav-item" v-if="this.user.permissions[0] === 'chuxe'">
+              <RouterLink to="/findcar/quanlyxe" @click="handleRouterLinkClick" class="text-decoration-none"><a class="nav-link">Xe của tôi</a></RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink to="/danhsachxe" @click="handleRouterLinkClick" class="text-decoration-none"><a class="nav-link">Tìm xe</a></RouterLink>
+            </li>
+          </ul>
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0" v-else>
             <li class="nav-item">
               <router-link to="/" class="text-decoration-none"><a class="nav-link active" href="#">Trang chủ</a></router-link>
             </li>
             <li class="nav-item">
-              <RouterLink to="/admin/xe" @click="handleRouterLinkClick" class="text-decoration-none"><a class="nav-link" aria-current="page" href="#">Trở thành chủ xe</a></RouterLink>
-            </li>
-            <li class="nav-item">
-              <RouterLink to="/admin/quanlyxe" @click="handleRouterLinkClick" class="text-decoration-none"><a class="nav-link">Xe của tôi</a></RouterLink>
+              <RouterLink to="/danhsachxe" @click="handleRouterLinkClick" class="text-decoration-none"><a class="nav-link">Tìm xe</a></RouterLink>
             </li>
           </ul>
 
@@ -36,9 +47,9 @@
               <template #dropdown>
                 <el-dropdown-menu class="user-infor-toolbar pb-0">
                   <el-dropdown-item @click="trangCaNhan"><v-icon icon="mdi:mdi-account mr-2" ></v-icon>Trang cá nhân</el-dropdown-item>
-                  <el-dropdown-item @click="listxe"><v-icon icon="mdi:mdi-car-sports mr-2" ></v-icon>Danh sách xe</el-dropdown-item>
-                  <el-dropdown-item @click="listxethue"><v-icon icon="mdi:mdi-car-sports mr-2" ></v-icon>Quản lý thuê xe</el-dropdown-item>
-                  <el-dropdown-item @click="listxedathue"><v-icon icon="mdi:mdi-car-sports mr-2" ></v-icon>Xe đã thuê</el-dropdown-item>
+                  <el-dropdown-item v-if="this.user.permissions[0] === 'chuxe'" @click="listxe"><v-icon icon="mdi:mdi-car-sports mr-2" ></v-icon>Danh sách xe</el-dropdown-item>
+                  <el-dropdown-item v-if="this.user.permissions[0] === 'chuxe'" @click="listxethue"><v-icon icon="mdi:mdi-car-sports mr-2" ></v-icon>Quản lý thuê xe</el-dropdown-item>
+                  <el-dropdown-item v-if="this.user.permissions[0] === 'user'" @click="listxedathue"><v-icon icon="mdi:mdi-car-sports mr-2" ></v-icon>Xe đã thuê</el-dropdown-item>
 
                   <el-dropdown-item class="bg-primary-custom"  @click="logOut"><v-icon icon="mdi:mdi-backburger mr-2"></v-icon>Đăng xuất</el-dropdown-item>
                 </el-dropdown-menu>
@@ -67,7 +78,8 @@ export default {
   data() {
     return {
       isLoggin: '',
-      hoTen: ''
+      hoTen: '',
+      user: ''
     }
   },
   methods: {
@@ -101,6 +113,8 @@ export default {
     this.isLoggin = localStorage.getItem('user');
     var user = JSON.parse(localStorage.getItem('user'));
     if (user) {
+      this.user = user
+      console.log('pẻ', this.user.permissions[0])
       this.hoTen = user.hoVaTen
     }
   }

@@ -29,6 +29,22 @@ class AuthServices {
         return http.get("/auth/tendangnhap?tendangnhap=" + tenDN);
     }
 
+    duyetTaiKhoan(tenDN) {
+        return http.get("/auth/duyettaikhoan?tendangnhap=" + tenDN);
+    }
+
+    khoaTaiKhoan(tenDN) {
+        return http.get("/auth/khoataikhoan?tendangnhap=" + tenDN);
+    }
+
+    daNopPhi(data) {
+        return http.post("car/v1/nguoidung/danop", data);
+    }
+
+    chuaNopPhi(tenDN) {
+        return http.get("car/v1/nguoidung/chuanop?tendn=" + tenDN);
+    }
+
     updateNguoiDung(data) {
         return http.post("/car/v1/nguoidung", data);
     }

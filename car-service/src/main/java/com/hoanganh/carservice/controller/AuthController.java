@@ -4,6 +4,7 @@ import com.hoanganh.carservice.dto.*;
 import com.hoanganh.carservice.entity.ERole;
 import com.hoanganh.carservice.entity.NguoiDung;
 import com.hoanganh.carservice.entity.QuyenTruyCap;
+import com.hoanganh.carservice.reponse.Reponse;
 import com.hoanganh.carservice.security.JwtUtils;
 import com.hoanganh.carservice.service.NguoiDungService;
 import com.hoanganh.carservice.util.Constants;
@@ -73,6 +74,11 @@ public class AuthController {
                         if (adminRole == null) throw new RuntimeException("Error: Role is not found.");
                         roles.add(adminRole);
                         break;
+                    case "chuxe":
+                        QuyenTruyCap chuxeRole = thanhVienService.getOneByRoleName(ERole.chuxe);
+                        if (chuxeRole == null) throw new RuntimeException("Error: Role is not found.");
+                        roles.add(chuxeRole);
+                        break;
                     default:
                         QuyenTruyCap userRole = thanhVienService.getOneByRoleName(ERole.user);
                         if (userRole == null) throw new RuntimeException("Error: Role is not found.");
@@ -93,5 +99,15 @@ public class AuthController {
     @GetMapping("/tendangnhap")
     public NguoiDung getByTenDangNhap(@RequestParam("tendangnhap") String tenDangNhap) {
         return thanhVienService.findByTenDangNhap(tenDangNhap);
+    }
+
+    @GetMapping("/duyettaikhoan")
+    public Reponse duyetTaiKhoan(@RequestParam("tendangnhap") String tenDangNhap) {
+        return thanhVienService.duyetTaiKhoan(tenDangNhap);
+    }
+
+    @GetMapping("/khoataikhoan")
+    public Reponse khoaTaiKhoan(@RequestParam("tendangnhap") String tenDangNhap) {
+        return thanhVienService.khoaTaiKhoan(tenDangNhap);
     }
 }

@@ -15,5 +15,9 @@ export const functionMixins ={
             const formattedDate = `${year}-${month}-${day}`;
             return formattedDate
         },
+        formatCurrency(money) {
+            money = money.toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
+            return money
+        },
     }
 }

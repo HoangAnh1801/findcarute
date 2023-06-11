@@ -10,6 +10,14 @@ defineRule('required', values => {
     }
     return true;
 });
+defineRule('require', value => {
+    if (!value || !value.length) {
+        return 'Trường này không được để trống!'
+    } else if ((!value.trim() || !value.trim().length)) {
+        return 'Trường này không được để trống!'
+    }
+    return true;
+});
 defineRule('selected', value => {
     console.log('value', value)
      // Check if it's empty.

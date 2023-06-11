@@ -2,8 +2,7 @@
   <div class="container mt-5">
     <div class="row">
       <div class="col-lg-8">
-        <div class="image-car" style="height: 500px">
-
+        <div class="image-car" style="height: 500px; width: 100%">
           <el-carousel :interval="5000" arrow="always" >
             <el-carousel-item
                 style="height: 500px"
@@ -11,13 +10,13 @@
                 :key="image.id">
               <inner-image-zoom
                   class="img-fluid"
+                  style="width: 100%"
                   :src="getUrlImage(image.urlAnh)"
                   :zoomSrc="getUrlImage(image.urlAnh)"
                   moveType="drag"
               />
             </el-carousel-item>
           </el-carousel>
-
         </div>
         <div>
           <h1>{{ xe.tenXe }}</h1>
@@ -33,7 +32,7 @@
               <p> Nhiên liệu: {{ xe.nhienLieu.ten }}</p>
             </div>
             <div class="col-lg-5">
-              <p>Truyền động: Số tự động</p>
+              <p>Loại xe: {{ xe.loaiXe.ten }}</p>
             </div>
           </div>
           <div class="row">
@@ -102,39 +101,54 @@
       <div class="col-lg-4">
         <div>
           <h3 class="text-center mb-5">Đặt xe</h3>
+          <Form @submit="thue" ref="form" lazy-validation>
           <div class="row mt-3">
               <div class="col-lg-6">
-                <span class="demonstration col-12">Ngày nhận xe</span>
-                <el-date-picker
-                    v-model="thueXes.ngayBatDau"
-                    class="w-100"
-                    type="date"
-                    placeholder="Chọn ngày nhận xe"
-                    format="DD/MM/YYYY"
-                    :disabled-date="disdabledate1"
-                    :shortcuts="shortcuts"
-                    :size="size"
-                />
+                <label class="demonstration col-12">Ngày nhận xe<span class="text-danger">*</span></label>
+                <Field name="ngayBatDau" rules="required" v-slot="{field}" :value="thueXes.ngayBatDau">
+                  <el-date-picker
+                      v-bind="field"
+                      v-model="thueXes.ngayBatDau"
+                      class="w-100"
+                      type="date"
+                      placeholder="Chọn ngày nhận xe"
+                      format="DD/MM/YYYY"
+                      :disabled-date="disdabledate1"
+                      :shortcuts="shortcuts"
+                      :size="size"
+                      :clearable="false"
+                  />
+                </Field>
+                <ErrorMessage name="ngayBatDau" class="text-danger"/>
               </div>
               <div class="col-lg-6">
-                <span class="demonstration col-12">Ngày trả xe</span>
-                <el-date-picker
-                    v-model="thueXes.ngayKetThuc"
-                    @change="dateDiff()"
-                    class="w-100"
-                    type="date"
-                    placeholder="Chọn ngày trả xe"
-                    format="DD/MM/YYYY"
-                    :disabled-date="disdabledate1"
-                    :shortcuts="shortcuts"
-                    :size="size"
-                />
+                <label class="demonstration col-12">Ngày trả xe<span class="text-danger">*</span></label>
+                <Field name="ngayKetThuc" rules="required" v-slot="{field}" :value="thueXes.ngayKetThuc">
+                  <el-date-picker
+                      v-model="thueXes.ngayKetThuc"
+                      @change="dateDiff"
+                      class="w-100"
+                      type="date"
+                      placeholder="Chọn ngày trả xe"
+                      format="DD/MM/YYYY"
+                      :disabled-date="disableDateEnd"
+                      :shortcuts="shortcuts"
+                      :size="size"
+                      v-bind="field"
+                      :clearable="false"
+                      :disabled="thueXes.ngayBatDau == ''"
+                  />
+                </Field>
+                <ErrorMessage name="ngayKetThuc" class="text-danger"/>
               </div>
 
           </div>
           <div class="row mx-auto mt-4">
-              <label class="form-label pl-0">Địa điểm giao nhận xe</label>
-              <input type="text" class="form-control" v-model="thueXes.diaChiGiaoXe">
+              <label class="form-label pl-0">Địa điểm giao nhận xe<span class="text-danger">*</span></label>
+            <Field name="diaChiGiaoXe" rules="required" v-slot="{field}" :value="thueXes.diaChiGiaoXe">
+              <textarea type="text" class="form-control" v-bind="field" v-model="thueXes.diaChiGiaoXe" />
+            </Field>
+            <ErrorMessage name="diaChiGiaoXe" class="text-danger"/>
           </div>
 
           <div class="row mx-auto mt-5">
@@ -143,15 +157,6 @@
                 <span>Đơn giá thuê</span>
                 <span class="float-right">{{ formatCurrency(xe.giaXe) }} / ngày</span>
               </div>
-              <div>
-                <span>Phí dịch vụ</span>
-                <span class="float-right">{{ formatCurrency(188000) }} / ngày</span>
-              </div>
-            <hr class="mt-1" />
-            <div>
-              <span>Tổng phí thuê xe</span>
-              <span class="float-right">{{ formatCurrency(xe.giaXe*datediff) }}</span>
-            </div>
             <hr class="mt-1" />
             <div>
               <span>Tổng cộng</span>
@@ -159,7 +164,8 @@
             </div>
           </div>
 
-          <button class="btn btn-warning mr-2 font-weight-bold mt-3 col-12" @click="thue"> Đặt xe </button>
+          <button class="btn btn-warning mr-2 font-weight-bold mt-3 col-12" :disabled="user.permissions[0] === 'chuxe'" > Đặt xe </button>
+          </Form>
         </div>
       </div>
     </div>
@@ -174,11 +180,13 @@ import swal from 'sweetalert';
 import InnerImageZoom from 'vue-inner-image-zoom';
 import {functionMixins} from "@/mixin/functionMixins";
 import moment from 'moment';
+import {Field, Form, ErrorMessage } from "vee-validate";
 
 export default {
   name: "ChiTietXe",
   components: {
-    InnerImageZoom
+    InnerImageZoom,
+    Form, Field, ErrorMessage
   },
   mixins: [
     functionMixins,
@@ -209,12 +217,13 @@ export default {
       tongPhi: '',
       thueXe: [],
       formattedDate: '',
-      disabledRangesData: []
+      disabledRangesData: [],
+      user: ''
     }
   },
   methods: {
     tongTien() {
-        this.tongPhi = this.xe.giaXe*this.datediff + 188000
+        this.tongPhi = this.xe.giaXe*(this.datediff + 1)
     },
     disdabledate1(time) {
       const dataDisable = this.disabledRangesData
@@ -230,6 +239,23 @@ export default {
       let dateStart = new Date()
       return false || time.getTime() < dateStart
     },
+    disableDateEnd(time) {
+      const dataDisable = this.disabledRangesData
+
+      for (const range of dataDisable) {
+        if (
+            time >= range.ngayBatDau.getTime() &&
+            time <= range.ngayKetThuc.getTime()
+        ) {
+          return true;
+        }
+      }
+      let dateStart = new Date()
+      if (this.thueXes.ngayBatDau != null) {
+        var ngayBD = this.thueXes.ngayBatDau;
+      }
+      return false || time.getTime() < dateStart || time.getTime() < ngayBD
+    },
     disabledDateBeforeDateStart(time) {
       let dateStart = new Date()
       return  time.getTime() < dateStart
@@ -237,25 +263,37 @@ export default {
     dateDiff() {
       var date1 = this.thueXes.ngayBatDau
       var date2 = this.thueXes.ngayKetThuc
-      var Difference_In_Time = date2 - date1;
-      var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24)
-      this.datediff = Difference_In_Days
+
+      if (date1 != null && date2 != null) {
+        var Difference_In_Time = date2 - date1;
+        var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24)
+        this.datediff = Difference_In_Days
+      }
+      console.log('datediff', this.datediff)
     },
     thue() {
       if (!this.logginIn) {
-        swal('Vui lòng đăng nhập để đặt xe', '', 'success').then(
-            this.$router.push('/fincar/login')
-        )
+        swal({title: "Vui lòng đăng nhập để đặt xe!",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,}).then(
+            (willDelete) => {
+              if (willDelete) {
+                this.$router.push('/fincar/login')
+              }
+              })
       } else {
         console.log('thuexe', this.thueXes.ngayBatDau)
       // var date = this.thueXes.ngayBatDau.toJSON().slice(0,10).split('-').join('-')
       var date = moment(this.thueXes.ngayBatDau).utcOffset(7).format('YYYY-MM-DD');
       var date2 = moment(this.thueXes.ngayKetThuc).utcOffset(7).format('YYYY-MM-DD');
+      console.log('ngaybatdau', date)
       this.thueXes.ngayBatDau = date
       this.thueXes.ngayKetThuc = date2
         console.log('thuexe', this.thueXes)
       XeService.saveThueXe(this.thueXes).then(
-          window.location.href = 'http://localhost:8080/danhsachxethue',
+          swal('Đã gửi yêu cầu thuê xe', '', 'success').then(
+          window.location.href = 'http://localhost:8080/findcar/danhsachxethue')
       )
       }
     },
@@ -290,6 +328,7 @@ export default {
     var user = JSON.parse(localStorage.getItem('user'));
     if (user) {
       this.thueXes.nguoiDung.id = user.id;
+      this.user = user
       this.logginIn = true
     }
 
@@ -299,8 +338,13 @@ export default {
     this.getThueXeByXeId(id);
   },
   watch: {
+    ngayKetThuc() {
+      this.datediff();
+    },
     datediff() {
-      this.tongTien();
+      if (this.datediff >= 0) {
+        this.tongTien();
+      }
     }
   }
 }
@@ -332,13 +376,6 @@ export default {
     text-align: center;
   }
 
-  /*.el-carousel__item:nth-child(2n) {*/
-  /*  background-color: #99a9bf;*/
-  /*}*/
-
-  /*.el-carousel__item:nth-child(2n + 1) {*/
-  /*  background-color: #d3dce6;*/
-  /*}*/
 </style>
 <style src="vue-inner-image-zoom/lib/vue-inner-image-zoom.css">
 

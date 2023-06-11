@@ -1,5 +1,5 @@
 <template>
-    <div class="header-blue">
+    <div class="header-blue" style="box-shadow: 0px 6px 5px rgba(0, 0, 0, 0.25)">
       <div class="container hero">
         <div class="row">
           <div class="col-12 col-lg-6 col-xl-5 offset-xl-1">
@@ -153,8 +153,8 @@
     </div>
   </div>
 
-  <div class="container" style="margin-top: 30px">
-    <h3 class="text-center" style="margin-bottom: 20px">CUNG CẤP TẤT CẢ CÁC LOẠI XE HIỆN CÓ</h3>
+  <div class="container" style="margin-top: 50px">
+    <h3 class="text-center" style="margin-bottom: 30px">CUNG CẤP TẤT CẢ CÁC LOẠI XE HIỆN CÓ</h3>
     <div class="row row-cols-1 row-cols-md-3 g-4">
       <div class="col-12 col-lg-3" v-for="xe in listXe" :key="xe.id">
         <div class="card h-100 custom-card">
@@ -170,11 +170,14 @@
               </div>
               <div>
                 <span class=""><v-icon icon="mdi:mdi-check color-f9c63f"/></span>
-                <span class="pl-2">Nhiên liệu: {{ xe.nhienLieu.name }}</span>
+                <span class="pl-2">Nhiên liệu: {{ xe.nhienLieu.ten }}</span>
+              </div>
+              <div class="mt-3">
+                <h5 class="pl-2 text-danger">{{ formatCurrency(xe.giaXe) }}</h5>
               </div>
             </div>
           </div>
-          <div class="card-footer bg-white border-0 my-2">
+          <div class="card-footer bg-white border-0">
             <button class="col-6 btn btn-warning col-12" @click="xemChiTiet(xe.id)">Xem chi tiết</button>
           </div>
         </div>
@@ -193,6 +196,7 @@
 import DanhMucService from "@/services/danhmuc.service"
 import ImageService from "@/services/image.service"
 import XeService from "@/services/xe.service"
+import {functionMixins} from "@/mixin/functionMixins";
 
 export default {
   name: "header",
@@ -205,9 +209,9 @@ export default {
       listXe: []
     }
   },
+  mixins: [functionMixins],
   methods: {
     handleRouterLinkClick() {
-      // Di chuyển đến đầu trang
       window.scrollTo(0, 0);
     },
     getListXeByQuanId(id) {

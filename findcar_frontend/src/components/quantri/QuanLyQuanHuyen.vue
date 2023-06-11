@@ -18,14 +18,14 @@
       <thead>
       <tr>
         <th scope="col">STT</th>
-        <th scope="col" v-for="itemHeader in headers" :key="itemHeader.id">{{ itemHeader.ten }}</th>
+        <th scope="col" v-for="itemHeader in headers" :key="itemHeader.id">{{ itemHeader.name }}</th>
         <th scope="col">Thao tác</th>
       </tr>
       </thead>
       <tbody>
       <tr v-for="(entry, stt) in resultQuery" :key="entry.id">
         <th scope="row" style="width: 5%">{{ stt + 1 }}</th>
-        <td>{{ entry.id }}</td>
+<!--        <td>{{ entry.id }}</td>-->
         <td>{{ entry.ten }}</td>
         <td><img :src="getUrlImage(entry.urlAnh)" style="max-height: 100px; width: 150px"/></td>
         <td>
@@ -105,11 +105,11 @@ export default ({
       imageData: '',
       dialog: false,
       headers: [
-        {
-          name: 'ID',
-          code: 'id',
-          type: 'text'
-        },
+        // {
+        //   name: 'ID',
+        //   code: 'id',
+        //   type: 'text'
+        // },
         {
           name: 'Tên quận/ huyện',
           code: 'ten',

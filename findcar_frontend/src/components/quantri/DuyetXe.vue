@@ -97,7 +97,7 @@
 
       <div class="my-3">
         <div class="row justify-content-center">
-          <button @click="duyetXe" class="btn btn-outline-success col-1 mr-2">Duyệt</button>
+          <button @click="duyetXe" class="btn btn-outline-success col-1 mr-2">Ẩn</button>
           <button class="btn btn-outline-danger col-1" @click="back">Quay lại</button>
         </div>
       </div>
@@ -127,8 +127,8 @@ export default {
       this.$router.go(-1)
     },
     duyetXe() {
-      XeService.duyetXe(this.id);
-      swal('Duyệt thành công', "", "success")
+      XeService.huyDuyetXe(this.id);
+      swal('Đã ẩn bài đăng', "", "success")
     },
     formatCurrency(money) {
       money = money.toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
